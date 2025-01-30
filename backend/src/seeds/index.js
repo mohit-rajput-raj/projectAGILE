@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 // import { Socket } from 'socket.io';
 // import http from 'http';
-import authRoute from '../routes/authRout.js';
+import {authRoute, messageRoute} from '../routes/authRout.js';
 dotenv.config();
 const port = 3000;
 const Port = process.env.PORT || 3000;
@@ -21,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoute);
+
+app.use("/api/messages", messageRoute);
 
 
 
