@@ -1,13 +1,15 @@
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import path from 'path';
+// import path from 'path';
 // import { Socket } from 'socket.io';
 // import http from 'http';
-import {authRoute, messageRoute} from '../routes/authRout.js';
+import authRoute from "../routes/auth.rout.js";
+
+// import messageRoute from "../routes/message.route.js";
 dotenv.config();
-const port = 3000;
+
 const Port = process.env.PORT || 3000;
 const app = express();
 
@@ -20,9 +22,12 @@ app.use(cors(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/',(req,res)=>{
+    res.send('Hello World bhai saab');
+})
 app.use("/api/auth", authRoute);
 
-app.use("/api/messages", messageRoute);
+// app.use("/api/messages", messageRoute);
 
 
 
