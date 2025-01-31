@@ -25,7 +25,8 @@ export const login = async (req, res) => {
             _id: user._id,
             username: user.username,
             email: user.email,
-            profilePic: user.profile.Pic,
+            msg: "User logged in",
+            
         });
         
     } catch (error) {
@@ -57,7 +58,7 @@ export const register = async (req, res) => {
                 _id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                profilePic: newUser.profile.Pic,
+                profilePic: newUser.profile.pic,
             });
         }
     } catch (error) {
@@ -68,17 +69,7 @@ export const register = async (req, res) => {
 
     res.json('register');
 }
-export const logout= async (req,res)=>{
-   try {
-    console.log("error in sigin",{error});
-        
-    return res.status(500).json({msg: error.message});
-   } catch (error) {
-    console.log("error in logout",{error});
-    
-    return res.status(500).json({msg: error.message});
-   }
-}
+
 export const checkAuth = async (req, res) => {
     try{
         return res.status(200).json(req.user);
@@ -90,25 +81,6 @@ export const checkAuth = async (req, res) => {
         return res.status(500).json({msg: error.message});
     }
 }
-export const updateProfile = async (req, res) => {
-    const {pic ,  bio, website} = req.body;
-    try{
-        
-    }catch(error){
-        console.log("error in updateProfile",{error});
-        
-        return res.status(500).json({msg: error.message});
-    }
-}
-export const settings = async (req, res) => {
-    
-    try{
-        
-    }catch(error){
-        console.log("error in settings",{error});
-        
-        return res.status(500).json({msg: error.message});
-    }
-}
+
 
 

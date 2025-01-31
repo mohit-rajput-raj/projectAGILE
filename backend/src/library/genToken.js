@@ -12,12 +12,13 @@ import jwt from "jsonwebtoken";
             sameSite: "strict", 
             
         });
+        return token;
         
     } catch (error) {
         console.log("error in genToken", {error});
         return res.status(500).json({msg: error.message});
         
     }
-    return token;
+    
 }
 export default genToken;

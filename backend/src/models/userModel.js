@@ -38,7 +38,7 @@ const userModel = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        Pic: {
+        pic: {
             type: String,
             default: "",
         },
