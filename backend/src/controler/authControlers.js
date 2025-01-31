@@ -2,39 +2,52 @@ import { User } from "../models/userModel.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import genToken from "../library/genToken.js";
+import jwt from "jsonwebtoken";
 export const about = async (req, res) => {
     res.json({mgs:"hell yeah"});
 } 
 export const login = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
-        if(!email || !password){
-            return res.status(400).json({msg:"All fields are required"});
+        if (!email || !password) {
+            return res.status(400).json({ msg: "All fields are required" });
         }
-        const user = await User.findOne({email:email});
-        if(!user){
-            return res.status(400).json({msg:"User does not exist"});
-        }   
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ msg: "User does not exist" });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.status(400).json({msg:"Invalid credentials"});
+        if (!isMatch) {
+            return res.status(400).json({ msg: "Invalid credentials" });
         }
-        genToken(user._id, res);
-        return res.status(200).json({
+
+        const token = jwt.sign({ USERid: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "30d",
+        });
+
+        res.cookie("jwt", token, {
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            httpOnly: true,
+            sameSite: "none", // Fix cross-origin issues
+            secure: process.env.NODE_ENV === "production", // Secure in production
+        });
+
+        return res.status(201).json({
             _id: user._id,
             username: user.username,
             email: user.email,
             msg: "User logged in",
-            
         });
-        
+
     } catch (error) {
-        console.log("error in login",{error});
-        
-        return res.status(500).json({msg: error.message});
+        console.error("Error in login", error);
+        return res.status(500).json({ msg: error.message });
     }
-}  
+};
+
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
