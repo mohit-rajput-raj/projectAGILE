@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { update } from "three/examples/jsm/libs/tween.module.js";
 const userModel = new mongoose.Schema({
     username: {
         type: String,
@@ -31,6 +32,10 @@ const userModel = new mongoose.Schema({
     acountType: {
         type: String,
         default: "user",
+    },
+    contact:{
+        type: String,
+        default: "",
     },
     profile:{
 
@@ -76,10 +81,7 @@ const userModel = new mongoose.Schema({
             ref: "Post",
         }]
         ,
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
+        
         
         isAdmin: {
             type: Boolean,
@@ -97,13 +99,18 @@ const userModel = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        chalanges: [{
+        
+        challenge: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Chalange",
         }],
         notifications: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Notification",
+        }],
+        history: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "History",
         }],
          
 

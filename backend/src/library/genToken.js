@@ -8,15 +8,14 @@ const genToken = (USERid, res) => {
 
     const token = jwt.sign({ USERid }, process.env.JWT_SECRET, {
       expiresIn: "30d",
-    });
+  });
 
-    res.cookie("jwt", token, {
+  res.cookie("jwt", token, {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       httpOnly: true,
-
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "none",//gpt
-      secure: process.env.NODE_ENV === "production",//gpt
-    });
+      sameSite: "none", // Fix cross-origin issues
+      secure: process.env.NODE_ENV === "production", // Secure in production
+  });
 
     // return res.json({ message: "Token set successfully" });
 

@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 // import http from 'http';
 import authRoute from "./routes/auth.rout.js";
 import dashRoute from "./routes/dashBoard.route.js";
-// import messageRoute from "../routes/message.route.js";
 dotenv.config();
 const Port = process.env.PORT || 3000;
 const app = express();
@@ -27,6 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/',(req,res)=>{
     res.send('Hello World bhai saab');
 })
+
+
+
 app.use("/api/auth", authRoute);
 app.use("/api/dashboard", dashRoute);
 // app.use("/api/messages", messageRoute);
