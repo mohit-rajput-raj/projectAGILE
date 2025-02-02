@@ -99,7 +99,7 @@ const userModel = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        
+
         challenge: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Chalange",
@@ -112,9 +112,11 @@ const userModel = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "History",
         }],
-         
-
-
+        blockedBy:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"BlockedBy",
+        }],
+   
     }
 
 

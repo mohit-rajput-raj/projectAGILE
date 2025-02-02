@@ -11,9 +11,13 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({msg: error.message});
     }
 }
+
+
 export const settings = async (req, res) => {
-    
+    const setting = req.body;
     try{
+
+
         
     }catch(error){
         console.log("error in settings",{error});
@@ -21,6 +25,8 @@ export const settings = async (req, res) => {
         return res.status(500).json({msg: error.message});
     }
 }
+
+
 export const logout= async (req,res)=>{
     try {
           res.clearCookie("jwt");
@@ -31,3 +37,15 @@ export const logout= async (req,res)=>{
      return res.status(500).json({msg: error.message});
     }
  }
+
+
+export const Posts=async()=>{
+    try{
+
+
+    }catch(err){
+        console.log("error in posts",{err});
+        return res.status(500).json({error:err.message});
+        
+    }
+}

@@ -20,6 +20,10 @@ const doubtSchema = new mongoose.Schema({
         type:Date,
         default:Date.now,
     },
+    doubtBoxId:{
+        type: mongoose.Schema.Types.ObjectId,
+
+    }
 
 },{timestamps:true});
 export const Doubt = mongoose.model("Doubt", doubtSchema);
