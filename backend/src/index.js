@@ -2,21 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
-// import path from 'path';
-// import { Socket } from 'socket.io';
-// import http from 'http';
+
 import authRoute from "./routes/auth.rout.js";
-// import dashRoute from "./routes/dashBoard.route.js";
 dotenv.config();
 const Port = process.env.PORT || 3000;
 const app = express();
 import {connectDB} from "./library/db.js";
 
-// Apply middleware
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors());
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
