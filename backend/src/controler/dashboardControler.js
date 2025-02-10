@@ -16,6 +16,7 @@ export const updateProfile = async (req, res) => {
 export const settings = async (req, res) => {
     const setting = req.body;
     try{
+        
 
 
         

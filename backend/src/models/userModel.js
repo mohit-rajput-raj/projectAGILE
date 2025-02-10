@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
-import { update } from "three/examples/jsm/libs/tween.module.js";
 const userModel = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true,
         trim: true,
-        minlength: 3,
+        require:true,
+        minlength: 1,
+        maxlength: 50
     },
     name: {
         type: String,
@@ -27,18 +26,28 @@ const userModel = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: 8,
+        minlength: 3,
     },
     acountType: {
         type: String,
         default: "user",
     },
-    contact:{
+    contactNumber:{
         type: String,
-        default: "",
+        default: "000000000",
+    },
+    phone:{
+        type: String,
+        required: true,
     },
     profile:{
+        
+        role:{
+            type:String,
+            required:true,
+            default:"user"
 
+        },
         isVerified: {
             type: Boolean,
             default: false,
