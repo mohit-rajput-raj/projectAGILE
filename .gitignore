@@ -1,10 +1,13 @@
 # dependencies
+node_modules/
 /node_modules
 /backend/node_modules
 /front/node_modules
 
 # environment variables
+*.env
 .env
+.env.*
 /backend/.env
 /front/.env
 
