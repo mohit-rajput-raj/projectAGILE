@@ -1,3 +1,4 @@
+import { posts } from "../models/postsModel.js";
 export const dashboard = (req, res) => {
     res.json('dashboard');
 }
@@ -40,8 +41,17 @@ export const logout= async (req,res)=>{
  }
 
 
-export const Posts=async()=>{
+export const Posts=async(req,res)=>{
     try{
+        const postData =req.body;
+        if(!postData.userId || !postData.text){
+            return res.status(401).json({msg:'Fill all data'});
+        }
+        const newPost = new posts(postData)
+        await newPost.save();
+
+        return res.status(201).json(newPost);
+
 
 
     }catch(err){

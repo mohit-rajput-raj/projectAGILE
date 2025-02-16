@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../login/style.css";
-import { useAuthStore } from "../../Store/AuthStore";
+import "./style.css";
+import { useAuthStore } from "../Store/AuthStore";
 import {Link} from 'react-router-dom'
 const Sign = () => {
   const { register } = useAuthStore();
@@ -116,8 +116,8 @@ const Sign = () => {
           </select>
 
           <div className="links">
-          
-             <Link to="/login">allready have a accountt?</Link>
+          <Link to="/dash">dashboard</Link>
+            <Link to="/login">allready have a accountt?</Link>
           </div>
 
           <button type="submit" className="btn">

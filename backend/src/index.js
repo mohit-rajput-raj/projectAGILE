@@ -2,11 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
-
+// const app = express();
+import {app,io,server} from "./library/socket.js";
 import authRoute from "./routes/auth.rout.js";
+import dashRoute from "./routes/dashBoard.route.js";
+
+
 dotenv.config();
 const Port = process.env.PORT || 3000;
-const app = express();
 import {connectDB} from "./library/db.js";
 
 app.use(cookieParser());
@@ -25,9 +28,9 @@ app.get('/',(req,res)=>{
 })
 
 app.use("/api/auth", authRoute);
-// app.use("/api/dashboard", dashRoute);
+app.use("/api/dashboard", dashRoute);
 // app.use("/api/messages", messageRoute);
 
-app.listen(Port, () => {
+server.listen(Port, () => {
     console.log('Server is running on port 3000');
 });

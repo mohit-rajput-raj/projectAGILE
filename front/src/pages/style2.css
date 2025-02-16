@@ -1,0 +1,173 @@
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #edf2f6;
+    color: #333;
+  }
+  
+  /* Container for the Forgot Password Page */
+  .forgot-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Header Style */
+  .forgot-header {
+    background-color: #131921;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .forgot-header .logo {
+    max-width: 150px;
+  }
+  
+  /* Main Content Style */
+  .forgot-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .forgot-box {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .forgot-box h2 {
+    font-size: 1.8rem;
+    color: #131921;
+    margin-bottom: 10px;
+  }
+  
+  .forgot-box p {
+    color: #888;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .input-wrapper {
+    position: relative;
+  }
+  
+  .input-wrapper .input-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #0073bb;
+    font-size: 18px;
+  }
+  
+  .input-wrapper input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .input-wrapper input:focus {
+    outline: none;
+    border-color: #0073bb;
+    box-shadow: 0 0 5px rgba(0, 115, 187, 0.5);
+  }
+  
+  /* Button Style */
+  .btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #0073bb;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #005fa3;
+  }
+  
+  /* Forgot Password Links */
+  .forgot-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .forgot-links a {
+    color: #0073bb;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+  
+  .forgot-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer Style */
+  .forgot-footer {
+    background-color: #131921;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+  }
+  
+  /* Fade In Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Additional styling for logout page */
+.logout-box {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  /* You can reuse the existing @keyframes fadeIn from your CSS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  

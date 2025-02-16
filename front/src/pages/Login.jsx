@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../../Store/AuthStore";
+import { useAuthStore } from "../Store/AuthStore";
 
 const Login = () => {
   const { login } = useAuthStore();
@@ -64,7 +64,7 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="btn">
+            <button type="submit" className="btn ">
               Login
             </button>
 

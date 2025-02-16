@@ -11,6 +11,8 @@ const orderSchema = new mongoose.Schema({
     },
     orderStatus: {
         type: String,
+        enum: ["pending", "accepted", "shipped", "delivered","paused", "rejected"],
+        default: "pending",
         required: true,
     },
     orderItems: [
@@ -63,6 +65,8 @@ const orderSchema = new mongoose.Schema({
     },
     orderPaymentStatus: {
         type: String,
+        enum: ["pending", "success", "failed"],
+        default: "pending",
         required: true,
     },
     orderPaymentDate: {
@@ -85,11 +89,6 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin",
     },
-    orderBidBy:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        default:[],
-    }]
 
 }, { timestamps: true });
 export const Orders = mongoose.model("Order", orderSchema);

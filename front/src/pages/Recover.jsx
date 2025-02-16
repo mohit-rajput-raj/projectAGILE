@@ -2,7 +2,7 @@ import React from 'react'
 
 const Recover = () => {
   return (
-    <div>Recover</div>
+    <div className='w-screen h-screen flex justify-center items-center'>Recover</div>
   )
 }
 

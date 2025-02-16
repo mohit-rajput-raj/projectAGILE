@@ -1,0 +1,78 @@
+/* General Page Styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Logout Box Styling */
+  .logout-box {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    width: 90%; /* Almost full-screen */
+    max-width: 600px; /* Limits width */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  /* Logo Styling */
+  .logout-box img {
+    max-width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  /* Heading & Text */
+  .logout-box h5 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .logout-box p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  /* Button Styling */
+  .btn {
+    background-color: #0073bb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #005fa3;
+  }
+  
+  /* Link Styling */
+  .link {
+    color: #0073bb;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+  

@@ -116,3 +116,57 @@ export const logout=async(req,res)=>{
         return res.status(500).json({msg: error.message});
     }
 }
+
+export const sendPasswordResetOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    user.resetPasswordOTP = otp;
+    user.resetPasswordOTPExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+
+    res.status(200).json({ 
+      message: "Password reset OTP has been sent to your email",
+      email 
+    });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    res.status(500).json({ message: "Failed to send OTP", error: error.message });
+  }
+};
+
+export const verifyOTPAndResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    const user = await User.findOne({ 
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpiry: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashPassword;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordOTPExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password has been reset successfully" });
+  } catch (error) {
+    console.error('Password reset verification error:', error);
+    res.status(500).json({ message: "Failed to reset password", error: error.message });
+  }
+};

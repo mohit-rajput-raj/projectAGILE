@@ -9,15 +9,20 @@ const postSchema = new mongoose.Schema(
     },
     text: {
       type: String,
+      trim: true,
+      default: "",
     },
     image: {
       type: String,
+      default:""
     },
     video: {
       type: String,
+      default:""
     },
     file: {
       type: String,
+      default:""
     },
     likes: [
       {
@@ -25,13 +30,34 @@ const postSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    comments:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment",
-    }]
+    comments: [
+      {
+        text: {
+          type: String,
+          required: true,
+        },
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        replies: [
+          {
+            text: {
+              type: String,
+              required: true,
+            },
+            user: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "User",
+              required: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   { timestamps: true }
 );
 
-export  const posts = mongoose.model("posts", postSchema);
-
+export const posts = mongoose.model("posts", postSchema);

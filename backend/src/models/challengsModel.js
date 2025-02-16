@@ -9,10 +9,10 @@ const challengeSchema = new mongoose.Schema(
         default: [],
       },
     ],
-    holdingBy: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false, 
+      required: true,
     },
     completed: {
       type: Boolean,
@@ -74,21 +74,7 @@ const challengeSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    location: {
-        
-            longitude: {
-                type: Number,
-                required: true,
-            },
-            latitude: {
-                type: Number,
-                required: true,
-            },
-        
-      type: String,
-      required: true,
-      trim: true,
-    },
+    
     status: {
       type: String,
       required: true,

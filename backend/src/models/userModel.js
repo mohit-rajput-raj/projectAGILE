@@ -28,18 +28,32 @@ const userModel = new mongoose.Schema({
         trim: true,
         minlength: 3,
     },
+    resetPasswordOTP: {
+        type: String
+    },
+    resetPasswordOTPExpiry: {
+        type: Date
+    },
     acountType: {
         type: String,
         default: "user",
     },
     contactNumber:{
         type: String,
-        default: "000000000",
+        default: "0000000000",
     },
     phone:{
         type: String,
         required: true,
     },
+    offrJobs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "nothings",
+        }
+    ]
+    ,
+
     profile:{
         
         role:{
@@ -56,6 +70,10 @@ const userModel = new mongoose.Schema({
             type: String,
             default: "",
         },
+        bannerImg:[{
+            type: String,
+            default: ""
+        }],
         bio: {
             type: String,
             default: "",
