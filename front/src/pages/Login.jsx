@@ -75,7 +75,7 @@ const Login = () => {
           </form>
         </main>
         <footer className="footer">
-          <p>&copy; 2023 MyCollab. All rights reserved.</p>
+          <p>&copy; 2025 MyCollab. All rights reserved.</p>
         </footer>
       </div>
     </div>

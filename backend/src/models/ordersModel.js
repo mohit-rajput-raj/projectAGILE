@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema({
         default: "pending",
         required: true,
     },
+
     orderItems: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -26,6 +27,11 @@ const orderSchema = new mongoose.Schema({
         required:true,
         trim:true,
     },
+    orderBidBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    }],
     doubts:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Doubt",
@@ -35,9 +41,14 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    orderDate: {
+    orderBuildDate: {
         type: Date,
-        required: true,
+    },
+    orderActiveDate: {
+        type: Date,
+    },
+    deadLine: {
+        type: Date,
     },
     orderCustomer: {
         type: mongoose.Schema.Types.ObjectId,

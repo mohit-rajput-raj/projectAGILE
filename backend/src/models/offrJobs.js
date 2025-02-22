@@ -5,18 +5,32 @@ const offrJobsSchema = new mongoose.Schema({
         require:true,
 
     },
+    img:{
+        type:String,
+    },
+    caption:{
+        type:String,
+        require:true,
+
+    },
     discription:{
         type:String,
         require:true,
     },
-    contact:{
+    contact:[{
         type:String,
         require:true,
-    },
-    mail:{
+        unique:true,
+        trim:true,
+        
+    }],
+    mail:[{
         type:String,
         require:true,
-    },
+        unique:true,
+        trim:true,
+
+    }],
     interestedPeople:[{
         type: mongoose.Schema.Types.ObjectId,
         default:[],

@@ -12,7 +12,7 @@ router.get('/logout',logout);
 // router.put('/settings', protectRoute, settings);
 
 
-router.post('/forgot-password', sendPasswordResetOTP);
-router.post('/reset-password', verifyOTPAndResetPassword);
+router.post('/sendotp', sendPasswordResetOTP);
+router.post('/verifotp', verifyOTPAndResetPassword);
 
 export default router;

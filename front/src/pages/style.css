@@ -10,8 +10,6 @@
     background-color: #f2f2f2;
     color: #333;
   }
-  
-  /* Container for the entire page */
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -28,8 +26,6 @@
     color: #fff;
     font-size: 2.5rem;
   }
-  
-  /* Footer */
   .footer {
     background-color: #131921;
     padding: 10px;
@@ -39,14 +35,12 @@
     bottom: 0;
     width: 100%;
   }
-  
-  /* Form Container */
   .form-container {
     padding: 60px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 140px); /* Adjust height accounting for header and footer */
+    min-height: calc(100vh - 140px);
   }
   
   /* Form Styling */

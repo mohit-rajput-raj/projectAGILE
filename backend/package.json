@@ -20,7 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "mailtrap": "^3.4.0",
     "mongoose": "^8.9.5",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "twilio": "^5.4.5"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",

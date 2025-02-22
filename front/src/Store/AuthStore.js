@@ -6,6 +6,7 @@ export const useAuthStore = create((set, get) => ({
   isSign: false,
   currUser: null,
   isLogingOut:false,
+
   getUser: async () => {
     try {
       const res = await axiosApi.get("/auth/authCheck");
@@ -30,6 +31,32 @@ export const useAuthStore = create((set, get) => ({
       console.log("Error in login store:", error);
     } finally {
       set({ isLogin: false });
+    }
+  },
+  sendOtp:async(data)=>{
+    try {
+      console.log(data.email);
+      
+      const res = await axiosApi.post("/auth/sendotp",data);
+      
+    } catch (error) {
+
+      console.log('errorn in send otp',error.msg);
+
+      
+    }
+  },
+  verifOtp:async(data)=>{
+    try {
+      const res = await axiosApi.post("/auth/verifotp",data);
+      return res;
+    } catch (error) {
+      console.log("Error in verifOtp:", error);
+      if (error.response) {
+        return new Error(error.response); 
+      } else {
+        return { status: 500, data: { msg: "Something went wrong" } };
+      }
     }
   },
 

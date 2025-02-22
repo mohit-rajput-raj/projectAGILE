@@ -29,10 +29,12 @@ const userModel = new mongoose.Schema({
         minlength: 3,
     },
     resetPasswordOTP: {
-        type: String
+        type: String,
+        default: "",
     },
     resetPasswordOTPExpiry: {
-        type: Date
+        type: Date,
+        default: Date.now,
     },
     acountType: {
         type: String,
@@ -93,6 +95,12 @@ const userModel = new mongoose.Schema({
             }
         ],
         connections: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            }
+        ],
+        closedConnections: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",

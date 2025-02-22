@@ -10,6 +10,10 @@
     background-color: #edf2f6;
     color: #333;
   }
+  imgwe{
+    background-image: url("imgceli.png");
+
+  }
   
   /* Container for the Forgot Password Page */
   .forgot-container {

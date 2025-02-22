@@ -2,7 +2,7 @@ import { User } from "../models/userModel.js";
 // import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import genToken from "../library/genToken.js";
-import { Pass } from "three/examples/jsm/Addons.js";
+import {sendOTPEmail} from '../library/sendEmail.js';
 // import jwt from "jsonwebtoken";
 export const about = async (req, res) => {
     res.json({mgs:"hell yeah"});
@@ -119,10 +119,14 @@ export const logout=async(req,res)=>{
 
 export const sendPasswordResetOTP = async (req, res) => {
   try {
-    const { email } = req.body;
+    const {email} = req.body;
+    // console.log(email); 
+    const user = await User.findOne({ email:email });
+    // console.log(user);
     
-    const user = await User.findOne({ email });
     if (!user) {
+        console.log("User not found");
+        
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -131,6 +135,7 @@ export const sendPasswordResetOTP = async (req, res) => {
     user.resetPasswordOTP = otp;
     user.resetPasswordOTPExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
+    sendOTPEmail(email,otp,user.username);
 
 
     res.status(200).json({ 
@@ -153,9 +158,12 @@ export const verifyOTPAndResetPassword = async (req, res) => {
       resetPasswordOTPExpiry: { $gt: Date.now() }
     });
 
+    // if (!user) {
+    //   return  res.status(400).json({ msg: "Invalid or expired OTP" });
+    // }
     if (!user) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
-    }
+        return res.status(400).json({ message: "Invalid or expired OTP" });
+      }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(newPassword, salt);

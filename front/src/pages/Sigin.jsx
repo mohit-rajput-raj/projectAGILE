@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import "./style.css";
 import { useAuthStore } from "../Store/AuthStore";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 const Sign = () => {
   const { register } = useAuthStore();
   const [regdata, setregdata] = useState({
-    username:"",
+    username: "",
     email: "",
     password: "",
-    phone:"",
-    confirmPassword:"",
-    role:"",
+    phone: "",
+    confirmPassword: "",
+    role: "",
   });
+
   const handelChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -20,32 +24,23 @@ const Sign = () => {
       [name]: value,
     }));
   };
+
   const handelSumbit = async (e) => {
     e.preventDefault();
-    if(regdata.password!=regdata.confirmPassword){
-      alert("passwaord does not match");
+    if (regdata.password !== regdata.confirmPassword) {
+      alert("Password does not match");
       return;
     }
     register(regdata);
-    // setregdata({
-    //   email: "",
-    //   password: "",
-    //   phone:"",
-    //   confirmPassword:"",
-    //   role:"",
-    // });
   };
+
   return (
-    <div className="container w-screen h-screen ">
+    <div className="container w-screen h-screen">
       <header className="flex justify-center">
         <h1>MyCollab</h1>
       </header>
       <main className="form-container">
-        <form
-          id="registerForm"
-          onSubmit={handelSumbit}
-          className="form animate-fadeIn"
-        >
+        <form id="registerForm" onSubmit={handelSumbit} className="form animate-fadeIn">
           <h2>Register</h2>
 
           <label htmlFor="regEmail">Email</label>
@@ -61,7 +56,7 @@ const Sign = () => {
 
           <label htmlFor="username">Username</label>
           <input
-            type="username"
+            type="text"
             id="regusername"
             name="username"
             value={regdata.username}
@@ -93,31 +88,24 @@ const Sign = () => {
           />
 
           <label htmlFor="regPhone">Phone Number</label>
-          <input
-            type="tel"
-            id="regPhone"
-            name="phone"
+          <PhoneInput
+            country={"in"}
+            // enableSearch={true}
             value={regdata.phone}
-            onChange={handelChange}
-            placeholder="Enter your phone number"
-            required
+            name="phone"
+            onChange={(phone) => setregdata((data) => ({ ...data, phone }))} 
           />
 
           <label htmlFor="regRole">Select Your Role</label>
-          <select id="regRole" required
-            value={regdata.role}
-            name="role"
-            onChange={handelChange}
-
-          >
+          <select id="regRole" required name="role" value={regdata.role} onChange={handelChange}>
             <option value="">Choose Role</option>
             <option value="homemaker">Home-Maker</option>
             <option value="shopowner">Shop Owner</option>
           </select>
 
           <div className="links">
-          <Link to="/dash">dashboard</Link>
-            <Link to="/login">allready have a accountt?</Link>
+            <Link to="/dash">Dashboard</Link>
+            <Link to="/login">Already have an account?</Link>
           </div>
 
           <button type="submit" className="btn">
@@ -126,7 +114,7 @@ const Sign = () => {
         </form>
       </main>
       <footer className="footer">
-        <p>&copy; 2023 MyCollab. All rights reserved.</p>
+        <p>&copy; 2025 MyCollab. All rights reserved.</p>
       </footer>
     </div>
   );

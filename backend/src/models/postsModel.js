@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
-    userId: {
+    auther: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -41,6 +41,10 @@ const postSchema = new mongoose.Schema(
           ref: "User",
           required: true,
         },
+        id:{
+          type:Number,
+          default:new Date().getTime(),
+        },
         replies: [
           {
             text: {
@@ -52,6 +56,7 @@ const postSchema = new mongoose.Schema(
               ref: "User",
               required: true,
             },
+            
           },
         ],
       },
