@@ -1,18 +1,25 @@
 import { create } from "zustand";
 // import axios from "axios";
 import {axiosApi} from '../library/axios.js';
+import { disconnect } from "mongoose";
+import {io} from 'socket.io-client';
+const BASE_URL = 'http://localhost:3000';
 export const useAuthStore = create((set, get) => ({
   isLogin: false,
   isSign: false,
   currUser: null,
   isLogingOut:false,
-
+  socket:null,
+  onlineUsers:[],
+  registerError: false,
+  loginError:false,
   getUser: async () => {
+    set({ loginError: false });
     try {
       const res = await axiosApi.get("/auth/authCheck");
       set({ currUser: res.data });
     } catch (error) {
-
+      set({ currUser: null });
       console.log("Error in getUser store:", error);
     }
 
@@ -21,14 +28,20 @@ export const useAuthStore = create((set, get) => ({
 
   login: async (data) => {
     // console.log(data);
-
+    set({ loginError: false });
     set({ isLogin: true });
     try {
       const res = await axiosApi.post("/auth/login",data);
       console.log(data);
       set({ currUser: res.data });
+      get().connectSocket();
+    //  await console.log(get().socket);
+
+
     } catch (error) {
+
       console.log("Error in login store:", error);
+      set({ loginError: true });
     } finally {
       set({ isLogin: false });
     }
@@ -61,12 +74,16 @@ export const useAuthStore = create((set, get) => ({
   },
 
   register: async (data) => {
+    set({ registerError: false });
     set({ isSign: true });
     try {
       const res = await axiosApi.post("/auth/register",data);
       
       set({ currUser: res.data });
+      get().connectSocket();
+
     } catch (error) {
+      set({ registerError: true });
       if(error?.res?.msg){
         console.log(error.res.msg);
         
@@ -81,6 +98,7 @@ export const useAuthStore = create((set, get) => ({
     set({isLogingOut:true});
     try {
       const res = await axiosApi.get("/auth/logout");
+      get().disconnectSocket();
       set({ currUser: null });
     } catch (error) {
       console.log("Error in logout store:", error);
@@ -89,5 +107,29 @@ export const useAuthStore = create((set, get) => ({
         isLogingOut:false
       })
     }
+  },
+  connectSocket:async()=>{
+    const {currUser} = get();
+
+    if(get().socket?.connected) return;
+    const socket = io(BASE_URL,{
+      query:{
+        userId:currUser._id,
+      },
+    });
+    socket.connect();
+    
+    
+    set({socket});
+    socket.on('onlineUsers',(userIds)=>{
+      set({onlineUsers:userIds});
+    })
+  },
+  disconnectSocket:async()=>{
+    console.log("disconnecting   ",get().socket);
+    if(get().socket?.connected) get().socket.disconnect();
+    set({socket:null});
+    console.log(get().socket);
+    
   },
 }));

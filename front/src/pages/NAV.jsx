@@ -1,0 +1,183 @@
+import React, { useEffect, useState } from "react";
+import { useAuthStore } from "../Store/AuthStore";
+import { Outlet, useNavigate } from "react-router-dom";
+import Logout from "./Logout";
+import "../coustomStyles/Nav.css";
+import notP from "./user.jpg";
+import {
+  FaHome,
+  FaBell,
+  FaUser,
+  FaEnvelope,
+  FaAddressBook,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import "../components/ove.css";
+
+const NAV = () => {
+  const [overlay, setOverlay] = useState(false);
+  const handelOver = () => {
+    setOverlay(!overlay);
+  };
+  const { logout, getUser, currUser } = useAuthStore();
+  const navigate = useNavigate();
+  const [profileDrop, setProDrop] = useState(false);
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
+  const handleLogout = () => {
+    navigate("/logout");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 w-screen">
+      <nav className="fixed top-0 left-0 right-0 bg-[#131921] text-white shadow-lg z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16 w-screen">
+            <button
+              onClick={() => navigate("/home")}
+              className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+            >
+              <FaHome className="w-6 h-6" />
+            </button>
+
+            <div className="flex-grow mx-4">
+              <span className="text-lg font-semibold">
+                {currUser?.username || "User"}
+              </span>
+            </div>
+
+            <div className="flex items-end space-x-2 mr-12">
+              <button
+                onClick={() => navigate("/notification")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaBell className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Notifications</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/profile")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaUser className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Profile</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaUser className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Dashboard</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/messages")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaEnvelope className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Messages</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/contacts")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaAddressBook className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Contact</span>
+              </button>
+
+              {/* <button
+                onClick={handelOver}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaSignOutAlt className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Logout</span>
+              </button> */}
+
+              <div
+                className="p-but"
+                onMouseOver={() => setProDrop(true)}
+                onMouseOut={() => setProDrop(false)}
+              >
+                {currUser?.profilePic ? (
+                  <img
+                    src={currUser.profilePic}
+                    alt="Profile"
+                    className="profile-image"
+                  />
+                ) : (
+                  <img src={notP} alt="Profile" className="profile-image" />
+                )}
+                {profileDrop && (
+                  <>
+                    <div className="pdropCon" onMouseOver={() => setProDrop(true)}>
+                    <div className="pdrop" >
+                      <div className="flex justify-center items-center optn">
+                      <a onClick={()=>navigate('/profile')} className="logoutb">view profile</a>
+                      </div>
+                      <hr />
+                      <div className="flex justify-center items-center optn">
+                      <a onClick={()=>navigate('/completep')} className="logoutb">complete profile</a>
+                      </div>
+                      <hr />
+                      <div className="flex justify-center items-center optn">
+                       <a onClick={handelOver} className="logoutb ">logout</a>
+                      </div>
+                      <hr />
+                      
+                    </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main
+        className="pt-16 min-h-screen w-screen"
+        style={{ paddingTop: "70px" }}
+      >
+        {overlay ? (
+          <>
+            <div className="fixed inset-0 z-50 flex items-center justify-center backest w-screen h-screen">
+              <div className="w-screen h-screen testBack">
+                <div className="testCard">
+                  <div className="flex h-1/5 w-1/1 justify-end">
+                    <button className="logout text-6xl " onClick={handelOver}>
+                      X
+                    </button>
+                  </div>
+                  <div className="flex justify-center items-center w-1/1 h-1/5">
+                    <p className="text-2xl">are u want to logout</p>
+                  </div>
+
+                  <div className="flex justify-center items-center h-3/5 w-1/1">
+                    <button className="logout" onClick={handleLogout}>
+                      yes
+                    </button>
+                    <button className="nott" onClick={handelOver}>
+                      no
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="container  w-screen ">
+              <Outlet />
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default NAV;

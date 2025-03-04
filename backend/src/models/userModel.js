@@ -3,7 +3,7 @@ const userModel = new mongoose.Schema({
     username: {
         type: String,
         trim: true,
-        require:true,
+        required:true,
         minlength: 1,
         maxlength: 50
     },
@@ -55,6 +55,12 @@ const userModel = new mongoose.Schema({
         }
     ]
     ,
+    messagesBar: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message",
+        unique: true
+    }],
+    
 
     profile:{
         

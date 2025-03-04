@@ -1,4 +1,4 @@
-import { posts } from "../models/postsModel.js";
+import { Post } from "../models/postsModel.js";
 import { User } from "../models/userModel.js";
 export const dashboard = (req, res) => {
     res.json('dashboard');

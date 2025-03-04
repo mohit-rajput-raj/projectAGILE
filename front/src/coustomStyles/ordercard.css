@@ -1,0 +1,49 @@
+.oCard{
+    width: 100%;
+    min-width: 150px;
+    padding: 5px;
+    border-radius: 5px;
+    
+    background-color: var(--backgroundColor);
+    transition: 0.3s ease;
+
+}
+.oCard:hover{
+    transform: scale(1.02);
+}
+.oCH{
+    font-size: 23px;
+}
+.bookBtn{
+    background-color: transparent;
+    border: none;
+}
+.detailsBtn{
+    width: 50px;
+    height: 40px;
+    background-color: aliceblue;
+    border: none;
+    border-radius: 4px;
+}
+.deplayBtn{
+    background-color: var(--backgroundColor);
+    /* box-shadow: var(--card-shadow); */
+    width: 100%;
+    /* border-radius: 50%; */
+    padding: 5px;
+}
+.deleteBtn{
+    background-color: rgb(233, 186, 186,0.9);
+    box-shadow: var(--card-shadow);
+    width: 100%;
+    /* border-radius: 50%; */
+    padding: 5px;
+}
+.oCardHead{
+    padding: 10px;
+    width: 100%;
+    /* background-color:var(--card-background); */
+    /* backd */
+    border-radius: 5px;
+    box-shadow: var(--card-shadow);
+}

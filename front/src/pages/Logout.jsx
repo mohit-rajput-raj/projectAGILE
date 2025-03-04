@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { HiOutlineLogout } from "react-icons/hi";
 import { TableFooter, Box } from "@mui/material";
-
+import { useAuthStore } from "../Store/AuthStore";
 const Logout = () => {
-  const [sec, setSec] = useState(5); 
+  const {logout,currUser} = useAuthStore();
+  const [sec, setSec] = useState(3); 
   const navigate = useNavigate();
-
+  const [rel,setrel] = useState(false);
   useEffect(() => {
     if (sec > 0) {
       setTimeout(() => {
@@ -15,19 +16,24 @@ const Logout = () => {
       }, 1000); 
 
     } else {
-      navigate("/login"); 
+      
+      logout();
+      // navigate('/login');
+      setrel(true);
     }
-  }, [sec, navigate]);
+    // logout();
+    // navigate("/login");
+  }, [navigate,sec]);
 
   return (
     <Box className="flex flex-col items-center justify-center min-h-screen w-screen bg-gray-100">
       <HiOutlineLogout className="w-64 h-64 mb-8" />
-      <h1 className="text-3xl font-bold mb-4">Logging you out in {sec}...</h1>
+      {rel ? <h6> You are loged out</h6>:(<h6> Logging you out in {sec}...</h6>)}
       <p className="text-gray-600">Please wait while we securely log you out.</p>
-      <Link to={"/login"} className="text-blue-500 mt-4">Sign In Again</Link>
-      <p className="mt-2">
+      <Link to={"/login"} className="text-blue-500 mt-4">Return on page</Link>
+      {/* <p className="mt-2">
         New to MyCollab? <Link to={"/register"} className="text-blue-500">Join now</Link>
-      </p>
+      </p> */}
       <TableFooter className="footer">&copy; 2025 MyCollab. All rights reserved.</TableFooter>
     </Box>
   );

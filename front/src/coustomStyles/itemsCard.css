@@ -1,0 +1,34 @@
+.ItemCard{
+    min-width: 200px;
+    max-width: 200px;
+    /* height: 330px; */
+    height: 100%;
+    border-radius: 10px;
+    border: 1px solid rgb(232, 232, 232);
+    background-color: var(--backgroundColor);
+    opacity: 0.8;
+}
+.itemImg{
+    border-radius:20px;
+
+}
+.ItemCardPic{
+    width: 100%;
+    /* height: 50%; */
+    padding: 20px;
+    overflow: hidden;
+    object-fit: cover;
+}
+.ItemCard:hover{
+    opacity: 1;
+}
+.BlankItemCard{
+    background-color: transparent;
+    height: 150px;
+    min-width: 100px;
+}
+.BlankItemCard:hover{
+    background-color: rgb(235, 235, 235);
+
+
+}

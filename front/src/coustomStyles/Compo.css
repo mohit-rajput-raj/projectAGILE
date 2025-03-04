@@ -1,0 +1,13 @@
+@import './variables.css';
+.Cosbutton{
+    /* background-color: var(--backgroundColor);
+     */
+     background-color: pink;
+    box-shadow: var(--card-shadow);
+    border:none;
+}
+.CosCard{
+    box-shadow: var(--card-shadow);
+    /* background-color: var(--card-shadow); */
+
+}

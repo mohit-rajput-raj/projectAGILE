@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema({
-    orderID: {
+
+    orderId: {
         type: String,
         required: true,
         unique: true,
+    },
+    holdByColabration:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Colabration",
     },
     orderKey: {
         type: String,
@@ -11,9 +16,17 @@ const orderSchema = new mongoose.Schema({
     },
     orderStatus: {
         type: String,
-        enum: ["pending", "accepted", "shipped", "delivered","paused", "rejected"],
-        default: "pending",
+        enum: ["pending", "accepted","running","deploy", "shipped", "delivered","paused", "rejected"],
+        default: "deploy",
         required: true,
+    },
+    visibleForAll:{
+        type:Boolean,
+        default:false,
+    },
+    orderCancled:{
+        type:Boolean,
+        default:false,
     },
 
     orderItems: [
@@ -27,16 +40,20 @@ const orderSchema = new mongoose.Schema({
         required:true,
         trim:true,
     },
+    caption:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    orderBanner:{
+        type:String,
+    },
     orderBidBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     }],
-    doubts:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Doubt",
-        default:[],
-    }],
+    
     orderTotal: {
         type: Number,
         required: true,
@@ -72,7 +89,7 @@ const orderSchema = new mongoose.Schema({
     },
     orderPaymentMethod: {
         type: String,
-        required: true,
+        enum: ["cash", "card", "bank"],
     },
     orderPaymentStatus: {
         type: String,
@@ -82,19 +99,15 @@ const orderSchema = new mongoose.Schema({
     },
     orderPaymentDate: {
         type: Date,
-        required: true,
     },
     orderPaymentRef: {
         type: String,
-        required: true,
     },
     orderPaymentAmount: {
         type: Number,
-        required: true,
     },
     orderPaymentCurrency: {
         type: String,
-        required: true,
     },
     orderHoldedBy: {
         type: mongoose.Schema.Types.ObjectId,

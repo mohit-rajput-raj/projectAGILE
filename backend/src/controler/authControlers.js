@@ -48,9 +48,14 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
     const {  email, password , phone, confirmPassword, role,username} = req.body;
     try {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if( !email || !password || !phone || !role || !confirmPassword ||!username){
             return res.status(400).json({msg:"All fields are required"});
         }
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ msg: "Invalid email format" });
+        }
+
         if(password!=confirmPassword){
             return res.status(400).json({msg:"password does not match"});
         }
@@ -69,9 +74,11 @@ export const register = async (req, res) => {
             password: hashPassword,
             phone,
             profile: {
-                role
+                role,
+                
             }
         });
+        
         const savedUser = await newUser.save();
         if(savedUser){
             genToken(savedUser._id, res);
@@ -81,6 +88,7 @@ export const register = async (req, res) => {
                 email: savedUser.email,
                 role: savedUser.profile.role,
                 phone: savedUser.phone
+                
             });
         }
         return res.status(401).json({msg:'not found'});

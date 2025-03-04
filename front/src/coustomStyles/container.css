@@ -1,0 +1,21 @@
+@import './variables.css';
+.dashCon , .dashConItem, .item1{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+    background-color: rgb(236, 236, 236);
+}
+.dashCon{
+    width: 100vw;
+}
+.dashConItem{
+    width: calc(100vw-2px);
+}
+.item1{
+    width: calc(100vw-4px);
+    /* position: fixed; */
+    /* overflow-y: scroll; */
+
+}

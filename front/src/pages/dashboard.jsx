@@ -1,192 +1,137 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Box,
-  Grid,
-  Container,
-  Typography,
-  Paper,
-  Avatar,
-  IconButton,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Divider,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { Link } from "react-router-dom";
-import {
-  Notifications,
-  Message,
-  Home,
-  People,
-  Work,
-  Analytics,
-  Settings,
-  Add,
-} from "@mui/icons-material";
-import { useAuthStore } from "../Store/AuthStore";
-
-const StyledSidebar = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
-  background: "#fff",
-  borderRight: "1px solid #eee",
-  height: "100vh",
-  position: "fixed",
-  width: "250px",
-}));
-
-const StyledMainContent = styled(Box)(({ theme }) => ({
-  marginLeft: "250px",
-  padding: theme.spacing(3),
-  background: "#f5f5f5",
-  minHeight: "100vh",
-}));
-import ContentLoader from 'react-content-loader'
+import React, { useState } from "react";
+import "../coustomStyles/container.css";
+import "../coustomStyles/dashboard.css";
+import { IoAddOutline } from "react-icons/io5";
+import Ordercard from "../components/orderCard";
+import DemoCard from "../components/DemoCard";
+import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
+export const menu1 = [
+  
+  { name: "Items", rout: "/dashboard/items" },
+  { name: "Colabration", rout: "/dashboard/colabration" },
+  { name: "Contacts", rout: "/dashboard/contacts" },
+  { name: "FeedBack", rout: "/dashboard/issues" },
+  { name: "Report", rout: "/dashboard/report" },
+  { name: "HIstory", rout: "/dashboard/history" },
+  { name: "Cancled", rout: "/dashboard/cancled" },
+  { name: "Deleted", rout: "/dashboard/deleted" },
+];
+import { IoSearchSharp } from "react-icons/io5";
+const orderStatus=["All","deploy", "running", "shipped","paused","pending", "delivered", "rejected"];
+const statusPanel = [16,1,2,4,1,6,4,8];
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { currUser, getUser } = useAuthStore();
-  const profile = useRef(null);
+  const [showOrder, setShowOrder] = useState(true);
+  const [idd,setIdd] =useState(0);
 
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
-
-  useEffect(() => {
-    if (currUser) {
-      profile.current = currUser.profile;
-    }
-    setStats({
-      followers: profile.current?.followers.length,
-    views: 120,
-    posts: 45,
-    })
-  }, [currUser]);
- 
-  const [stats, setStats] = useState({
-    followers: profile.current?.followers.length,
-    views: 120,
-    posts: 45,
-  });
-
-  const [activities, setActivities] = useState([
-    { id: 1, type: "connection", user: "John Doe", action: "connected with you", time: "2h ago" },
-    { id: 2, type: "post", user: "Jane Smith", action: "liked your post", time: "4h ago" },
-    { id: 3, type: "job", user: "Tech Corp", action: "posted a new job", time: "5h ago" },
-  ]);
-
-  const menuItems = [
-    { icon: <Home />, text: "Home" },
-    { icon: <People />, text: "My Network" },
-    { icon: <Work />, text: "Jobs" },
-    { icon: <Message />, text: "Messaging" },
-    { icon: <Notifications />, text: "Notifications" },
-    { icon: <Analytics />, text: "Analytics" },
-  ];
-
+  
   return (
-    <Box sx={{ display: "flex" }}>
-      <Link to="/login">Already have an account?</Link>
-      <StyledSidebar>
-        <Box sx={{ mb: 4, textAlign: "center" }}>
-          <Avatar sx={{ width: 80, height: 80, margin: "auto", mb: 2 }} src="/avatar-placeholder.png" />
-          <Typography variant="h6">{currUser?.username || "User"}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            {profile.current?.role || "Role not available"}{"     "}
-            {profile.current?.followers.length}
-          </Typography>
-        </Box>
-
-        <List>
-          {menuItems.map((item, index) => (
-            <ListItem button onClick={() => navigate('/profile')} key={index} sx={{ mb: 1 }}>
-              <ListItemAvatar>{item.icon}</ListItemAvatar>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </StyledSidebar>
-
-      <StyledMainContent>
-        <Container>
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            {Object.entries(stats).map(([key, value], index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper sx={{ p: 2, textAlign: "center" }}>
-                  <Typography variant="h4">{value}</Typography>
-                  <Typography color="textSecondary">{key.replace(/([A-Z])/g, " $1").trim()}</Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ mb: 3 }}>
-                <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                    <Avatar sx={{ mr: 2 }} />
-                    <Typography variant="body1">Share your thoughts...</Typography>
-                    <IconButton sx={{ ml: "auto" }}>
-                      <Add />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-              </Card>
-
-              {activities.map((activity) => (
-                <Card key={activity.id} sx={{ mb: 2 }}>
-                  <CardContent>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Avatar sx={{ mr: 2 }} />
-                      <Box>
-                        <Typography variant="body1">
-                          <strong>{activity.user}</strong> {activity.action}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {activity.time}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              ))}
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Paper sx={{ p: 2, mb: 3 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Suggested Connections</Typography>
-                <List>
-                  {[1, 2, 3].map((item) => (
-                    <React.Fragment key={item}>
-                      <ListItem>
-                        <ListItemAvatar><Avatar /></ListItemAvatar>
-                        <ListItemText primary={`Suggested User ${item}`} secondary="Software Engineer at Tech Corp" />
-                      </ListItem>
-                      {item < 3 && <Divider />}
-                    </React.Fragment>
+    <div className="dashCon">
+      <div className="dashCon">
+        <div className="item1">
+          <main className="dMain">
+            <div className="dLeft">
+              <div className="dLeftTop center ">someItems</div>
+              <div className="dLeftBottom">
+                {menu1.map((itm, i) => (
+                  <div key={i}>
+                    <div className="menuItems1 center " onClick={() => navigate(itm.rout)}>{itm.name}</div>
+                    <hr />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="dMid  gap-4">
+              <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-4"></div>
+              <div className="dMidBottom  rounded">
+                <div className="dHeader p-5 flex gap-4   ">
+                  <div className="center searchIcon w-12 h-10"><IoSearchSharp className="h-6 w-6" /> </div>
+                  <input type="text" placeholder="serach person" name="filter" className="rounded-3xl bg-zinc-300 border-none focus:outline-none inputFilter" />
+                </div>
+                <div className="flex justify-evenly">
+                  {[orderStatus.map((itm,i)=>(
+                    <div key={i} className="w-full">
+                    <button className="dNavBtn center" onClick={()=>setIdd(i)}>{itm}</button>
+                  </div>
+                  ))]}
+                </div>
+                <div style={{maxHeight:"200vh"}} className="overflow-y-scroll w-full  flex flex-col gap-2 ">
+                  {[...Array(statusPanel[idd])].map((item) => (
+                    <PlacedOrderCard rating={orderStatus[idd]==="delivered"?true:false} />
                   ))}
-                </List>
-              </Paper>
-
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Recent News</Typography>
-                <List>
-                  {[1, 2, 3].map((item) => (
-                    <ListItem key={item}>
-                      <ListItemText primary={`Trending News ${item}`} secondary="2 hours ago" />
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </StyledMainContent>
-    </Box>
+                </div>
+              </div>
+            </div>
+            <div className="dRight  ">
+              <div className="dRightTop min-h-screen overflow-y-scroll ">
+                <div className="flex gap-2">
+                  <button
+                    className="dNavBtn"
+                    onClick={() => setShowOrder(true)}
+                  >
+                    orders
+                  </button>
+                  <button
+                    className="dNavBtn"
+                    onClick={() => setShowOrder(false)}
+                  >
+                    challenges
+                  </button>
+                </div>
+                {showOrder && (
+                  <div className=" relative orderBlock mb-2">
+                    <div>
+                      <div className="flex">
+                        <button
+                          className="dNavBtn flex center"
+                          onClick={() => navigate("/create")}
+                        >
+                          <IoAddOutline />
+                          <div>create order</div>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <h2 className="text-2xl">undeployed Orders</h2>
+                      <div className="w-full max-h-screen overflow-y-scroll">
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                          <Ordercard />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!showOrder && (
+                  <div className=" relative orderBlock mb-2">
+                    <div>
+                      <div className="flex">
+                        <button
+                          className="dNavBtn flex center"
+                          onClick={() => navigate("/create")}
+                        >
+                          <IoAddOutline />
+                          <div>create challengse</div>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <h2 className="text-2xl">undeployed challenges</h2>
+                      <div className="w-full">
+                        {[1, 2, 3, 4, 5].map((item) => (
+                          <Ordercard />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="dRightBottom min-h-12 bg-zinc-100 w-full overflow-y-scroll"></div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
   );
 };
 

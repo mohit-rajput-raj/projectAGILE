@@ -1,0 +1,200 @@
+@import '../coustomStyles/variables.css';
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.ConnContainer{
+    overflow: hidden;
+    width: 100vw;
+    /* background-image: url('wall.png'); */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    box-shadow: var(--card-shadow);
+    /* background-color: rgb(250, 250, 250); */
+    /* padding: 60px; */
+}
+.asideBox{
+    /* height: 480px; */
+    /* border: 1px solid black; */
+    box-shadow: var(--card-shadow);
+}
+.career{
+    width: 100%;
+    height: 350px;
+    background-color:var(--backgroundColor);
+    box-shadow: var(--card-shadow);
+}
+.pfps{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.careerText{
+    font-weight: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    
+}
+.ConnMain{
+    padding: 30px;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    box-shadow: var(--card-shadow);
+    /* background-color: rgb(250, 250, 250); */
+}
+.asideUl{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.asideUlLI{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    height: 50px;
+    border-radius: 5px;
+    /* background-color: var(--backgroundColor);
+    box-shadow: var(--card-shadow); */
+    /* margin: 10px; */
+}
+hr {
+    opacity: 0.5;
+    height: 2px; 
+    border: none;
+    background-color: rgb(236, 236, 236); 
+  }
+.mutual{
+    display: flex;
+    height: 50px;
+    /* gap: -3px; */
+}
+.mutualImg{
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    margin-left: -5px;
+    background-color: rgb(144, 203, 255);
+}
+.imgBox{
+    height: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pfpsImg{
+    height: 100px;
+    width: 100px;
+    margin-left: -20px;
+    border-radius: 50%;
+}
+.aside{
+    padding: 20px;
+    /* background-image: url('wall.png'); */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: var(--backgroundColor);
+    background-color:rgb(250, 250, 250, 0.7); ;
+    /* border: 1px solid black; */
+}
+.main{
+    padding: 20px;
+    width: 70%;
+    /* border: 1px solid black; */
+}
+.ConnCard{
+    box-shadow: var(--card-shadow);
+    background-color: rgb(250, 250, 250);
+    padding: 10px;
+    border-radius: 12px;
+    /* width: 400px; */
+    width: 300px;
+    margin: 2px;
+    opacity: 0.9;
+}
+.CardsWrap{
+    backdrop-filter: blur(8px);
+    padding: 10px;
+    width: 100%;
+    /* height: 100%; */
+    box-shadow: var(--card-shadow);
+    /* background-color: rgb(250, 250, 250); */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    ;
+    /* align-items: stretch; */
+    /* background-color: rgb(250, 250, 250); */
+    
+}
+.active{
+    color: rgb(0, 0, 0);
+    font-style: unset;
+}
+.lis{
+    width: 110px;
+    display: flex;
+    justify-content: center;
+    /* font-style: italic; */
+    color: beige;
+}
+.ConnBox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* height: 100vh; */
+}
+.testCard{
+    width: 400px;
+    height: 300px;
+    border-radius: 30px;
+    background-color: var(--backgroundColor);
+}
+.testBack{
+    position: absolute;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height:100vh;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+.ConnUl{
+    box-shadow: var(--card-shadow);
+    background-color: var(--backgroundColor);
+    display: flex;
+    height: 50px;
+    align-items: center;
+}
+.CardHead{
+    background-color: var(--backgroundColor);
+    width: 70%;
+    justify-content: space-between;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.ConnectBg{
+    background-color: var(--backgroundColor);
+    box-shadow: var(--card-shadow);
+    
+    
+}
+.ConnectBg:hover{
+    transform: scale(1.02);
+    background-color:rgba(210, 250, 255, 0.7); 
+
+}

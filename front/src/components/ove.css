@@ -1,0 +1,47 @@
+@import '../coustomStyles/variables.css';
+.testCard{
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+    background-color: var(--backgroundColor);
+    opacity: 0.8;
+}
+.testBack{
+    position: absolute;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height:100vh;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    background-image: url('wall.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.logout{
+    background-color: rgb(254, 204, 204);
+    box-shadow: var(--backgroundColor);
+    height: 50px;
+    width: 50px;
+    margin: 10px;
+    border-radius: 5px;
+}
+.nott{
+    background-color: rgb(110, 176, 160);
+    box-shadow: var(--backgroundColor);
+    height: 50px;
+    width: 50px;
+    border-radius: 5px;
+    margin: 10px;
+}
+.backest{
+    /* background-color: black; */
+
+    /* background-image: var(--bg-img); */
+    background-image: url('wall.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    /* background-color: blue; */
+}

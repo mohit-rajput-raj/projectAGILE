@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../Store/AuthStore";
 
 const Login = () => {
-  const { login } = useAuthStore();
+  const { login,loginError } = useAuthStore();
   const [logindata, setLogindata] = useState({
     email: "",
     password: "",
@@ -18,10 +18,22 @@ const Login = () => {
       [name]: value,
     }));
   };
-
+  useEffect(()=>{
+    if(loginError){
+      alert("Invalid Credentials");
+    }
+  },[loginError])
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(logindata);
+    try {
+      const res = await login(logindata);
+      
+
+    } catch (error) {
+      console.log(error);
+      
+    }
     setLogindata({
       email: "",
       password: "",
@@ -29,12 +41,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <div className="container">
+    <div className="w-screen flex justify-center">
+      <div className="container ">
         <header className="header">
           <h1>MyCollab</h1>
         </header>
-        <main className="form-container">
+        <div className="flex">
+        <main className="form-container flex justify-center w-screen">
           <form
             id="loginForm"
             className="form animate-fadeIn"
@@ -74,6 +87,15 @@ const Login = () => {
             </div>
           </form>
         </main>
+        <div className="image-container">
+            <div>
+              {/* <h1>HEY YOUR WELCOME</h1> */}
+              
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam, beatae.</p>
+            <div className="image"></div>
+            </div>
+          </div>
+          </div>
         <footer className="footer">
           <p>&copy; 2025 MyCollab. All rights reserved.</p>
         </footer>

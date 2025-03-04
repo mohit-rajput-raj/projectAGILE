@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import {app,io,server} from "./library/socket.js";
 import authRoute from "./routes/auth.rout.js";
 import dashRoute from "./routes/dashBoard.route.js";
-
+import messageRoute from "./routes/message.route.js";
 
 dotenv.config();
 const Port = process.env.PORT || 3000;
@@ -28,8 +28,8 @@ app.get('/',(req,res)=>{
 })
 
 app.use("/api/auth", authRoute);
-app.use("/api/dashboard", dashRoute);
-// app.use("/api/messages", messageRoute);
+// app.use("/api/dashboard", dashRoute);
+app.use("/api/messages", messageRoute);
 
 server.listen(Port, () => {
     console.log('Server is running on port 3000');

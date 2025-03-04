@@ -1,4 +1,5 @@
 /* General Page Styling */
+@import '../coustomStyles/variables.css';
 body {
     display: flex;
     justify-content: center;

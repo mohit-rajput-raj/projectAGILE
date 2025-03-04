@@ -1,0 +1,67 @@
+@import '../coustomStyles/variables.css';
+@import '../coustomStyles/container.css';
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.suggestedBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+.item1Con{
+    background-image: var(--bg-img);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+}
+.dashMain{
+    /* backdrop-filter: var(--back-Drop); */
+    width: 45%;
+    padding: 6px;
+    /* border: 1px solid black; */
+    margin: 1px;
+
+}
+h6{
+    font-size: 20px;
+    font-weight: 900;
+}
+.conns{
+    /* border: 1px solid black; */
+}
+.suggProfile{
+    padding: 4px;
+    box-shadow: var(--card-shadow);
+
+}
+.Cardsec{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+.snbg{
+    /* background-color: var(--backgroundColor); */
+    box-shadow: var(--card-shadow);
+    
+}
+.dashAside1,.dashAside2 {
+    /* backdrop-filter: var(--back-Drop); */
+    width: 25%;
+    padding: 10px;
+    /* border: 1px solid black; */
+    margin: 1px;
+    
+}

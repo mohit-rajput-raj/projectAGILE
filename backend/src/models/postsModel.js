@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
-    auther: {
+    author: {  
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -26,9 +26,11 @@ const postSchema = new mongoose.Schema(
     },
     likes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
+        author: {  
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User"
+        }
+      }
     ],
     comments: [
       {
@@ -42,8 +44,8 @@ const postSchema = new mongoose.Schema(
           required: true,
         },
         id:{
-          type:Number,
-          default:new Date().getTime(),
+          type: Number,
+          default: () => new Date().getTime(),  
         },
         replies: [
           {
@@ -56,13 +58,24 @@ const postSchema = new mongoose.Schema(
               ref: "User",
               required: true,
             },
-            
-          },
+            id: {
+              type: Number,
+              default: () => new Date().getTime(),  
+            },
+            createdAt: {
+              type: Date,
+              default: Date.now,
+            }
+          }
         ],
-      },
-    ],
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        }
+      }
+    ]
   },
   { timestamps: true }
 );
 
-export const posts = mongoose.model("posts", postSchema);
+export const Post = mongoose.model("Post", postSchema);

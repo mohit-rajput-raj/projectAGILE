@@ -1,13 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import img from './image.png'; // Ensure the correct path to your image
 
 const PageNotFound = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen text-center">
-      <h1 className="text-6xl font-bold text-red-600">404</h1>
+    <div className="flex  items-center justify-center h-screen w-screen text-center bg-black">
+      <img src={img} alt="Not Found" className="w-90 h-60 mb-4" />
+      <div>
       <h2 className="text-2xl font-semibold mt-4">Page Not Found</h2>
       <p className="text-gray-600 mt-2">The page you're looking for doesn't exist or has been moved.</p>
-      <Link to="/" className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Go Home</Link>
+      <Link to="/" className="text-blue-50">
+        Go Home
+      </Link>
+      </div>
     </div>
   );
 };
