@@ -1,21 +1,40 @@
 import mongoose from "mongoose";
-const notificationSchema = new mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true,
+const notificationSchema = new mongoose.Schema(
+  {
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    text:{
-        type:String,
-        required:true,
+    type: {
+      type: String,
+      required: true,
+      enum: [
+        "like",
+        "comment",
+        "connectionAccepted",
+        "connectionRequest",
+        "startFollowing",
+        "joinColabration",
+        "leaveColabration",
+        "deployNewOrder",
+        "newChallenge",
+        "newJob",
+      ],
     },
-    link:{
-        type:String,
-        required:true,
+    relatedUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
-    read:{
-        type:Boolean,
-        default:false,
+    relatedPost: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
     },
-},{timestamps:true});
+    read: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
 export const Notification = mongoose.model("Notification", notificationSchema);

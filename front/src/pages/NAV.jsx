@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../Store/AuthStore";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Logout from "./Logout";
 import "../coustomStyles/Nav.css";
+import { menu1 } from "./dashboard";
 import notP from "./user.jpg";
 import {
   FaHome,
@@ -15,7 +16,9 @@ import {
 import "../components/ove.css";
 
 const NAV = () => {
+  // const [dashNav , setDashNav] = useState(false);
   const [overlay, setOverlay] = useState(false);
+  const location = useLocation();
   const handelOver = () => {
     setOverlay(!overlay);
   };
@@ -34,21 +37,35 @@ const NAV = () => {
     <div className="min-h-screen bg-gray-50 w-screen">
       <nav className="fixed top-0 left-0 right-0 bg-[#131921] text-white shadow-lg z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16 w-screen">
+          <div className="flex items-center justify-between  h-16 w-screen">
+            <div className="flex items-center w-1/2">
             <button
               onClick={() => navigate("/home")}
               className="p-2 hover:bg-gray-700 rounded-full transition-colors"
             >
               <FaHome className="w-6 h-6" />
             </button>
-
-            <div className="flex-grow mx-4">
-              <span className="text-lg font-semibold">
-                {currUser?.username || "User"}
-              </span>
+            {location.pathname.startsWith("/dashboard") && (
+              <div className="dLeft ">
+                {/* <div className="dLeftTop center ">someItems</div> */}
+                <div className="dLeftBottom trdcard">
+                  {menu1.map((itm, i) => (
+                    <div key={i}>
+                      <div className={`menuItems1 center `}   onClick={() => navigate(itm.rout)}>{itm.name}</div>
+                      <hr />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              )}
             </div>
-
-            <div className="flex items-end space-x-2 mr-12">
+            {/* <div className="flex-grow  mx-4">
+              <span className="text-lg font-semibold">
+                
+              </span>
+            </div> */}
+            {/* <div className="w-110"></div> */}
+            <div className="flex items-end space-x-2 mr-12 mr-0">
               <button
                 onClick={() => navigate("/notification")}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
@@ -66,7 +83,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() => navigate("/dashboard")}
+                onClick={() =>{ navigate("/dashboard"); setDashNav(!dashNav)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />
@@ -104,7 +121,7 @@ const NAV = () => {
               >
                 {currUser?.profilePic ? (
                   <img
-                    src={currUser.profilePic}
+                    src={currUser.profile.Pic}
                     alt="Profile"
                     className="profile-image"
                   />

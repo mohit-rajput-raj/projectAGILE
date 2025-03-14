@@ -18,7 +18,11 @@ export const login = async (req, res) => {
             return res.status(400).json({ msg: "All fields are required" });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({email})
+        // .populate({
+        //     path: "colabration", 
+        //     select: "colabName colabImage description rating caption likes"
+        // });
         if (!user) {
             console.log({ msg:"User does not exist"});
             return res.status(400).json({ msg: "User does not exist" });
@@ -32,12 +36,14 @@ export const login = async (req, res) => {
 
         genToken(user._id, res);
 
-        return res.status(201).json({
-            _id:user._id,
-            email:user.email,
-            role: user.profile.role,
-            phone: user.phone
-        });
+        // return res.status(201).json({
+        //     _id:user._id,
+        //     email:user.email,
+        //     role: user.profile.role,
+        //     phone: user.phone
+        // });
+        
+        return res.status(201).json(user);
 
     } catch (error) {
         console.error("Error in login", error);
@@ -82,15 +88,15 @@ export const register = async (req, res) => {
         const savedUser = await newUser.save();
         if(savedUser){
             genToken(savedUser._id, res);
-            return res.status(201).json({
-                _id: savedUser._id,
-                username:savedUser.username,
-                email: savedUser.email,
-                role: savedUser.profile.role,
-                phone: savedUser.phone
+            // return res.status(201).json({
+            //     _id: savedUser._id,
+            //     username:savedUser.username,
+            //     email: savedUser.email,
+            //     role: savedUser.profile.role,
+            //     phone: savedUser.phone
                 
-            });
-        }
+            // });
+            return res.status(201).json(savedUser);       }
         return res.status(401).json({msg:'not found'});
     } catch (error) {
         console.log("error in sigin",{error});

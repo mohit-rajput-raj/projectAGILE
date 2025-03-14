@@ -1,87 +1,98 @@
-import React from 'react';
-import '../coustomStyles/home.css';
-import  '../coustomStyles/compo.css';
-import {ProfileComponent} from '../components/profileCard';
-import { useNavigate} from 'react-router-dom';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import "../coustomStyles/home.css";
+import "../coustomStyles/compo.css";
+import { ProfileComponent } from "../components/profileCard";
+import { useNavigate } from "react-router-dom";
+import { IoSearchSharp } from "react-icons/io5";
+import { axiosApi } from "../library/axios.js";
+
 const Home = () => {
   const navigate = useNavigate();
-  const jobItems = [
-    {
-      title: 'UI/UX designer',
-      company: 'Envato',
-      location: 'India, Punjab',
-      connections: 18,
-      image: 'img/l1.png',
-      profiles: ['img/p1.png', 'img/p2.png', 'img/p3.png', 'img/p4.png', 'img/p5.png'],
-    },
-    {
-      title: '.NET Developer',
-      company: 'Invision',
-      location: 'London, UK',
-      connections: 18,
-      image: 'img/l4.png',
-      profiles: ['img/p13.png', 'img/p1.png', 'img/p2.png', 'img/p3.png'],
-    },
-    {
-      title: 'Channel Sales Director',
-      company: 'Slack Inc.',
-      location: 'London, UK',
-      connections: 18,
-      image: 'img/l7.png',
-      profiles: ['img/p12.png', 'img/p13.png', 'img/p2.png'],
-    },
-  ];
+  // const [isLoading,setIsLoading] =useState(false);
+  const [searchData, setSearchData] = useState("");
 
-  const peopleList = [
-    { name: 'Sophia Lee', title: 'Student at Harvard', image: 'img/p8.png' },
-    { name: 'John Doe', title: 'Traveler', image: 'img/p9.png' },
-    { name: 'Julia Cox', title: 'Art Designer', image: 'img/p10.png' },
-    { name: 'Robert Cook', title: 'Photographer at Photography', image: 'img/p11.png' },
-    { name: 'Richard Bell', title: 'Graphic Designer at Envato', image: 'img/p12.png' },
-  ];
+  const { data: searchedUsers, isLoading } = useQuery({
+    queryKey: ["searchedUsers", searchData],
+    queryFn: async () => {
+      if (!searchData) return [];
+      try {
+        const res = await axiosApi.get(`/home/searchperson?query=${searchData}`);
+        return res.data;
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        return [];
+      }
+    },
+    enabled: !!searchData, 
+  });
 
   return (
-    <div className='dashCon'>
-      <div className='dashConItem'>
-        <div className='item1'>
-          <div className='item1Con CosCard min-h-screen w-screen'>
-            <aside className='dashAside1 CosCard'>
-              <div className='suggestedBar'>
-                <h6 className='text-3xl'>suggested shops</h6>
+    <div className="dashCon">
+      <div className="dashConItem">
+        <div className="item1">
+          <div className="item1Con CosCard min-h-screen w-screen">
+            <aside className="dashAside1 CosCard">
+              <div className="suggestedBar">
+                <h6 className="text-3xl">Suggested Shops</h6>
               </div>
-              <div className='suggestedPf'>
+              <div className="suggestedPf">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className='p-2 hover:bg-blue-100 cursor-pointer hover:text-black' onClick={()=>navigate ('/profile')}>
-                     <ProfileComponent/>
-                     <hr />
+                  <div
+                    key={i}
+                    className="p-2 hover:bg-blue-100 cursor-pointer hover:text-black"
+                    onClick={() => navigate("/profile")}
+                  >
+                    <ProfileComponent />
+                    <hr />
                   </div>
                 ))}
               </div>
-              
-              
-             
             </aside>
-            <main className='dashMain CosCard w-full'>
-              
-                
-             
-            </main>
-            
-            <aside className='dashAside2 CosCard'>
-              <div>
-                <div className='cursor-pointer' onClick={()=>navigate ('/connections')}>
-                  <h6 className='dashRec' >People you might know</h6>
-                </div>
-                <div>
-                  {peopleList.map((person, index) => (
-                    <div key={index} className='p-2 text-gray-600 hover:bg-blue-100 cursor-pointer hover:text-black  ' onClick={()=>navigate ('/profile')}>
-                    <ProfileComponent/>
-                    <hr />
-                 </div>
-                  ))}
+
+            <main className="dashMain w-full">
+              <div className="h-12 w-full rounded-2xl CosCard center padl-12">
+                <div className="p-5 flex gap-4 w-full ml-12">
+                  <div className="center searchIcon w-12 h-10">
+                    <IoSearchSharp className="h-6 w-6" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search person"
+                    value={searchData}
+                    onChange={(e) => setSearchData(e.target.value)}
+                    className="rounded-3xl w-2/3 bg-zinc-100 border-none focus:outline-none inputFilter"
+                  />
                 </div>
               </div>
-              
+
+              <div className="w-1/2 CosCard">
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : searchedUsers?.length === 0 ? (
+                  <p>No users found</p>
+                ) : (
+                  searchedUsers?.map((user, index) => (
+                    <div
+                      key={index}
+                      className="hover:bg-blue-100 "
+                    >
+                      <ProfileComponent user={user} />
+                      <hr />
+                    </div>
+                  ))
+                )}
+              </div>
+            </main>
+
+            <aside className="dashAside2 CosCard">
+              <h6 className="dashRec">People you might know</h6>
+              {[...Array(2)].map((_, index) => (
+                <div key={index} className="p-2 text-gray-600 hover:bg-blue-100 cursor-pointer">
+                  <ProfileComponent />
+                  <hr />
+                </div>
+              ))}
             </aside>
           </div>
         </div>

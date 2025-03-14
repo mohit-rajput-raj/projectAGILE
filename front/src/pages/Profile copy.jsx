@@ -9,11 +9,11 @@ import black from './black.tree.jpg'
 import { MdOutlineModeEdit } from "react-icons/md";
 import Suggestions from './Suggestions';
 import '../coustomStyles/person.css';
-import { Link, useNavigate,useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdOutlineVerified } from "react-icons/md";
 import userPic from './user.jpg';
 import { useAuthStore } from '../Store/AuthStore';
-const Profile = () => {
+const PeoplesProfile = () => {
   const { currUser } = useAuthStore();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -70,7 +70,7 @@ const Profile = () => {
               <div className='pInfo'>
                 <div className='pPicHolder'>
                   <div className='pPic'>
-                  <img src={user.current.profile.pic?user.current.profile.pic:userPic} className='fit' />
+                  <img src={user.current.profile.pic} className='fit' />
                   </div>
                 </div>
                 <div className='profile-header'>
@@ -207,16 +207,4 @@ const Profile = () => {
   );
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-export  {Profile};
+export default PeoplesProfile;

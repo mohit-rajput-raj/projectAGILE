@@ -26,7 +26,7 @@ const itemSchema = new mongoose.Schema({
     },
     image:{
         type:String,
-        required:true,
+        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtZyrVY1ktSmsw3tkJFd7JgqYBkhKJsl7IwA&s"
     },
     rating:{
         type:Number,

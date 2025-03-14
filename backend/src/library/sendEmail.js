@@ -52,7 +52,7 @@ export const sendEmailNode = async ({ sendTo, subject, html }) => {
       secure: true,
       auth: {
         user: "13mohitrajput1692001.com@gmail.com",
-        pass: "gpcu vnvm sfsa jadw",
+        pass: process.env.APP_PASS,
       },
     });
 

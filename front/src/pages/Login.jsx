@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "../Store/AuthStore";
 
 const Login = () => {
-  const { login,loginError } = useAuthStore();
+  const { login,loginError ,isLogin} = useAuthStore();
   const [logindata, setLogindata] = useState({
     email: "",
     password: "",
@@ -23,6 +23,8 @@ const Login = () => {
       alert("Invalid Credentials");
     }
   },[loginError])
+
+  
   
   const handleSubmit = async (e) => {
     e.preventDefault();

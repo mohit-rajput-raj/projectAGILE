@@ -32,6 +32,9 @@
     font-size: small;
 
 }
+.fitCover{
+    object-fit: cover;
+}
 .cardPic{
     border-radius: 50%;
     height:60px;

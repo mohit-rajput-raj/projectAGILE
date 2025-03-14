@@ -1,0 +1,57 @@
+.colMain{
+    padding-top: 30px;
+    display: flex;
+    width: 100%;
+    /* height: 100vh; */
+    gap: 10px;
+    padding-left: 400px;
+    padding-right: 150px;
+}
+.usersPisc{
+    padding-left: 45px;
+    /* margin-left: -10px; */
+    /* gap: -10px; */
+}
+.colabcard{
+    padding-left: 10px;
+    padding-right: 100px;
+    justify-content: space-between;
+    background-color: var(--backgroundColor);
+}
+.picHolder{
+    margin-left: -25px;
+
+}
+.colLeft{
+    width: 65%;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: 100%;
+}
+.colRight{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 35%;
+    height: 100%;
+}
+.trdcard{
+    background-color: rgba(223, 243, 255, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: var(--card-shadow);
+}
+.colLeftBottom{
+    align-items: center;
+    /* padding-top: 70px; */
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* justify-content: center; */
+    overflow-y: scroll;
+}

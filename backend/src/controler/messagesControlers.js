@@ -1,5 +1,5 @@
 import {Messages} from "../models/messagesModel.js";
-import cloudinary from "../library/cloud.js";
+// import cloudinary from "../library/cloud.js";
 import {User} from "../models/userModel.js";
 // import { io } from "socket.io-client";
 export const createMessage = async (req, res) => {
@@ -124,7 +124,7 @@ export const getSideBarUsers = async (req, res) => {
                 { _id: { $in: myData.messagesBar } },
                 { _id: { $ne: myId } } 
             ]
-        }).select('username profile.Pic');
+        }).select('username profile.Pic profile.role');
         
         return res.status(200).json(users);
         

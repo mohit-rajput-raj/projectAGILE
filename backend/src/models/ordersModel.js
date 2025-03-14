@@ -6,6 +6,10 @@ const orderSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    budget:{
+        type: Number,
+        required: true,
+    },
     holdByColabration:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Colabration",
@@ -53,6 +57,11 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     }],
+    address:{
+        type: String,
+        required: true,
+        trim: true,
+    },
     
     orderTotal: {
         type: Number,

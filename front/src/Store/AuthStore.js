@@ -14,6 +14,7 @@ export const useAuthStore = create((set, get) => ({
   registerError: false,
   loginError:false,
   getUser: async () => {
+    set({ isLogin: true });
     set({ loginError: false });
     try {
       const res = await axiosApi.get("/auth/authCheck");
@@ -21,6 +22,8 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       set({ currUser: null });
       console.log("Error in getUser store:", error);
+    }finally{
+      set({ isLogin: false });
     }
 
 

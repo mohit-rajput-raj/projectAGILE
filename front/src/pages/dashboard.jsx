@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
 import Ordercard from "../components/orderCard";
-import DemoCard from "../components/DemoCard";
+// import DemoCard from "../components/DemoCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
 export const menu1 = [
-  
+  { name: "Dashboard", rout: "/dashboard" },
   { name: "Items", rout: "/dashboard/items" },
   { name: "Colabration", rout: "/dashboard/colabration" },
   { name: "Contacts", rout: "/dashboard/contacts" },
@@ -22,8 +22,10 @@ const orderStatus=["All","deploy", "running", "shipped","paused","pending", "del
 const statusPanel = [16,1,2,4,1,6,4,8];
 const Dashboard = () => {
   const navigate = useNavigate();
+  let d = useRef();
   const [showOrder, setShowOrder] = useState(true);
   const [idd,setIdd] =useState(0);
+ 
 
   
   return (
@@ -43,7 +45,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="dMid  gap-4">
-              <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-4"></div>
+              <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-10">ShopOwner</div>
               <div className="dMidBottom  rounded">
                 <div className="dHeader p-5 flex gap-4   ">
                   <div className="center searchIcon w-12 h-10"><IoSearchSharp className="h-6 w-6" /> </div>
@@ -52,7 +54,7 @@ const Dashboard = () => {
                 <div className="flex justify-evenly">
                   {[orderStatus.map((itm,i)=>(
                     <div key={i} className="w-full">
-                    <button className="dNavBtn center" onClick={()=>setIdd(i)}>{itm}</button>
+                    <button className="dNavBtn center" onClick={()=>{setIdd(i); d.current=i}}>{itm}</button>
                   </div>
                   ))]}
                 </div>

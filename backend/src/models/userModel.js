@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { exp } from "three/tsl";
 const userModel = new mongoose.Schema({
     username: {
         type: String,
@@ -58,11 +59,56 @@ const userModel = new mongoose.Schema({
     messagesBar: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message",
-        unique: true
+        
     }],
     
 
     profile:{
+        notifications:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notification",
+        }],
+        skills:[{
+            skillname: {
+                type: String,
+            },
+            skillexp: {
+                type: String,
+            },
+
+        }],
+        
+        experience: [
+			{
+				title: String,
+				company: String,
+				startDate: Date,
+				endDate: Date,
+				description: String,
+			},
+		],
+		education: [
+			{
+				school: String,
+				fieldOfStudy: String,
+				startYear: Number,
+				endYear: Number,
+			},
+		],
+        certificates:[{
+            type: String,
+        }],
+        fields:[{
+            type:String,
+        }],
+        colabration:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Colabration",
+        }],
+        accounts:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Account",
+        }],
         
         role:{
             type:String,
@@ -76,20 +122,24 @@ const userModel = new mongoose.Schema({
         },
         pic: {
             type: String,
-            default: "",
+            default:"",
         },
         bannerImg:[{
             type: String,
             default: ""
         }],
+        about: {
+            type: String,
+            default: "",
+        },
         bio: {
             type: String,
             default: "",
         },
-        website: {
+        websites: [{
             type: String,
             default: "",
-        },
+        }],
         followers:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
@@ -112,6 +162,10 @@ const userModel = new mongoose.Schema({
                 ref: "User",
             }
         ],
+        address:{
+            type: String,
+            default: "",
+        },
     
         saved: [{
             type: mongoose.Schema.Types.ObjectId,

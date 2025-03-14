@@ -14,7 +14,8 @@ import Logout from './pages/Logout'
 // import PhoneNumberInput from './pages/num'
 import PageNotFound from './pages/PageN'
 // import Tpp from './pages/num'
-import Profile from './pages/Profile'
+import {Profile} from './pages/Profile'
+// import PeoplesProfile from './pages/Profile'
 // import Num from './pages/num'
 import Connections from './pages/Connections'
 import EditProfile from './pages/EditProfile'
@@ -24,6 +25,8 @@ import CompleteProfile from './pages/CompleteProfile'
 import CreateOrder from './pages/CreateOrder'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import EditOrder from './pages/EditOrder'
+import HeaderLoader from './skeletons/profileSkeleton';
+
 
 import Items from './pages/Items'
 import Deleted from './pages/Deleted'
@@ -36,21 +39,25 @@ import Cancled from './pages/Cancled'
 import DashboardHomeMaker from './pages/DashboardHomeMaker'
 // import CreateOrder from './pages/CreateOrder'
 const App = () => {
-  const {currUser,getUser} = useAuthStore();
-  // console.log(onlineUsers);
-  console.log(currUser?.profile.role);
+  const {currUser,getUser,isLogin} = useAuthStore();
+  
+
   
   useEffect(()=>{
     getUser()
   },[getUser]);
-  
 
+  if(isLogin && !currUser){
+    return <HeaderLoader/>
+  }
+  
+  
 
   return (
      
     <Routes>
       <Route path='/' element={currUser?<NAV/>:<Navigate to={'/login'}/>}>
-        <Route index element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/dashboard/items' element={<Items />} />
         <Route path='/dashboard/colabration' element={<Colabration />} />
         <Route path='/dashboard/contacts' element={<Contacts />} />
@@ -63,8 +70,9 @@ const App = () => {
         
 
         <Route path='/profile' element={<Profile/>} />
+        <Route path='/profile/:id' element={<Profile/>} />
         <Route path='/editProfile' element={<EditProfile/>} />
-        <Route path='/dashboard' element={currUser?.profile.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
+        <Route path='/dashboard' element={currUser?.profile?.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
         <Route path='/createOrder' element={<CreateOrder />} />
         <Route path='/messages' element={<Messages />} />
         <Route path='/notification' element={<Notification />} />

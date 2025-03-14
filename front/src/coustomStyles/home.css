@@ -25,12 +25,18 @@
     justify-content: space-evenly;
 
 }
+.padl-12{
+    padding-left: 48px;
+}
 .dashMain{
     /* backdrop-filter: var(--back-Drop); */
     width: 45%;
     padding: 6px;
     /* border: 1px solid black; */
     margin: 1px;
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
 
 }
 h6{
