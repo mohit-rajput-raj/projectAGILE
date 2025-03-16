@@ -13,26 +13,62 @@ import { Link, useNavigate,useParams } from 'react-router-dom';
 import { MdOutlineVerified } from "react-icons/md";
 import userPic from './user.jpg';
 import { useAuthStore } from '../Store/AuthStore';
-const Profile = () => {
-  const { currUser } = useAuthStore();
-  const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const banners = [banner, banner2, banner3, banner2];
+const banners = [banner, banner2, banner3, banner2];
   const images = banners;
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % images.length);
-  }, [images.length]);
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-  };
+// import { useQueryClient, useQuery} from '@tanstack/react-query';
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-  const user =useRef(currUser);
+import { useUsersData } from '../Store/dataStore';
+const Profile = () => {
+  const { username } = useParams();
+  const { userProfile, getUserProfile, isUserProfileLoading} = useUsersData();
+  useEffect(() => {
+    getUserProfile(username);
+  },[getUserProfile]);
+  
+
+  const { currUser } = useAuthStore();
+  
+  // const navigate = useNavigate();
+  console.log(userProfile);
+  
+  
 
 
+
+  const isOwnProfile = currUser?._id === userProfile?._id;
+  // const isOwnProfile = false;
+  const userData =isOwnProfile ? currUser : userProfile;
+  // console.log(userData);
+  // const userData = currUser;
+  // const isOwnProfile =false;
+
+  
+
+
+
+
+
+
+
+
+  
+  // const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // const nextSlide = useCallback(() => {
+  //   setCurrentSlide((prev) => (prev + 1) % images.length);
+  // }, [images.length]);
+
+  // const prevSlide = () => {
+  //   setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  // };
+
+  // const goToSlide = (index) => {
+  //   setCurrentSlide(index);
+  // };
+  
+
+if (isUserProfileLoading) return <div>Loading...</div>;
 
   return (
     <div className='dashCon'>
@@ -70,29 +106,29 @@ const Profile = () => {
               <div className='pInfo'>
                 <div className='pPicHolder'>
                   <div className='pPic'>
-                  <img src={user.current.profile.pic?user.current.profile.pic:userPic} className='fit' />
+                  <img src={userData.profile.Pic || userPic} className='fit' alt="userPic" />
                   </div>
                 </div>
                 <div className='profile-header'>
                   <div className='profile-nameHolder'>
-                    <h1 className='profile-name'><h1 className='profile-name  gap-3'>{user.current.isVerified &&<MdOutlineVerified className='color-blue'/>}{user.current.username}</h1>
+                    <h1 className='profile-name gap-3'><div className='text-2xl'>{userData.isVerified &&<MdOutlineVerified className='color-blue'/>}{userData.username}</div>
                     <div className='stat-item'>
-                      <span>{user.current.isVerified?"verified":"not verified"}</span>
+                      <span>{userData.isVerified?"verified":"not verified"}</span>
                     </div>
                     <div className='stat-item'>
-                      <Link to={'/completep'} className='logoutb'>{!user.current.isVerified &&"Complete your profile"}</Link>
+                      {isOwnProfile && <Link to={'/completep'} className='logoutb'>{!userData.isVerified &&"Complete your profile"}</Link>}
                     </div>
                     </h1>
-                    <button className='editButton ' onClick={()=>navigate('/editProfile')}>
+                    {isOwnProfile && <button className='editButton ' onClick={()=>navigate('/editProfile')}>
                     <MdOutlineModeEdit className='editIcon'/>
 
-                    </button>
+                    </button>}
 
                   </div>
                   <div className='profile-title'>Fields</div>
-                  <div className='profile-title'>{user.current.email}</div>
+                  <div className='profile-title'>{userData.email}</div>
                   <div className='profile-location'>
-                    <span>{user.current.address? user.current.address:"add address"}</span>
+                    <span>{userData.address? user.current.address:"new user"}</span>
                     <div className='stat-item'>
                     <span>CONTACTS INFO</span>
                   </div>
@@ -104,16 +140,16 @@ const Profile = () => {
 
                 <div className='profile-stats'>
                   <div className='stat-item'>
-                    <span>{user.current.profile.connections.length} connections</span>
+                    <span>{userData.profile.connections.length} connections</span>
                   </div>
                   {/* <div className='stat-item'>
                     <span>Alumni Student Club SGSITS Indore</span>
                   </div> */}
                   <div className='stat-item'>
-                    <span>{user.current.profile.followers.length} Folowers</span>
+                    <span>{userData.profile.followers.length} Folowers</span>
                   </div>
                   <div className='stat-item'>
-                    <span>{user.current.profile.following.length} Followring</span>
+                    <span>{userData.profile.following.length} Followring</span>
                   </div>
                   <div className='stat-item'>
                     <span> Colobrations</span>
@@ -126,8 +162,8 @@ const Profile = () => {
 
                 <div className='profile-buttons'>
                   <button className='profile-btn btn-primary'>Connect</button>
-                  <button className='profile-btn btn-secondary'>Follow</button>
-                  <button className='profile-btn btn-secondary'>Message</button>
+                  <button className='profile-btn btn-secondary'>follow</button>
+                  {!isOwnProfile && <button className='profile-btn btn-secondary' onClick={()=>navigate('/messages')}>Message</button>}
                   <button className='profile-btn btn-secondary'>More</button>
                 </div>
               </div>
@@ -206,17 +242,6 @@ const Profile = () => {
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
 
 
 export  {Profile};

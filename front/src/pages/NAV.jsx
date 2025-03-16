@@ -3,7 +3,17 @@ import { useAuthStore } from "../Store/AuthStore";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Logout from "./Logout";
 import "../coustomStyles/Nav.css";
-import { menu1 } from "./dashboard";
+export const menu1 = [
+  { name: "DashBoard", rout: "/dashboard" },
+  { name: "Items", rout: "/dashboard/items" },
+  
+  { name: "Contacts", rout: "/dashboard/contacts" },
+  { name: "FeedBack", rout: "/dashboard/issues" },
+  { name: "Report", rout: "/dashboard/report" },
+  { name: "HIstory", rout: "/dashboard/history" },
+  { name: "Cancled", rout: "/dashboard/cancled" },
+  { name: "Deleted", rout: "/dashboard/deleted" },
+];
 import notP from "./user.jpg";
 import {
   FaHome,
@@ -14,9 +24,18 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import "../components/ove.css";
-
+export const menu2 = [
+  { name: "DashBoard", rout: "/dashboard" },
+  { name: "Items", rout: "/dashboard/items" },
+  { name: "Colabration", rout: "/dashboard/colabration" },
+  { name: "Contacts", rout: "/dashboard/contacts" },
+  { name: "FeedBack", rout: "/dashboard/issues" },
+  { name: "Menu", rout: "/dashboard/menu" },
+  { name: "HIstory", rout: "/dashboard/history" },
+  { name: "Cancled", rout: "/dashboard/cancled" },
+  { name: "Deleted", rout: "/dashboard/deleted" },
+];
 const NAV = () => {
-  // const [dashNav , setDashNav] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const location = useLocation();
   const handelOver = () => {
@@ -24,6 +43,16 @@ const NAV = () => {
   };
   const { logout, getUser, currUser } = useAuthStore();
   const navigate = useNavigate();
+  const [menu , setMenu] = useState(null);
+  
+  const handelMenu = ()=>{
+    if(currUser?.profile?.role==="homemaker"){
+      return true;
+    }else if(currUser?.profile?.role==="shopowner"){
+      return false;
+    }
+  }
+  
   const [profileDrop, setProDrop] = useState(false);
   useEffect(() => {
     getUser();
@@ -49,12 +78,17 @@ const NAV = () => {
               <div className="dLeft ">
                 {/* <div className="dLeftTop center ">someItems</div> */}
                 <div className="dLeftBottom trdcard">
-                  {menu1.map((itm, i) => (
+                  {handelMenu? (menu2.map((itm, i) => (
                     <div key={i}>
                       <div className={`menuItems1 center `}   onClick={() => navigate(itm.rout)}>{itm.name}</div>
                       <hr />
                     </div>
-                  ))}
+                  ))) :  (menu1.map((itm, i) => (
+                    <div key={i}>
+                      <div className={`menuItems1 center `}   onClick={() => navigate(itm.rout)}>{itm.name}</div>
+                      <hr />
+                    </div>
+                  )))}
                 </div>
               </div>
               )}
@@ -66,6 +100,13 @@ const NAV = () => {
             </div> */}
             {/* <div className="w-110"></div> */}
             <div className="flex items-end space-x-2 mr-12 mr-0">
+            <button
+                onClick={() => navigate("/home")}
+                className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <FaHome className="w-6 h-6" />
+                <span className="hidden md:inline">Home</span>
+              </button>
               <button
                 onClick={() => navigate("/notification")}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
@@ -75,7 +116,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate("/profile/" + currUser?.username)}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />
@@ -83,7 +124,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() =>{ navigate("/dashboard"); setDashNav(!dashNav)}}
+                onClick={() =>{ navigate("/dashboard");}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />
@@ -98,13 +139,13 @@ const NAV = () => {
                 <span className="hidden md:inline">Messages</span>
               </button>
 
-              <button
+              {/* <button
                 onClick={() => navigate("/contacts")}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaAddressBook className="w-5 h-5 mr-2" />
                 <span className="hidden md:inline">Contact</span>
-              </button>
+              </button> */}
 
               {/* <button
                 onClick={handelOver}

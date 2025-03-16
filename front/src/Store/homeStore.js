@@ -3,8 +3,14 @@ import { axiosApi } from '../library/axios.js';
 
 export const useHomeStore = create((set) => ({
   searchedUsers: [],
+  SuggestedConnections:[],
   searchBarDataLoading: false,
+  getSuggestedConnectionsLoading:false,
+
+
   searchBarDataError: null,
+  suggestedConnectionsError:null,
+
 
   getSearchedUsers: async (query) => {
     try {
@@ -18,6 +24,18 @@ export const useHomeStore = create((set) => ({
       set({ searchBarDataError: 'Failed to load users.' });
     } finally {
       set({ searchBarDataLoading: false });
+    }
+  },
+  getSuggestedConnections:async()=>{
+    set({getSuggestedConnections:true});
+    try {
+      const res = await axiosApi.get("/home/getSuggestedConnections");
+      set({SuggestedConnections:res.data||[]});
+    } catch (error) {
+      console.error('Error in getSuggestedConnections:', error);
+      set({ suggestedConnectionsError: 'Failed to load suggec=stions.' });
+    }finally{
+      set({getSuggestedConnections:false});
     }
   }
 }));

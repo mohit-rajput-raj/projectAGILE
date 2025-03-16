@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import "./profileCard.css";
 import black from "./black.tree.jpg";
 import gian from "./gian.jpg";
+import userPicc from '../pages/user.jpg'
+import { Link } from "react-router-dom";
 export const userPic = "https://media.istockphoto.com/id/1131164548/vector/avatar-5.jpg?s=612x612&w=0&k=20&c=CK49ShLJwDxE4kiroCR42kimTuuhvuo2FH5y_6aSgEo=";
 // import '../coustomStyles/profile.css'
 const ProfileComponent = ({ user }) => {
   if (!user) return null;
-  console.log(user);
+  // console.log(user);
   const styleC = {
     marginLeft: "10px",
   };
   return (
+    <Link to={`/profile/${user.username}`} style={{ color: 'black' }}>
     <div className="flex  items-center gap-6 pCard cursor-pointer w-40">
       <div style={styleC} className="cardPic ">
         <img
           src={
             user.profile.pic
               ? user.profile.pic
-              : "https://media.istockphoto.com/id/1131164548/vector/avatar-5.jpg?s=612x612&w=0&k=20&c=CK49ShLJwDxE4kiroCR42kimTuuhvuo2FH5y_6aSgEo="
+              : userPicc
           }
           alt="User"
           className="fitCover"
@@ -25,9 +28,10 @@ const ProfileComponent = ({ user }) => {
       </div>
       <div className="flex flex-col justify-end">
         <h5 className="username">{user.username}</h5>
-        <h3 className="profession "></h3>
+        <h3 className="profession ">{user.profile.role}</h3>
       </div>
     </div>
+    </Link>
   );
 };
 const ProfileComponentMessage = ({ sideUser }) => {

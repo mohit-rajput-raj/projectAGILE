@@ -133,7 +133,7 @@ const CreateOrder = () => {
                       )}
                       <div className="flex overflow-x-scroll h-90 gap-4 bg-transparent">
                         {items.map((item) => (
-                          <div key={item.id} className="bg-pink-100 rounded-2xl h-full">
+                          <div key={item.id} className=" rounded-2xl h-full">
                             <ItemsCard CardData={item} deleteItem={deleteItem} />
                           </div>
                         ))}

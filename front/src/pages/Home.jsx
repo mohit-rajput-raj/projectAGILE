@@ -3,14 +3,29 @@ import { useQuery } from "@tanstack/react-query";
 import "../coustomStyles/home.css";
 import "../coustomStyles/compo.css";
 import { ProfileComponent } from "../components/profileCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 import { axiosApi } from "../library/axios.js";
-
 const Home = () => {
   const navigate = useNavigate();
   // const [isLoading,setIsLoading] =useState(false);
+  const handelSuggestions = async()=>{
+    try {
+      const res = await axiosApi.get("/home/getSuggestedConnections");
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching users:", error);
+        return [];
+    }
+  }
+  
   const [searchData, setSearchData] = useState("");
+  
+  const {data:suggestedConnections,suggestedConnectionsisLoading} = useQuery({
+    queryKey:["suggestedConnections"],
+    queryFn:handelSuggestions,
+  })
+  // console.log(suggestedConnections);
 
   const { data: searchedUsers, isLoading } = useQuery({
     queryKey: ["searchedUsers", searchData],
@@ -77,7 +92,9 @@ const Home = () => {
                       key={index}
                       className="hover:bg-blue-100 "
                     >
+                      
                       <ProfileComponent user={user} />
+                      
                       <hr />
                     </div>
                   ))
@@ -87,9 +104,10 @@ const Home = () => {
 
             <aside className="dashAside2 CosCard">
               <h6 className="dashRec">People you might know</h6>
-              {[...Array(2)].map((_, index) => (
-                <div key={index} className="p-2 text-gray-600 hover:bg-blue-100 cursor-pointer">
-                  <ProfileComponent />
+              {suggestedConnections?.map((user, index) => (
+                <div key={index} className="flex items-center p-2 text-gray-600 hover:bg-blue-100 cursor-pointer">
+                  <ProfileComponent user={user} />
+                  <div className="center h-10 w-50"><button className="btn-primary ">connect</button></div>
                   <hr />
                 </div>
               ))}

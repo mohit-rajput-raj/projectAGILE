@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
@@ -6,26 +6,14 @@ import Ordercard from "../components/orderCard";
 // import DemoCard from "../components/DemoCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
-export const menu1 = [
-  { name: "Dashboard", rout: "/dashboard" },
-  { name: "Items", rout: "/dashboard/items" },
-  { name: "Colabration", rout: "/dashboard/colabration" },
-  { name: "Contacts", rout: "/dashboard/contacts" },
-  { name: "FeedBack", rout: "/dashboard/issues" },
-  { name: "Report", rout: "/dashboard/report" },
-  { name: "HIstory", rout: "/dashboard/history" },
-  { name: "Cancled", rout: "/dashboard/cancled" },
-  { name: "Deleted", rout: "/dashboard/deleted" },
-];
+
 import { IoSearchSharp } from "react-icons/io5";
-const orderStatus=["All","deploy", "running", "shipped","paused","pending", "delivered", "rejected"];
-const statusPanel = [16,1,2,4,1,6,4,8];
+const orderStatus=["All", "running", "shipped","paused","pending", "delivered", "rejected"];
+const statusPanel = [16,2,4,1,6,4,8];
 const Dashboard = () => {
   const navigate = useNavigate();
-  let d = useRef();
   const [showOrder, setShowOrder] = useState(true);
   const [idd,setIdd] =useState(0);
- 
 
   
   return (
@@ -33,7 +21,7 @@ const Dashboard = () => {
       <div className="dashCon">
         <div className="item1">
           <main className="dMain">
-            <div className="dLeft">
+            {/* <div className="dLeft">
               <div className="dLeftTop center ">someItems</div>
               <div className="dLeftBottom">
                 {menu1.map((itm, i) => (
@@ -43,18 +31,18 @@ const Dashboard = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
             <div className="dMid  gap-4">
-              <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-10">ShopOwner</div>
+              <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-10">HomeMaker </div>
               <div className="dMidBottom  rounded">
                 <div className="dHeader p-5 flex gap-4   ">
-                  <div className="center searchIcon w-12 h-10"><IoSearchSharp className="h-6 w-6" /> </div>
+                  <div className="center searchIcon w-12 h-10"><IoSearchSharp className="h-6 w-6" /></div>
                   <input type="text" placeholder="serach person" name="filter" className="rounded-3xl bg-zinc-300 border-none focus:outline-none inputFilter" />
                 </div>
                 <div className="flex justify-evenly">
                   {[orderStatus.map((itm,i)=>(
                     <div key={i} className="w-full">
-                    <button className="dNavBtn center" onClick={()=>{setIdd(i); d.current=i}}>{itm}</button>
+                    <button className="dNavBtn center" onClick={()=>setIdd(i)}>{itm}</button>
                   </div>
                   ))]}
                 </div>

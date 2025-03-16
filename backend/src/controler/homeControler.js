@@ -16,3 +16,19 @@ export const searchPerson = async (req, res) => {
     return res.status(500).json({ msg: "Failed to fetch users" });
   }
 };
+export const getSuggestedConnections = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("profile.connections");
+
+    const suggestions = await User.find({
+      _id: { $ne: req.user._id, $nin: user.profile.connections },
+    })
+      .select("username profile.pic profile.role")
+      .limit(3);
+
+    res.status(200).json(suggestions);
+  } catch (error) {
+    console.log("error in getSuggestedConnections", { error });
+    return res.status(500).json({ msg: error.message });
+  }
+};

@@ -9,7 +9,8 @@ import authRoute from "./routes/auth.rout.js";
 import dashRoute from "./routes/dashBoard.route.js";
 import messageRoute from "./routes/message.route.js";
 import homeRoute from "./routes/home.rout.js";
-import profile from "./routes/profile.rout.js";
+import userRoute from "./routes/user.route.js";
+// import profile from "./routes/profile.rout.js";
 dotenv.config();
 const Port = process.env.PORT || 3000;
 import {connectDB} from "./library/db.js";
@@ -33,7 +34,8 @@ app.use("/api/auth", authRoute);
 // app.use("/api/dashboard", dashRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/home", homeRoute);
-app.use("/api/profile/:id", profile);
+app.use("/api/user",userRoute );
+// app.use("/api/profile/:id", profile);
 
 server.listen(Port, () => {
     console.log('Server is running on port 3000');

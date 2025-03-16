@@ -18,7 +18,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ msg: "All fields are required" });
         }
 
-        const user = await User.findOne({email})
+        const user = await User.findOne({email});
         // .populate({
         //     path: "colabration", 
         //     select: "colabName colabImage description rating caption likes"
@@ -86,6 +86,7 @@ export const register = async (req, res) => {
         });
         
         const savedUser = await newUser.save();
+        
         if(savedUser){
             genToken(savedUser._id, res);
             // return res.status(201).json({
@@ -96,6 +97,7 @@ export const register = async (req, res) => {
             //     phone: savedUser.phone
                 
             // });
+            // const user = await User.findById({_id:savedUser._id});
             return res.status(201).json(savedUser);       }
         return res.status(401).json({msg:'not found'});
     } catch (error) {

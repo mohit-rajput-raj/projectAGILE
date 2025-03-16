@@ -6,17 +6,7 @@ import Ordercard from "../components/orderCard";
 // import DemoCard from "../components/DemoCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
-export const menu1 = [
-  
-  { name: "Items", rout: "/dashboard/items" },
-  { name: "Colabration", rout: "/dashboard/colabration" },
-  { name: "Contacts", rout: "/dashboard/contacts" },
-  { name: "FeedBack", rout: "/dashboard/issues" },
-  { name: "Report", rout: "/dashboard/report" },
-  { name: "HIstory", rout: "/dashboard/history" },
-  { name: "Cancled", rout: "/dashboard/cancled" },
-  { name: "Deleted", rout: "/dashboard/deleted" },
-];
+
 import { IoSearchSharp } from "react-icons/io5";
 const orderStatus=["All", "running", "shipped","paused","pending", "delivered", "rejected"];
 const statusPanel = [16,2,4,1,6,4,8];

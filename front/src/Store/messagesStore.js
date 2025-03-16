@@ -14,7 +14,7 @@ export const useMessagesStore = create((set, get) => ({
 
   getMessages: async (id) => {
     try {
-      set({ messagesLoading: true, error: null });
+      set({ messagesLoading: true, error: null, messages: [] });
       const res = await axiosApi.get(`/messages/getMessages/${id}`);
       set({ messages: res.data.messages });
     } catch (error) {

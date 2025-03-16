@@ -36,11 +36,13 @@ import Colabration from './pages/Colabration'
 import Issues from './pages/Issues'
 import Contacts from './pages/Contacts'
 import Cancled from './pages/Cancled'
+import Menu from './pages/Menu'
 import DashboardHomeMaker from './pages/DashboardHomeMaker'
 // import CreateOrder from './pages/CreateOrder'
 const App = () => {
   const {currUser,getUser,isLogin} = useAuthStore();
   
+// console.log(currUser);
 
   
   useEffect(()=>{
@@ -67,10 +69,11 @@ const App = () => {
         <Route path='/dashboard/history' element={<History />} />
         <Route path='/dashboard/deleted' element={<Deleted />} />
         <Route path='/dashboard/Cancled' element={<Cancled/>} />
+        <Route path='/dashboard/menu' element={<Menu/>} />
         
 
-        <Route path='/profile' element={<Profile/>} />
-        <Route path='/profile/:id' element={<Profile/>} />
+        <Route path='/profile/:username' element={<Profile/>} />
+        {/* <Route path='/profile/:id' element={<Profile/>} /> */}
         <Route path='/editProfile' element={<EditProfile/>} />
         <Route path='/dashboard' element={currUser?.profile?.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
         <Route path='/createOrder' element={<CreateOrder />} />

@@ -94,3 +94,9 @@
     /* padding: 40px; */
     box-shadow: var(--card-shadow);
 }
+.MessagepaddingLeft{
+    padding-left: 100px;
+}
+.MessagepaddingRight{
+    padding-right: 100px;
+}   
