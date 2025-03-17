@@ -17,7 +17,7 @@ const ItemsCard = ({ CardData, deleteItem }) => {
       <div className="flex flex-col justify-end pdng">
         <div className="flex justify-between">
           <span>ID: {CardData.id}</span>
-          <span className="bg-red-200 center rounded" onClick={() => deleteItem(CardData.id)}>
+          <span className="bg-red-200 center rounded" onClick={() => deleteItem(CardData.idp)}>
             <AiOutlineDelete className="h-5 w-5" />
           </span>
         </div>
@@ -39,33 +39,34 @@ const ItemsCard = ({ CardData, deleteItem }) => {
     </div>
   );
 };
-const ItemsCardDummy = () => {
+const ItemsCardDummy = ({item}) => {
+  if(!item)return;
 
   return (
     <div className="ItemCard">
       <div className="ItemCardPic fit">
-        <img src={ cake} alt="User" className="itemImg" />
+        <img src={item.image || cake} alt="User" className="itemImg" />
       </div>
       <div className="flex flex-col justify-end pdng">
         <div className="flex justify-between">
-          <span>ID: 28648</span>
+          <span>ID: {item.id}</span>
           <span className="bg-red-200 center rounded" >
             <AiOutlineDelete className="h-5 w-5" />
           </span>
         </div>
-        <h5 className="username">cake</h5>
+        <h5 className="username">{item.name}</h5>
         <Rating name="size-small" defaultValue={2} size="small" />
-        <h3 className="profession">veg</h3>
-        <div className="w-full flex flex-col gap-px">
+        <h3 className="profession">{item.category}</h3>
+        <div className="w-full flex flex-col ">
           <div className="w-full flex h-8 justify-between">
             <label htmlFor="price">Price/Unit</label>
             <input className="w-1/2 h-6" type="number" placeholder="Price" value={2}  />
           </div>
-          <div className="w-full h-8 flex justify-between">
+          {/* <div className="w-full h-8 flex justify-between">
             <label htmlFor="quantity">Quantity</label>
             <input className="w-1/2 h-6" type="number" placeholder="Quantity" value={2} />
           </div>
-          <label htmlFor="quantity">{`Total Price: 4`}</label>
+          <label htmlFor="quantity">{`Total Price: 4`}</label> */}
         </div>
       </div>
     </div>

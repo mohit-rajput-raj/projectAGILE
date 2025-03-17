@@ -13,8 +13,8 @@ import { FaBookmark } from "react-icons/fa";
 import { IoCheckmarkDone } from "react-icons/io5";
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
-const Ordercard = ({rating}) => {
-
+const Ordercard = ({rating,order}) => {
+    if(!order) return;
     const navigate = useNavigate();
     const [isBookmarked, setIsBookmarked] = React.useState(false);
   return (
@@ -22,14 +22,14 @@ const Ordercard = ({rating}) => {
         <hr />
         <div className='flex'>
             <div className='oCardHead'  onClick={() => navigate('/orderDetails')}>
-                <h2 className='text-2X oCH flex items-center gap-2'><div className='center rounded bg-gray-300 w-10 h-10'><HiOutlineCake className='h-6 w-6' /></div>Maridge Reception</h2>
-                <div className='text-gret-800 flex justify-between'>C1-2432-1232-9219 <CgDetailsMore /> </div>
+                <h2 className='text-2X oCH flex items-center gap-2'><div className='center rounded bg-gray-300 w-10 h-10'><HiOutlineCake className='h-6 w-6' /></div>{order.caption}</h2>
+                <div className='text-gret-800 flex justify-between'>{order.orderId} <CgDetailsMore /> </div>
                 <h3 className='text-grey-500 flex gap-10'>Hold By : hiroshi saitama <p className='text-sm center'><MdEmail />hiroshi@gmail.com {rating &&(<Rating name="size-small" defaultValue={0} size="small" readOnly />)}</p></h3>
-                <h3 className='text-grey-500 flex gap-10'>Deployed By : kunal aaluvaliya <p className='text-sm center'><MdEmail />kunal@gmail.com </p></h3>
+                <h3 className='text-grey-500 flex gap-10'>Deployed By : {order.orderBuilder.username} <p className='text-sm center'><MdEmail /> {order.orderBuilder.email}</p></h3>
                 
                 <div className='flex justify-between'>
-                    <h3 className='text-sm flex'> < HiCalendarDateRange />MFG 12/12/2025 </h3>
-                    <h3 className='text-sm flex'> < HiCalendarDateRange />EXP 12/12/2025 </h3>
+                    <h3 className='text-sm flex'> < HiCalendarDateRange />{order.orderBuildDate} </h3>
+                    <h3 className='text-sm flex'> < HiCalendarDateRange />{order.deadLine} </h3>
 
                 </div>
             </div>

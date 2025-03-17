@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
-import Ordercard from "../components/orderCard";
+import {Ordercard,TODOOrdercard } from "../components/orderCard";
 // import DemoCard from "../components/DemoCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
-
 import { IoSearchSharp } from "react-icons/io5";
-const orderStatus=["All", "running", "shipped","paused","pending", "delivered", "rejected"];
+const orderStatus2=["All", "running", "shipped","paused","TOdo", "delivered", "rejected"];
 const statusPanel = [16,2,4,1,6,4,8];
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -40,15 +39,15 @@ const Dashboard = () => {
                   <input type="text" placeholder="serach person" name="filter" className="rounded-3xl bg-zinc-300 border-none focus:outline-none inputFilter" />
                 </div>
                 <div className="flex justify-evenly">
-                  {[orderStatus.map((itm,i)=>(
+                  {[orderStatus2.map((itm,i)=>(
                     <div key={i} className="w-full">
                     <button className="dNavBtn center" onClick={()=>setIdd(i)}>{itm}</button>
                   </div>
                   ))]}
                 </div>
                 <div style={{maxHeight:"200vh"}} className="overflow-y-scroll w-full  flex flex-col gap-2 ">
-                  {[...Array(statusPanel[idd])].map((item) => (
-                    <PlacedOrderCard rating={orderStatus[idd]==="delivered"?true:false} />
+                  {[...Array(statusPanel[idd])].map((item,i) => (
+                    <PlacedOrderCard key={i} rating={orderStatus2[idd]==="delivered"?true:false} />
                   ))}
                 </div>
               </div>
@@ -60,33 +59,23 @@ const Dashboard = () => {
                     className="dNavBtn"
                     onClick={() => setShowOrder(true)}
                   >
-                    orders
+                    TODO orders
                   </button>
                   <button
                     className="dNavBtn"
                     onClick={() => setShowOrder(false)}
                   >
-                    challenges
+                    TODO challenges
                   </button>
                 </div>
                 {showOrder && (
                   <div className=" relative orderBlock mb-2">
-                    <div>
-                      <div className="flex">
-                        <button
-                          className="dNavBtn flex center"
-                          onClick={() => navigate("/create")}
-                        >
-                          <IoAddOutline />
-                          <div>create order</div>
-                        </button>
-                      </div>
-                    </div>
+                   
                     <div className="flex flex-col items-center">
                       <h2 className="text-2xl">undeployed Orders</h2>
                       <div className="w-full max-h-screen overflow-y-scroll">
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                          <Ordercard />
+                          <TODOOrdercard />
                         ))}
                       </div>
                     </div>
@@ -94,22 +83,12 @@ const Dashboard = () => {
                 )}
                 {!showOrder && (
                   <div className=" relative orderBlock mb-2">
-                    <div>
-                      <div className="flex">
-                        <button
-                          className="dNavBtn flex center"
-                          onClick={() => navigate("/create")}
-                        >
-                          <IoAddOutline />
-                          <div>create challengse</div>
-                        </button>
-                      </div>
-                    </div>
+                   
                     <div className="flex flex-col items-center">
                       <h2 className="text-2xl">undeployed challenges</h2>
                       <div className="w-full">
                         {[1, 2, 3, 4, 5].map((item) => (
-                          <Ordercard />
+                          <TODOOrdercard />
                         ))}
                       </div>
                     </div>

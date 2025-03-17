@@ -13,14 +13,16 @@ import { Link, useNavigate,useParams } from 'react-router-dom';
 import { MdOutlineVerified } from "react-icons/md";
 import userPic from './user.jpg';
 import { useAuthStore } from '../Store/AuthStore';
+import {useHomeStore }from '../Store/homeStore';
 const banners = [banner, banner2, banner3, banner2];
   const images = banners;
 
-// import { useQueryClient, useQuery} from '@tanstack/react-query';
-
 import { useUsersData } from '../Store/dataStore';
 const Profile = () => {
-  const { username } = useParams();
+  const {sendConnectRequest} = useHomeStore();
+  const username= useParams().username;
+  console.log(username);
+  
   const { userProfile, getUserProfile, isUserProfileLoading} = useUsersData();
   useEffect(() => {
     getUserProfile(username);
@@ -29,8 +31,8 @@ const Profile = () => {
 
   const { currUser } = useAuthStore();
   
-  // const navigate = useNavigate();
-  console.log(userProfile);
+  const navigate = useNavigate();
+  // console.log(userProfile);
   
   
 
@@ -68,7 +70,7 @@ const Profile = () => {
   // };
   
 
-if (isUserProfileLoading) return <div>Loading...</div>;
+if (isUserProfileLoading || !userProfile) return <div>Loading...</div>;
 
   return (
     <div className='dashCon'>
@@ -105,8 +107,8 @@ if (isUserProfileLoading) return <div>Loading...</div>;
               
               <div className='pInfo'>
                 <div className='pPicHolder'>
-                  <div className='pPic'>
-                  <img src={userData.profile.Pic || userPic} className='fit' alt="userPic" />
+                  <div className='pPic center'>
+                  {userData.profile.Pic ?<img src={userData.profile.Pic || userPic} className='fit' alt="userPic" /> :<div className='text-2xl center bg-'><h1>{userData.username.charAt(0).toUpperCase()}</h1></div>}
                   </div>
                 </div>
                 <div className='profile-header'>
@@ -157,15 +159,18 @@ if (isUserProfileLoading) return <div>Loading...</div>;
                   <div className='stat-item'>
                     <span>accounts</span>
                   </div>
+                  {userData.profile.role==="homemaker" &&<div className='stat-item'>
+                    <span onClick={()=>navigate(`/profile/${username}/menu`)}>menu</span>
+                  </div>}
                 </div>
                 
 
-                <div className='profile-buttons'>
-                  <button className='profile-btn btn-primary'>Connect</button>
+                {!isOwnProfile &&<div className='profile-buttons'>
+                  <button className='profile-btn btn-primary' onClick={()=>sendConnectRequest(userData._id)}>Connect</button>
                   <button className='profile-btn btn-secondary'>follow</button>
-                  {!isOwnProfile && <button className='profile-btn btn-secondary' onClick={()=>navigate('/messages')}>Message</button>}
+                  { <button className='profile-btn btn-secondary' onClick={()=>navigate('/messages')}>Message</button>}
                   <button className='profile-btn btn-secondary'>More</button>
-                </div>
+                </div>}
               </div>
               <div className='pLBase'>
                   <h1>Achivements</h1>

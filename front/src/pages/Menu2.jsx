@@ -18,10 +18,27 @@ const itemsTypes = [
   { item: "cakes" },
   { item: "cookie" },
   { item: "wine" },
-  
+  { item: "pastry" },
+  { item: "All" },
+  { item: "cakes" },
+  { item: "cookie" },
+  { item: "wine" },
+  { item: "pastry" },
+  { item: "All" },
+  { item: "cakes" },
+  { item: "cookie" },
+  { item: "wine" },
+  { item: "pastry" },
+  { item: "All" },
+  { item: "cakes" },
+  { item: "cookie" },
+  { item: "wine" },
+  { item: "pastry" },
 ];
-const Menu = () => {
-  
+const Menu2 = () => {
+    const username = useParams().username
+    console.log(username, "username");
+    
   const [expended, setExpended] = useState(false);
   const bitonItems = useRef();
   if (expended) {
@@ -33,10 +50,11 @@ const Menu = () => {
     <div className="dashCon">
       <div className="dashCon">
         <div className="item1">
-          <main className="menuMain">
+          <main style={{ height: "100vh" }} className=" w-full center overflow-x-scroll ">
             <aside className="menLeft h-full flex flex-col gap-1">
               <div className="w-full h-10 center">
-                <h2 className="text-3xl">MENU</h2>
+                <div className="text-2xl">{username}</div>
+                <h2 className="text-2xl">MENU</h2>
                 
               </div>
               <div className="w-30 bg-zinc-600">
@@ -65,7 +83,6 @@ const Menu = () => {
                 )}
               </div>
             </aside>
-            <aside className="menRight h-full"></aside>
           </main>
         </div>
       </div>
@@ -73,4 +90,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default Menu2;

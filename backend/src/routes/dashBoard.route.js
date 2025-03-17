@@ -1,19 +1,17 @@
 import express from 'express';
-// import { dashboard, logout, updateProfile } from '../controler/dashboardControler.js';
-// import { protectRoute } from '../middleware/auth.js';
-// import { messages } from '../controler/messagesControlers.js';
-// import { checkAuth } from '../controler/authControlers.js';
-import { Posts,getNames } from '../controler/dashboardControler.js';
-import { follow } from '../controler/connect.js';
 import { protectRoute } from "../middleware/auth.js";
+import { getAllItems, getItem, deleteItem, updateItem, createItem, setRating } from '../controler/itemsControler.js';
+import {getUnDeployedOrders,getDeployedOrders,createOrder,getconnections} from '../controler/ordersControlers.js';
 const router = express.Router();
+router.get('/getAllItems',protectRoute,getAllItems);
+router.get('/getItem/:id',protectRoute,getItem);
+router.delete('/deleteItem/:id',protectRoute,deleteItem);
+router.put('/updateItem/:id',protectRoute,updateItem);
+router.post('/createItem',protectRoute,createItem);
+router.put('/setRating/:id',protectRoute,setRating);
 
-router.post('/createPost',protectRoute,Posts);
-router.post('/follow/:id',protectRoute,follow);
-// router.put('/profile', protectRoute, updateProfile);
-// router.get('/messages', protectRoute, messages);
-// router.get('/auth', protectRoute, checkAuth);
-// router.get('/logout', logout);
-router.get('/getNames',getNames);
-
+router.get('/getdeployed',protectRoute,getDeployedOrders);
+router.get('/getundeployed',protectRoute,getUnDeployedOrders);
+router.get('/getconnections',protectRoute,getconnections);
+router.post('/createOrder',protectRoute,createOrder);
 export default router;

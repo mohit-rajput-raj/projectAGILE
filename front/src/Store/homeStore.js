@@ -37,5 +37,19 @@ export const useHomeStore = create((set) => ({
     }finally{
       set({getSuggestedConnections:false});
     }
+  },
+  sendConnectRequest:async(userId)=>{
+    try {
+      const res = await axiosApi.post(`/user/connect/${userId}`);
+    } catch (error) {
+      console.error('Error in getSuggestedConnections:', error);
+    }
+  },
+  sendAcceptConnection:async(userId)=>{
+    try {
+      const res = await axiosApi.put(`/user/accept/${userId}`);
+    } catch (error) {
+      console.error('Error in getSuggestedConnections:', error);
+    }
   }
 }));

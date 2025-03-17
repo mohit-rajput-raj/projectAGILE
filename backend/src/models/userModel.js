@@ -61,6 +61,18 @@ const userModel = new mongoose.Schema({
         ref: "Message",
         
     }],
+    orders:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order"
+    }],
+    undOrders:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order"
+    }],
+    items:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Item"
+    }],
     
 
     profile:{

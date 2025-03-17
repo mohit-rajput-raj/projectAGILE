@@ -38,11 +38,14 @@ import Contacts from './pages/Contacts'
 import Cancled from './pages/Cancled'
 import Menu from './pages/Menu'
 import DashboardHomeMaker from './pages/DashboardHomeMaker'
+import Menu2 from './pages/Menu2'
+import { nanoid } from "nanoid";
 // import CreateOrder from './pages/CreateOrder'
 const App = () => {
   const {currUser,getUser,isLogin} = useAuthStore();
   
-// console.log(currUser);
+
+
 
   
   useEffect(()=>{
@@ -73,10 +76,11 @@ const App = () => {
         
 
         <Route path='/profile/:username' element={<Profile/>} />
+        <Route path='/profile/:username/menu' element={<Menu2/>} />
         {/* <Route path='/profile/:id' element={<Profile/>} /> */}
         <Route path='/editProfile' element={<EditProfile/>} />
         <Route path='/dashboard' element={currUser?.profile?.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
-        <Route path='/createOrder' element={<CreateOrder />} />
+        <Route path='/createOrder' element={<CreateOrder/>} />
         <Route path='/messages' element={<Messages />} />
         <Route path='/notification' element={<Notification />} />
         <Route path='/home' element={<Home />} />

@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 const itemSchema = new mongoose.Schema({
+    parentId:{
+        type:String,
+        required:true,
+    },
+    id:{
+        type:String,
+        default:"",
+    },
     name:{
         type:String,
         required:true,
@@ -14,23 +22,22 @@ const itemSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    stock:{
+    quantity:{
         type:Number,
         required:true,
     },
     
-    category:{
+    type:{
         type:String,
         required:true,
         trim:true,
     },
     image:{
         type:String,
-        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtZyrVY1ktSmsw3tkJFd7JgqYBkhKJsl7IwA&s"
+        default:""
     },
     rating:{
         type:Number,
-        required:true,
     },
     reviews:[{
         type: mongoose.Schema.Types.ObjectId,

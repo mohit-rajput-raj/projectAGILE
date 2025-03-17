@@ -31,7 +31,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use("/api/auth", authRoute);
-// app.use("/api/dashboard", dashRoute);
+app.use("/api/dashboard", dashRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/home", homeRoute);
 app.use("/api/user",userRoute );
