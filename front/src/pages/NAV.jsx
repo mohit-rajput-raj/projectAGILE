@@ -160,9 +160,9 @@ const NAV = () => {
                 onMouseOver={() => setProDrop(true)}
                 onMouseOut={() => setProDrop(false)}
               >
-                {currUser?.profilePic ? (
+                {currUser?.profile.pic ? (
                   <img
-                    src={currUser.profile.Pic}
+                    src={currUser.profile.pic}
                     alt="Profile"
                     className="profile-image"
                   />

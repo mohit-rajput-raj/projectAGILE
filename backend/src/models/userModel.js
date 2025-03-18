@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { exp } from "three/tsl";
 const userModel = new mongoose.Schema({
     username: {
         type: String,
@@ -41,10 +40,10 @@ const userModel = new mongoose.Schema({
         type: String,
         default: "user",
     },
-    contactNumber:{
-        type: String,
-        default: "0000000000",
-    },
+    contactsNumber:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"User",
+    }],
     phone:{
         type: String,
         required: true,
@@ -73,6 +72,7 @@ const userModel = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Item"
     }],
+    
     
 
     profile:{

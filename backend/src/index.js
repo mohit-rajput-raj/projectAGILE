@@ -4,7 +4,14 @@ import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 // const app = express();
 import {app,io,server} from "./library/socket.js";
+import fileUpload from "express-fileupload";
 
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 import authRoute from "./routes/auth.rout.js";
 import dashRoute from "./routes/dashBoard.route.js";
 import messageRoute from "./routes/message.route.js";

@@ -1,30 +1,40 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../coustomStyles/contacts.css'
 import { userPic } from '../components/profileCard'
-export const ContactCard =({keys})=>{
+import { useHomeStore } from '../Store/homeStore'
+export const ContactCard =({keys,contact})=>{
+  if(!contact)return;
   return(
-    <div className='cntCard flex  '>
+    <div className='cntCard flex   '>
       <div className='w-1/6 '>
         <div className='object-cover fit rounded-full w-10 h-10 overflow-hidden'>
-          <img src={userPic} alt="" />
+          <img src={contact.profile.pic ||userPic} alt="" />
         </div>
       </div>
       <div className='cntCardChild'>
-        <span>Name</span>
+        <span></span>
       </div>
       <div className='cntCardChild'>
-        position
+        {contact.profile.role}
       </div>
       <div className='cntCardChild'>
-        820384084284
+        {contact.phone}
       </div>
       <div className='cntCardChild'>
-        email@gmail.com   {keys}
+        {contact.email}
       </div>
+      <div>
+        <button className='rounded-3xl deleteBtn'>remove</button>
+      </div>
+      
     </div>
   )
 }
 const Contacts = () => {
+  const {getContacts,allContacts} = useHomeStore();
+  useEffect(()=>{
+    getContacts();
+  },[getContacts])
   return (
     <div className="dashCon">
       <div className="dashCon">
@@ -34,9 +44,9 @@ const Contacts = () => {
               Contacts
             </div>
             <div className='trdcard ctMainBottom  '>
-              {[...Array(20)].map((_, index) => (
-                <div className='min-h-13'>
-                  <ContactCard keys={index}/>
+              {allContacts?.map((contact, index) => (
+                <div className='min-h-13 overflow-x-scroll min-w-max'>
+                  <ContactCard keys={index} contact={contact}/>
                   <hr />
                 </div>
                 

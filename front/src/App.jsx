@@ -21,7 +21,7 @@ import Connections from './pages/Connections'
 import EditProfile from './pages/EditProfile'
 import Messages from './pages/Messages'
 import Notification from './pages/Notification'
-import CompleteProfile from './pages/CompleteProfile'
+// import CompleteProfile from './pages/CompleteProfile'
 import CreateOrder from './pages/CreateOrder'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import EditOrder from './pages/EditOrder'
@@ -84,7 +84,7 @@ const App = () => {
         <Route path='/messages' element={<Messages />} />
         <Route path='/notification' element={<Notification />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/completep' element={<CompleteProfile/>} />
+        <Route path='/completep' element={<EditProfile/>} />
         <Route path='/connections' element={<Connections />} />
         <Route path='/orderDetails' element={<OrderDetailsPage />} />
         <Route path='/editOrder' element={<EditOrder />} />

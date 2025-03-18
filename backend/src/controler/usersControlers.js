@@ -48,7 +48,7 @@ export const acceptConnectionRequest = async (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////////
 export const sendConnectionRequest = async (req, res) => {
 	try {
-    console.log("oo");
+    // console.log("oo");
     
 		const { userId } = req.params;
     
@@ -58,7 +58,7 @@ export const sendConnectionRequest = async (req, res) => {
 		if (senderId.toString() === userId) {
 			return res.status(400).json({ message: "You can't send a request to yourself" });
 		}
-    console.log("ff");
+    // console.log("ff");
 
 		if (req.user.profile.connections.includes(userId)) {
 			return res.status(400).json({ message: "You are already connected" });
@@ -85,6 +85,54 @@ export const sendConnectionRequest = async (req, res) => {
 		res.status(500).json({ message: "Server error dd" });
 	}
 };
+export const addContact = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const senderId = req.user._id;
+
+    if (senderId.toString() === userId) {
+      return res.status(400).json({ message: "You can't add yourself as a contact" });
+    }
+
+    if (req.user.contactsNumber.includes(userId)) {
+		
+      return res.status(400).json({ message: "You are already a contact" });
+    }
+
+
+    await User.findByIdAndUpdate(senderId, { $addToSet: { contactsNumber: userId } });
+
+    res.status(201).json({ message: "Contact added successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error addContacts" });
+  }
+};
+export const isInContacts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(req.user._id).select("contactsNumber");
+    res.status(200).json(user.contactsNumber.includes(userId));
+  } catch (error) {
+    res.status(500).json({ message: "Server error isInContacts" });
+  }
+}
+export const deleteContact =async(req,res)=>{
+	try {
+		const { userId } = req.params;
+		const user = await User.findByIdAndUpdate(req.user._id,{$pull:{contactsNumber:userId}});
+		res.status(200).json(user.contactsNumber.includes(userId));
+	  } catch (error) {
+		res.status(500).json({ message: "Server error deleteContact" });
+	  }
+}
+export const getContacts = async (req, res) => {
+  try {
+    const contacts = await User.findById(req.user._id).select("contactsNumber").populate({path:"contactsNumber",select:"name email profile.role profile.pic phone"});
+    res.status(200).json(contacts.contactsNumber);
+  } catch (error) {
+    res.status(500).json({ message: "Server error getContacts" });
+  }
+}
 
 export const hi = async (req, res) => {
   try {
