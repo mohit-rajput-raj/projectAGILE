@@ -19,7 +19,7 @@ const ProfileImageUploader = ({ handleImageChange, ima }) => {
       <img
         src={imgPreview || ima}
         alt="Profile"
-        className="w-full h-full object-contain rounded-full border-2 border-gray-300"
+        className="w-full h-full object-cover rounded-full border-2 border-gray-300"
       />
 
       <input

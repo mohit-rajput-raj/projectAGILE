@@ -12,13 +12,27 @@ import "../coustomStyles/person.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MdOutlineVerified } from "react-icons/md";
 import userPic from "./user.jpg";
+
+import { useDashBoardStore } from "../Store/dashBoardStore";
 import { useAuthStore } from "../Store/AuthStore";
 import { useHomeStore } from "../Store/homeStore";
+import { useConnectStore } from "../Store/ConnectStore.js";
 const banners = [banner, banner2, banner3, banner2];
 const images = banners;
 
 import { useUsersData } from "../Store/dataStore";
+
 const Profile = () => {
+  const { getConnections, connections } = useDashBoardStore();
+  const {
+    sendFollowRequest,
+    sendUnfollowRequest,
+    isFollowing,
+    isFollowingLoading,
+    getIsFollowing,
+    ToggleFollowingLoading,
+    
+  } = useConnectStore();
   const {
     sendConnectRequest,
     addContact,
@@ -29,25 +43,35 @@ const Profile = () => {
     removingFromContacts,
     addingContacts,
   } = useHomeStore();
+  
+  useEffect(()=>{
+    getIsFollowing(userProfile?._id);
+  },[getIsFollowing, ToggleFollowingLoading]);
+
+ 
+  
+  
   const username = useParams().username;
-  console.log(username);
-  console.log(contactsSaved);
 
   const { userProfile, getUserProfile, isUserProfileLoading } = useUsersData();
+  
+  
   useEffect(() => {
     getUserProfile(username);
     console.log(userProfile);
   }, [getUserProfile]);
+
+  
   useEffect(() => {
     isInContacts(userProfile?._id);
-  }, [isInContacts,removingFromContacts,addingContacts]);
-  const handelRemovecontact=async()=>{
+  }, [isInContacts, removingFromContacts, addingContacts]);
+  const handelRemovecontact = async () => {
     try {
       await removeContact(userProfile?._id);
     } catch (error) {
       console.error("Error adding contact:", error);
     }
-  }
+  };
   const addContactHandler = async () => {
     try {
       await addContact(userProfile?._id);
@@ -177,25 +201,27 @@ const Profile = () => {
                       <span>CONTACTS INFO</span>
                     </div>
                     <div className="w-8"></div>
-                    {!isOwnProfile && !isInContactsLoading && !removingFromContacts && (
-                      <span className=" text-blue-500">
-                        {contactsSaved ? (
-                          <button
-                          className="profile-btn btn-secondary stat-item"
-                          onClick={handelRemovecontact}
-                        >
-                          remove from contact
-                        </button>
-                        ) : (
-                          <button
-                            className="profile-btn btn-secondary stat-item"
-                            onClick={addContactHandler}
-                          >
-                            Add to connect
-                          </button>
-                        )}
-                      </span>
-                    )}
+                    {!isOwnProfile &&
+                      !isInContactsLoading &&
+                      !removingFromContacts && (
+                        <span className=" text-blue-500">
+                          {contactsSaved ? (
+                            <button
+                              className="profile-btn btn-secondary stat-item"
+                              onClick={handelRemovecontact}
+                            >
+                              remove from contact
+                            </button>
+                          ) : (
+                            <button
+                              className="profile-btn btn-secondary stat-item"
+                              onClick={addContactHandler}
+                            >
+                              Add to connect
+                            </button>
+                          )}
+                        </span>
+                      )}
                   </div>
 
                   <div className="profile-stats">
@@ -243,9 +269,21 @@ const Profile = () => {
                     >
                       Connect
                     </button>
-                    <button className="profile-btn btn-secondary">
-                      follow
-                    </button>
+                    {isFollowing ? (
+                            <button
+                              className="profile-btn btn-secondary stat-item"
+                              onClick={()=>sendUnfollowRequest(userData._id)}
+                            >
+                              unfollow
+                            </button>
+                          ) : (
+                            <button
+                              className="profile-btn btn-secondary stat-item"
+                              onClick={()=>sendFollowRequest(userData._id)}
+                            >
+                              Follow
+                            </button>
+                          )}
                     {
                       <button
                         className="profile-btn btn-secondary"
@@ -261,40 +299,7 @@ const Profile = () => {
               <div className="pLBase">
                 <h1>Achivements</h1>
               </div>
-              {/* <div className='pLBase'>
-                <div className='analytics-header'>
-                  <h2 className='analytics-title'>Analytics</h2>
-                  <div className='analytics-private'>
-                    <span>Private to you</span>
-                  </div>
-                </div>
-                <div className='analytics-grid'>
-                  <div className='analytics-item'>
-                    <div className='analytics-value'>30</div>
-                    <div className='analytics-label'>
-                      Discover who's viewed your profile
-                    </div>
-                    <div className='analytics-period'>profile views</div>
-                  </div>
-                  <div className='analytics-item'>
-                    <div className='analytics-value'>19</div>
-                    <div className='analytics-label'>
-                      Check out who's engaging with your posts
-                    </div>
-                    <div className='analytics-period'>Past 7 days</div>
-                  </div>
-                  <div className='analytics-item'>
-                    <div className='analytics-value'>7</div>
-                    <div className='analytics-label'>
-                      See how often you appear in search results
-                    </div>
-                    <div className='analytics-period'>search appearances</div>
-                  </div>
-                </div>
-                <div className='show-all-analytics' onClick={()=>navigate('/dashboard')}>
-                  Show all analytics →
-                </div>
-              </div> */}
+              
 
               <div className="pLBase"></div>
               <div className="pLBase"></div>

@@ -17,6 +17,8 @@ import dashRoute from "./routes/dashBoard.route.js";
 import messageRoute from "./routes/message.route.js";
 import homeRoute from "./routes/home.rout.js";
 import userRoute from "./routes/user.route.js";
+import connectionsRoute from "./routes/connections.route.js";
+import notificationRoute from "./routes/notification.route.js";
 // import profile from "./routes/profile.rout.js";
 dotenv.config();
 const Port = process.env.PORT || 3000;
@@ -42,6 +44,8 @@ app.use("/api/dashboard", dashRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/home", homeRoute);
 app.use("/api/user",userRoute );
+app.use("/api/connections", connectionsRoute);
+app.use("/api/notifications", notificationRoute);
 // app.use("/api/profile/:id", profile);
 
 server.listen(Port, () => {

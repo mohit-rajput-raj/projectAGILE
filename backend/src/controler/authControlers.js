@@ -13,15 +13,15 @@ export const updatePfp = async (req, res) => {
     // console.log('Body received:', req.body);   // Debugging log
     
     const userId = req.user._id;
-    let { username, lastname, shopname } = req.body;
+    let { name, lastName, shopname } = req.body;
     const profilePic = req.files?.pic;
     const bannerImg = req.files?.bannerImg;
     try {
         // Clean up empty strings or undefined values
         const updateData = {};
         
-        if (username?.trim()) updateData.username = username.trim();
-        if (lastname?.trim()) updateData.lastname = lastname.trim();
+        if (name?.trim()) updateData.name = name.trim();
+        if (lastName?.trim()) updateData.lastName = lastName.trim();
         if (shopname?.trim()) updateData.shopname = shopname.trim();
 
         if (profilePic) {

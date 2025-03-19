@@ -9,8 +9,8 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const { updateProfile, currUser } = useAuthStore();
   const [profile, setProfile] = useState({
-    name: currUser?.username || "",
-    lastname: currUser?.lastname || "",
+    name: currUser?.name || "",
+    lastName: currUser?.lastName || "",
     shopname: currUser?.shopname || "",
   });
   const [img, setImg] = useState(currUser?.profile?.pic || null);
@@ -79,12 +79,12 @@ const handleBannerImageChange = (e) => {
       }
       
   
-      if (profile.name.trim()) formData.append("username", profile.name);
-      if (profile.lastname.trim()) formData.append("lastname", profile.lastname);
+      if (profile.name.trim()) formData.append("name", profile.name);
+      if (profile.lastName.trim()) formData.append("lastName", profile.lastName);
       if (profile.shopname.trim()) formData.append("shopname", profile.shopname);
   
       // Ensure FormData isn't empty
-      if (!img1 && !profile.name.trim() && !profile.lastname.trim() && !profile.shopname.trim()) {
+      if (!img1 && !profile.name.trim() && !profile.lastName.trim() && !profile.shopname.trim()) {
         setError("No data provided for update.");
         setLoading(false);
         return;

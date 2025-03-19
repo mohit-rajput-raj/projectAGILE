@@ -24,6 +24,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import "../components/ove.css";
+import { useNotificationStore } from "../Store/notificationStore";
 export const menu2 = [
   { name: "DashBoard", rout: "/dashboard" },
   { name: "Items", rout: "/dashboard/items" },
@@ -36,6 +37,8 @@ export const menu2 = [
   { name: "Deleted", rout: "/dashboard/deleted" },
 ];
 const NAV = () => {
+  const { getUnreadNotifications,unreadNotifications,unreadNotificationsLoading } = useNotificationStore();
+  const [re, setRe ] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const location = useLocation();
   const handelOver = () => {
@@ -44,6 +47,10 @@ const NAV = () => {
   const { logout, getUser, currUser } = useAuthStore();
   const navigate = useNavigate();
   const [menu , setMenu] = useState(null);
+  useEffect(() => {
+    getUnreadNotifications();
+  }, [getUnreadNotifications,re]);
+  console.log(unreadNotifications);
   
   const handelMenu = ()=>{
     if(currUser?.profile?.role==="homemaker"){
@@ -69,7 +76,7 @@ const NAV = () => {
           <div className="flex items-center justify-between  h-16 w-screen">
             <div className="flex items-center w-1/2">
             <button
-              onClick={() => navigate("/home")}
+              onClick={() =>{ navigate("/home");setRe(!re)}}
               className="p-2 hover:bg-gray-700 rounded-full transition-colors"
             >
               <FaHome className="w-6 h-6" />
@@ -80,12 +87,12 @@ const NAV = () => {
                 <div className="dLeftBottom trdcard">
                   {handelMenu? (menu2.map((itm, i) => (
                     <div key={i}>
-                      <div className={`menuItems1 center `}   onClick={() => navigate(itm.rout)}>{itm.name}</div>
+                      <div className={`menuItems1 center `}   onClick={() => {navigate(itm.rout);setRe(!re)}}>{itm.name}</div>
                       <hr />
                     </div>
                   ))) :  (menu1.map((itm, i) => (
                     <div key={i}>
-                      <div className={`menuItems1 center `}   onClick={() => navigate(itm.rout)}>{itm.name}</div>
+                      <div className={`menuItems1 center `}   onClick={() =>{ navigate(itm.rout);setRe(!re)}}>{itm.name}</div>
                       <hr />
                     </div>
                   )))}
@@ -101,22 +108,27 @@ const NAV = () => {
             {/* <div className="w-110"></div> */}
             <div className="flex items-end space-x-2 mr-12 mr-0">
             <button
-                onClick={() => navigate("/home")}
+                onClick={() =>{ navigate("/home");setRe(!re)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaHome className="w-6 h-6" />
                 <span className="hidden md:inline">Home</span>
               </button>
               <button
-                onClick={() => navigate("/notification")}
+                onClick={() => {navigate("/notification");setRe(!re)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaBell className="w-5 h-5 mr-2" />
                 <span className="hidden md:inline">Notifications</span>
+                {unreadNotifications?.total > 0 && (
+                  <span className="bg-red-500 w-4 h-4 text-white center text-xs rounded-full px-2 py-1 relative -top-1">
+                    {unreadNotifications?.total}
+                  </span>
+                )}
               </button>
 
               <button
-                onClick={() => navigate("/profile/" + currUser?.username)}
+                onClick={() => {navigate("/profile/" + currUser?.username);setRe(!re)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />
@@ -124,7 +136,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() =>{ navigate("/dashboard");}}
+                onClick={() =>{ navigate("/dashboard");setRe(!re)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />
@@ -132,7 +144,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() => navigate("/messages")}
+                onClick={() =>{ navigate("/messages");setRe(!re)}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaEnvelope className="w-5 h-5 mr-2" />
@@ -174,7 +186,7 @@ const NAV = () => {
                     <div className="pdropCon" onMouseOver={() => setProDrop(true)}>
                     <div className="pdrop" >
                       <div className="flex justify-center items-center optn">
-                      <a onClick={()=>navigate('/profile')} className="logoutb">view profile</a>
+                      <a onClick={()=>{navigate("/profile/" + currUser?.username);setRe(!re)}} className="logoutb">view profile</a>
                       </div>
                       <hr />
                       <div className="flex justify-center items-center optn">

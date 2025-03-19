@@ -1,10 +1,12 @@
 // import { sendConnectionAcceptedEmail } from "../emails/emailHandlers.js";
-import ConnectionRequest from "../models/connectionRequestModel.js";
+import {ConnectionRequest} from "../models/connectionRequestModel.js";
 import { User } from "../models/userModel.js";
 import { Notification } from "../models/notificationModel.js";
 
-export const follow = async (req, res) => {
+export const toggleFollow = async (req, res) => {
     try {
+		console.log("toggleFollow controller");
+		
         const { userId } = req.params;
         const myId = req.user?._id; 
 
@@ -20,61 +22,46 @@ export const follow = async (req, res) => {
         if (!userToFollow) {
             return res.status(404).json({ message: "User not found" });
         }
-        if(userToFollow.profile.followers.includes(myId)){
-            return res.status(400).json({ message: "You are already following this user" });
+
+        const isFollowing = userToFollow.profile.followers.includes(myId);
+
+        if (isFollowing) {
+            await User.updateOne(
+                { _id: myId },
+                { $pull: { "profile.following": userId } }
+            );
+
+            await User.updateOne(
+                { _id: userId },
+                { $pull: { "profile.followers": myId } }
+            );
+
+            return res.status(200).json({ message: "Unfollowed successfully",isFollowing: false });
+        } else {
+            await User.updateOne(
+                { _id: myId },
+                { $addToSet: { "profile.following": userId } }
+            );
+
+            await User.updateOne(
+                { _id: userId },
+                { $addToSet: { "profile.followers": myId } }
+            );
+			const notif = new Notification({
+				recipient: userId,
+				type: "Follow",
+				sender: myId
+			});
+			await notif.save();
+
+            return res.status(200).json({ message: "Followed successfully", isFollowing: true });
         }
-
-        await User.updateOne(
-            { _id: myId },
-            { $addToSet: { "profile.following": userId } }
-        );
-
-        await User.updateOne(
-            { _id: userId },
-            { $addToSet: {  "profile.followers": myId } }
-        );
-
-        res.status(200).json({ message: "Followed successfully" });
     } catch (error) {
-        console.error("Error in follow controller:", error.message);
+        console.error("Error in toggleFollow controller:", error.message);
         res.status(500).json({ message: "Server error" });
     }
 };
 
-export const unfollow = async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const myId = req.user?._id;
-
-        if (!myId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        if (myId.toString() === userId) {
-            return res.status(400).json({ message: "You can't unfollow yourself" });
-        }
-
-        const userToUnfollow = await User.findById(userId);
-        if (!userToUnfollow) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        await User.updateOne(
-            { _id: myId },
-            { $pull: { "profile.following": userId } } 
-        );
-
-        await User.updateOne(
-            { _id: userId },
-            { $pull: { "profile.followers": myId } }
-        );
-
-        res.status(200).json({ message: "Unfollowed successfully" });
-    } catch (error) {
-        console.error("Error in unfollow controller:", error.message);
-        res.status(500).json({ message: "Server error" });
-    }
-};
 
 
 
@@ -88,7 +75,7 @@ export const sendConnectionRequest = async (req, res) => {
 			return res.status(400).json({ message: "You can't send a request to yourself" });
 		}
 
-		if (req.user.connections.includes(userId)) {
+		if (req.user.profile.connections.includes(userId)) {
 			return res.status(400).json({ message: "You are already connected" });
 		}
 
@@ -169,7 +156,26 @@ export const acceptConnectionRequest = async (req, res) => {
 		res.status(500).json({ message: "Server error" });
 	}
 };
+export const amIFollowing = async (req, res) => {
+	try {
+		console.log("mohit");
+		
+		const { userId } = req.params;
+		const myId = req.user._id;
 
+		const user = await User.findById(userId);
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		const isFollowing = user.profile.followers.includes(myId);
+		return res.json(isFollowing);
+	} catch (error) {
+		console.error("Error in amIFollowing controller:", error);
+		res.status(500).json({ message: "Server error" });
+	}
+};
 export const rejectConnectionRequest = async (req, res) => {
 	try {
 		const { requestId } = req.params;
@@ -248,7 +254,7 @@ export const getConnectionStatus = async (req, res) => {
 		const currentUserId = req.user._id;
 
 		const currentUser = req.user;
-		if (currentUser.connections.includes(targetUserId)) {
+		if (currentUser.profile.connections.includes(targetUserId)) {
 			return res.json({ status: "connected" });
 		}
 
