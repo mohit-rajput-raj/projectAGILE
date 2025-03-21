@@ -1,42 +1,81 @@
-import React, { useEffect, useState } from "react";
-import "../coustomStyles/container.css";
-import "../coustomStyles/messages.css";
+import React, { useEffect, useRef, useState } from "react";
+import { useMessagesStore } from "../Store/messagesStore";
+import { useAuthStore } from "../Store/AuthStore";
+import { useLocation } from "react-router-dom";
+import { FaPhone } from "react-icons/fa";
+import SnapchatThread from "../skeletons/ProfileCardSkeleton";
 import {
   ProfileComponentMessage,
   ProfileComponentMessageHeader,
 } from "../components/profileCard";
-import { FaPhone } from "react-icons/fa";
-import { useMessagesStore } from "../Store/messagesStore.js";
-import SnapchatThread from "../skeletons/ProfileCardSkeleton.jsx";
-import { div } from "three/tsl";
-import { useAuthStore } from "../Store/AuthStore";
+import "../coustomStyles/container.css";
+import "../coustomStyles/messages.css";
+import MessageInput from "../components/MessageInput";
 const Messages = () => {
-  const {currUser} = useAuthStore();
-  const [selectedUser, setSelectedUser] = useState("");
-
+  
+  const location = useLocation();
+  const { currUser,onlineUsers } = useAuthStore();
+  const [sideBarUsers4, setSideBarUsers4] = useState([]);
   const {
+    selectedUser,
+    setSelectedUser,
     getSideBarUsers,
     sideBarUsers,
-    sideBarUsersLoding,
+    sideBarUsersLoading,
     messages,
     error,
     getMessages,
-    sendMessage,
-    updateMessage,
-    deleteMessage,
+    setSideBarUsers,
     messagesLoading,
+    sendMessage,
     sendMessageLoading,
-    updateMessageLoading,
-    deleteMessageLoading
+    subscribeToMessages,
+    unsubscribeFromMessages,
   } = useMessagesStore();
-  // console.log(sideBarUsers);
-
+  
+  const messageEndRef = useRef(null);
   useEffect(() => {
     getSideBarUsers();
   }, [getSideBarUsers]);
   useEffect(() => {
-    if(selectedUser.length!==0)getMessages(selectedUser);
-  }, [selectedUser,getMessages]);
+    if (!selectedUser?._id) return;
+
+    getMessages(selectedUser._id);
+    subscribeToMessages();
+
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [selectedUser?._id]);
+
+  useEffect(() => {
+    setSideBarUsers4(sideBarUsers);
+  }, [sideBarUsers]);
+  
+  useEffect(() => {
+    if (location.state?.newUser) {
+      const newUser = location.state.newUser;
+  
+      setSideBarUsers4(prevUsers => {
+        if (!Array.isArray(prevUsers)) return [newUser]; 
+        
+        if (!prevUsers.some(user => user._id === newUser._id)) {
+          return [...prevUsers, newUser];
+        }
+        return prevUsers;
+      });
+    }
+  }, [location.state]);
+  
+  // console.log(messages);
+  
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messageEndRef.current && messages?.length > 0) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+  
   if (error) {
     return <div>Error loading sidebar users.</div>;
   }
@@ -52,7 +91,7 @@ const Messages = () => {
                   <h1>Profiles</h1>
                 </div>
                 <div className="mllBase">
-                  {sideBarUsersLoding ? (
+                  {sideBarUsersLoading ? (
                     [...Array(5)].map((_, i) => (
                       <div className="p-0" key={i}>
                         <button className="proBtn focus:ring-0">
@@ -60,14 +99,14 @@ const Messages = () => {
                         </button>
                       </div>
                     ))
-                  ) : sideBarUsers ? (
-                    sideBarUsers.map((sideUser, i) => (
+                  ) : sideBarUsers4?.length > 0 ? (
+                    sideBarUsers4.map((sideUser, i) => (
                       <div className="p-0" key={i}>
                         <button
                           className="proBtn focus:ring-0"
-                          onClick={() => setSelectedUser(sideUser._id)}
+                          onClick={() => setSelectedUser(sideUser)}
                         >
-                          <ProfileComponentMessage sideUser={sideUser} />
+                          <ProfileComponentMessage sideUser={sideUser} onlineUsers={onlineUsers} />
                         </button>
                       </div>
                     ))
@@ -78,18 +117,48 @@ const Messages = () => {
               </div>
               <div className="mlr flex flex-col gap-2">
                 <div className="mlrHead flex justify-between items-center">
-                  <ProfileComponentMessageHeader />
+                  <ProfileComponentMessageHeader selectedUser={selectedUser} onlineUsers={onlineUsers} />
                   <FaPhone className="h-6 w-6" />
                 </div>
                 <div className="mlrBase">
-                  {messages.length===0?<div className="w-full h-2/3 center"> No messages yet</div>: messages.map((item, i) => (
-                    <div className={`w-full rounded ${item.senderId === currUser._Id ? "MessagepaddingLeft" : "MessagepaddingRight"} `} key={i}>
-                      <p className={`p-2 ${item.senderId === currUser._Id ? "bg-blue-400 rounded-2xl p-4" : "bg-blue-100 rounded-2xl p-4"} `}>
-                        {item.message}
-                      </p>
+                  {messagesLoading ? (
+                    [...Array(5)].map((_, i) => (
+                      <div className="p-0" key={i}>
+                        <button className="proBtn focus:ring-0">
+                          <SnapchatThread />
+                        </button>
+                      </div>
+                    ))
+                  ) : !selectedUser ? (
+                    <div className="w-full h-2/3 center">Select a user to start chatting</div>
+                  ) : messages?.length === 0 ? (
+                    <div className="w-full h-2/3 center">No messages yet</div>
+                  ) : (
+                    <div className="messages-container">
+                      {messages.map((item, i) => (
+                        <div
+                          className={`w-full flex pad2 ${
+                            item.senderId === currUser._id ? "justify-end" : "justify-start"
+                          }`}
+                          key={i}
+                        >
+                          <div
+                            className={`max-w-xs md:max-w-md lg:max-w-lg pad2 rounded-xl shadow-md ${
+                              item.senderId === currUser._id
+                                ? "bg-blue-400 text-white rounded-br-none"
+                                : "bg-gray-200 text-black rounded-bl-none"
+                            }`}
+                          >
+                            <p className="break-words">{item.text}</p>
+                          </div>
+                        </div>
+                      ))}
+                      <div ref={messageEndRef} />
                     </div>
-                  ))}
+                  )}
                 </div>
+                {selectedUser && <MessageInput />}
+
               </div>
             </div>
             <div className="mRight"></div>

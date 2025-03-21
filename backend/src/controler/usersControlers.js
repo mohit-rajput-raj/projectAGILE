@@ -127,7 +127,7 @@ export const deleteContact =async(req,res)=>{
 }
 export const getContacts = async (req, res) => {
   try {
-    const contacts = await User.findById(req.user._id).select("contactsNumber").populate({path:"contactsNumber",select:"name email profile.role profile.pic phone"});
+    const contacts = await User.findById(req.user._id).select("contactsNumber").populate({path:"contactsNumber",select:"name email username profile.role profile.pic phone"});
     res.status(200).json(contacts.contactsNumber);
   } catch (error) {
     res.status(500).json({ message: "Server error getContacts" });

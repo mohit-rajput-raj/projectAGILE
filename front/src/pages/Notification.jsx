@@ -12,7 +12,7 @@ import {
   NewConnectionNotifications,
 } from "../components/notifications";
 
-const bar = ["Orders", "Jobs", "Like", "Comment", "Follow", "Connections"];
+const bar = ["Orders", "Jobs", "Like", "Comment", "Follow", "Connection"];
 
 const Notification = () => {
   const { unreadNotifications } = useNotificationStore();
@@ -24,7 +24,7 @@ const Notification = () => {
     Like: <LikeNotifications />,
     Comment: <CommentNotifications />,
     Follow: <NewFollowNotifications />,
-    Connections: <NewConnectionNotifications />,
+    Connection: <NewConnectionNotifications />,
   };
 
   return (
@@ -41,10 +41,12 @@ const Notification = () => {
                 {bar.map((item, i) => (
                   <div
                     key={i}
-                    className="flex justify-evenly w-full cursor-pointer"
+                    className={`flex justify-evenly w-full center cursor-pointer py-2 px-4 rounded-md transition-all ${
+                      barStatus === item ? "bg-blue-200 text-black" : ""
+                    }`}
                     onClick={() => setBarStatus(item)}
                   >
-                    <span className="span">{item}</span>
+                    <span className="span center">{item}</span>
                     {unreadNotifications?.[item] > 0 && (
                       <span className="bg-red-500 center w-4 h-4 text-white text-xs rounded-full px-2 py-1 relative -top-1">
                         {unreadNotifications?.[item]}

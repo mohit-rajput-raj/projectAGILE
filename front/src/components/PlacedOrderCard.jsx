@@ -24,12 +24,12 @@ const Ordercard = ({rating,order}) => {
             <div className='oCardHead'  onClick={() => navigate('/orderDetails')}>
                 <h2 className='text-2X oCH flex items-center gap-2'><div className='center rounded bg-gray-300 w-10 h-10'><HiOutlineCake className='h-6 w-6' /></div>{order.caption}</h2>
                 <div className='text-gret-800 flex justify-between'>{order.orderId} <CgDetailsMore /> </div>
-                <h3 className='text-grey-500 flex gap-10'>Hold By : hiroshi saitama <p className='text-sm center'><MdEmail />hiroshi@gmail.com {rating &&(<Rating name="size-small" defaultValue={0} size="small" readOnly />)}</p></h3>
+                <h3 className='text-grey-500 flex gap-10'>Hold By : {order.orderHoldedBy.username} <p className='text-sm center'><MdEmail />{order.orderHoldedBy.email} {rating &&(<Rating name="size-small" defaultValue={0} size="small" readOnly />)}</p></h3>
                 <h3 className='text-grey-500 flex gap-10'>Deployed By : {order.orderBuilder.username} <p className='text-sm center'><MdEmail /> {order.orderBuilder.email}</p></h3>
                 
                 <div className='flex justify-between'>
-                    <h3 className='text-sm flex'> < HiCalendarDateRange />{order.orderBuildDate} </h3>
-                    <h3 className='text-sm flex'> < HiCalendarDateRange />{order.deadLine} </h3>
+                    <h3 className='text-sm flex'> < HiCalendarDateRange />{new Date(order.orderBuildDate).toLocaleString()} </h3>
+                    <h3 className='text-sm flex'> < HiCalendarDateRange />{new Date(order.deadLine).toLocaleString()} </h3>
 
                 </div>
             </div>
@@ -39,10 +39,10 @@ const Ordercard = ({rating,order}) => {
                 <button className='center bookBtn'  onClick={() => setIsBookmarked(!isBookmarked)}>{isBookmarked ? <FaBookmark className='h-6 w-6' /> : <FaRegBookmark className='h-6 w-6' />}</button>
             </div>
         </div>
-        <div className='flex justify-between'>
+        {order.orderStatus !== "delivered" && <div className='flex justify-between'>
             <button className='deplayBtn center'> <RiMessageFill />Messages</button>
             <button className='deleteBtn'>cancel</button>
-        </div>
+        </div>}
         <hr />
     </div>
   )

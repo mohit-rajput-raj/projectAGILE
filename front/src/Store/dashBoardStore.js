@@ -15,6 +15,8 @@ export const useDashBoardStore = create((set,get)=>({
     undorders:null,
     undordersLoading:false,
     undordersError:null,
+    
+
 
     creatingOrder:false,
     creatingOrderError:null,
@@ -25,6 +27,65 @@ export const useDashBoardStore = create((set,get)=>({
     connectionsError:null,
 
     userDataLoading:false,
+    deleteFromCreation:async(id)=>{
+      try {
+        set({ deleteFromCreationLoading: true, deleteFromCreationError: null });
+        const res = await axiosApi.put(`/dashboard/deleteFromCreation/${id}`);
+        
+      } catch (error) {
+        console.log("Error in deleteFromCreation store:", error);
+        set({ deleteFromCreationError: "Failed to delete from creation." });
+      } finally {
+        set({ deleteFromCreationLoading: false });
+      }
+    },
+    deleteFromCreationLoading:false,
+    deleteFromCreationError:null,
+    makeAccept: async(data)=>{
+      try {
+        set({ makeAcceptLoading: true, makeAcceptError: null });
+        const res = await axiosApi.post(`/dashboard/makeAccept`,data);
+        set({ makeAccepted: res.data });
+      } catch (error) {
+        console.log("Error in makeAccept store:", error);
+        set({ makeAcceptError: "Failed to make accept." });
+      } finally {
+        set({ makeAcceptLoading: false });
+      }
+    },
+    makeAcceptLoading:false,
+    makeAcceptError:null,
+    makeAccepted:null,
+    makeReject: async(data)=>{
+      try {
+        set({ makeRejectLoading: true, makeRejectError: null });
+        const res = await axiosApi.put(`/dashboard/makeReject`,data);
+        set({ makeRejected: res.data });
+      } catch (error) {
+        console.log("Error in makeReject store:", error);
+        set({ makeRejectError: "Failed to make reject." });
+      } finally {
+        set({ makeRejectLoading: false });
+      }
+    },
+    makeRejectLoading:false,
+    makeRejectError:null,
+    makeRejected:null,
+    deleteAsk:async(id)=>{
+      try {
+        set({ deleteAskLoading: true, deleteAskError: null });
+        const res = await axiosApi.put(`/dashboard/deleteAsk/${id}`);
+        set({ deleteAsked: res.data });
+      } catch (error) {
+        console.log("Error in deleteAsk store:", error);
+        set({ deleteAskError: "Failed to delete ask." });
+      } finally {
+        set({ deleteAskLoading: false });
+      }
+    },
+    deleteAskLoading:false,
+    deleteAskError:null,
+    deleteAsked:null,
     getDashBoardData: async () => {
         try {
           set({ dashBoardDataLoading: true, dashBoardDataError: null });
@@ -37,9 +98,24 @@ export const useDashBoardStore = create((set,get)=>({
           set({ dashBoardDataLoading: false });
         }
     },
+    getWaitingOrders:async()=>{
+      try {
+        set({ waitingOrdersLoading: true, waitingOrdersError: null });
+        const res = await axiosApi.get(`/dashboard/getwaiting`);
+        set({ waitingOrders: res.data });
+      } catch (error) {
+        console.log("Error in getWaitingOrders store:", error);
+        set({ waitingOrdersError: "Failed to load waiting orders." });
+      } finally {
+        set({ waitingOrdersLoading: false });
+      }
+    },
+    waitingOrders:null,
+    waitingOrdersLoading:false,
+    waitingOrdersError:null,
     getDeployedOrders:async()=>{
       try {
-        // console.log("helll");
+        console.log("helll");
         
         set({ ordersLoading: true, ordersError: null });
         const res = await axiosApi.get(`/dashboard/getdeployed`);
@@ -51,8 +127,26 @@ export const useDashBoardStore = create((set,get)=>({
         set({ordersLoading: false });
       }
     },
+    makerorders:null,
+    makerordersLoading: false,
+    
+    getDeployedOrdersForMaker:async()=>{
+      try {
+        console.log("helll");
+        
+        set({ makerordersLoading: true, ordersError: null });
+        const res = await axiosApi.get(`/dashboard/getDeployedOrdersForMaker`);
+        set({ makerorders: res.data });
+      } catch (error) {
+        console.log("Error in getDashBoardData store:", error);
+        set({ ordersError: "Failed to load dashboard data." });
+      } finally {
+        set({makerordersLoading: false });
+      }
+    },
     getConnections:async()=>{
       try {
+        set({ connections: null });
         set({ connectionsLoading: true, connectionsError: null });
         const res = await axiosApi.get(`/dashboard/getconnections`);
         set({ connections: res.data });
@@ -90,6 +184,22 @@ export const useDashBoardStore = create((set,get)=>({
         set({ creatingOrderError: "Failed to load dashboard data." });
       } finally {
         set({creatingOrder: false });
+      }
+    }
+    ,
+    deployOrder2Loading:false,
+    deployOrder2Error:null,
+    deployOrder2data:null,
+    deployOrder2:async(data)=>{
+      try {
+        set({deployOrder2Loading:true,deployOrder2Error:null});
+        const res = await axiosApi.post(`/dashboard/deployOrder2`,data);
+        set({deployOrder2data:res.data});
+      } catch (error) {
+        console.log("Error in deployOrder2 store:", error);
+        set({deployOrder2Error:"Failed to deploy order."});
+      } finally {
+        set({deployOrder2Loading:false});
       }
     }
     

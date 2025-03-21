@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
@@ -7,30 +7,29 @@ import {Ordercard,TODOOrdercard } from "../components/orderCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
-const orderStatus2=["All", "running", "shipped","paused","TOdo", "delivered", "rejected"];
+const orderStatus2=["All", "running", "shipped","paused","Todo", "delivered", "rejected"];
 const statusPanel = [16,2,4,1,6,4,8];
+import { useDashBoardStore } from "../Store/dashBoardStore";
 const Dashboard = () => {
+  // const {getDeployedOrdersForMaker,makerorders,makerordersLoading}  = useDashBoardStore();
   const navigate = useNavigate();
   const [showOrder, setShowOrder] = useState(true);
   const [idd,setIdd] =useState(0);
-
+  const [selectedStatus,setSelectedStatus] = useState("running");
+  // useEffect(()=>{
+  //   getDeployedOrdersForMaker();
+  // },[getDeployedOrdersForMaker])
+  // if(makerorders){
+  //   console.log(makerorders);
+    
+  // }
   
   return (
     <div className="dashCon">
       <div className="dashCon">
         <div className="item1">
           <main className="dMain">
-            {/* <div className="dLeft">
-              <div className="dLeftTop center ">someItems</div>
-              <div className="dLeftBottom">
-                {menu1.map((itm, i) => (
-                  <div key={i}>
-                    <div className="menuItems1 center " onClick={() => navigate(itm.rout)}>{itm.name}</div>
-                    <hr />
-                  </div>
-                ))}
-              </div>
-            </div> */}
+            
             <div className="dMid  gap-4">
               <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-10">HomeMaker </div>
               <div className="dMidBottom  rounded">
@@ -40,8 +39,9 @@ const Dashboard = () => {
                 </div>
                 <div className="flex justify-evenly">
                   {[orderStatus2.map((itm,i)=>(
+                    
                     <div key={i} className="w-full">
-                    <button className="dNavBtn center" onClick={()=>setIdd(i)}>{itm}</button>
+                    <button className={`dNavBtn center ${selectedStatus===itm && 'text-blue-400'}`} onClick={()=>{setIdd(i);setSelectedStatus(itm)}}>{itm}</button>
                   </div>
                   ))]}
                 </div>

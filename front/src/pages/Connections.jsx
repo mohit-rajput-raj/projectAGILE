@@ -32,7 +32,6 @@ const Connections = () => {
             </ul>
 
             <div className='CardsWrap  '>
-              {/* Connection Card */}
               {[...Array(15)].map((_, index) => (
                 <div key={index} className='ConnCard  '>
                   <ProfileComponent />
@@ -56,23 +55,21 @@ const Connections = () => {
           </div>
         </main>
 
-        {/* Sidebar */}
         <aside className='aside'>
           <div className='asideBox'>
             <h6 className='h-12 flex justify-center items-center'>Manage my network</h6>
             <ul>
               {["Connections", "Contacts", "People I Follow", "Groups", "Pages", "Hashtags"].map((item, index) => (
-                <>
-                <li key={index} className='asideUlLI'>
+                <div key={index}>
+                <li className='asideUlLI'>
                   <span className='h-6 flex   items-center w-1/2'>{item}</span>
                   <span className='flex justify-center items-center w-1/3 '>{Math.floor(Math.random() * 100)}</span>
                 </li>
                 <hr className='HR' />
-                </>
+                </div>
               ))}
             </ul>
           </div>
-          {/* Promotional Box */}
           <div className='career'>
             <div className='imgBox'>
               <div className='pfps'>

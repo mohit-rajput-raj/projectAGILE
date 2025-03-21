@@ -43,7 +43,7 @@ export const getJobNotifications = async (req, res) => {
     const notifications = await Notification.find({
       recipient: req.user._id,
       type: "Jobs",
-    });
+    }).populate("sender", "username profile.pic").sort({ createdAt: -1 });
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error in getJobNotifications controller:", error);
@@ -55,7 +55,7 @@ export const getLikeNotifications = async (req, res) => {
     const notifications = await Notification.find({
       recipient: req.user._id,
       type: "Like",
-    });
+    }).populate("sender", "username profile.pic").sort({ createdAt: -1 }) ;
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error in getLikeNotifications controller:", error);
@@ -63,17 +63,19 @@ export const getLikeNotifications = async (req, res) => {
   }
 };
 export const getFollowNotifications = async (req, res) => {
-  try {
-    const notifications = await Notification.find({
-      recipient: req.user._id,
-      type: "Follow",
-    });
-    res.status(200).json(notifications);
-  } catch (error) {
-    console.error("Error in getFollowNotifications controller:", error);
-    res.status(500).json({ msg: "Failed to load follow notifications." });
-  }
-};
+    try {
+      const notifications = await Notification.find({
+        recipient: req.user._id,
+        type: "Follow",
+      }).populate("sender", "username profile.pic").sort({ createdAt: -1 }); 
+  
+      res.status(200).json(notifications);
+    } catch (error) {
+      console.error("Error in getFollowNotifications controller:", error);
+      res.status(500).json({ msg: "Failed to load follow notifications." });
+    }
+  };
+  
 export const makeUnRead = async (req, res) => {
     const type = req.params.type;
   
@@ -98,7 +100,7 @@ export const getNewCommentNotifications = async (req, res) => {
     const notifications = await Notification.find({
       recipient: req.user._id,
       type: "Comment",
-    });
+    }).populate("sender", "username profile.pic").sort({ createdAt: -1 });
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error in getNewCommentNotifications controller:", error);
@@ -110,7 +112,7 @@ export const orderNotification =async(req,res)=>{
         const notifications = await Notification.find({
           recipient: req.user._id,
           type: "Orders",
-        });
+        }).populate("sender", "username profile.pic").sort({ createdAt: -1 });
         res.status(200).json(notifications);
       } catch (error) {
         console.error("Error in getNewConnectionNotifications controller:", error);
@@ -127,7 +129,7 @@ export const getNewConnectionNotifications = async (req, res) => {
     const notifications = await Notification.find({
       recipient: req.user._id,
       type: "Connection",
-    });
+    }).populate("sender", "username profile.pic").sort({ createdAt: -1 });
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error in getNewConnectionNotifications controller:", error);

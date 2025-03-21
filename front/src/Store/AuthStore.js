@@ -92,27 +92,25 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  connectSocket: async () => {
+  connectSocket: () => {
     const { currUser } = get();
-    if (!currUser?._id || get().socket?.connected) return;
+    if (!currUser || get().socket?.connected) return;
 
     const socket = io(BASE_URL, {
-      query: { userId: currUser._id },
+      query: {
+        userId: currUser._id,
+      },
     });
-
     socket.connect();
-    set({ socket });
 
-    socket.on("onlineUsers", (userIds) => {
+    set({ socket: socket });
+
+    socket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
     });
   },
-
-  disconnectSocket: async () => {
-    if (get().socket?.connected) {
-      get().socket.disconnect();
-    }
-    set({ socket: null });
+  disconnectSocket: () => {
+    if (get().socket?.connected) get().socket.disconnect();
   },
 
   updateProfile: async (data) => {

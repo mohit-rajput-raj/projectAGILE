@@ -50,7 +50,7 @@ const NAV = () => {
   useEffect(() => {
     getUnreadNotifications();
   }, [getUnreadNotifications,re]);
-  console.log(unreadNotifications);
+  // console.log(unreadNotifications);
   
   const handelMenu = ()=>{
     if(currUser?.profile?.role==="homemaker"){
@@ -168,7 +168,7 @@ const NAV = () => {
               </button> */}
 
               <div
-                className="p-but"
+                className="p-but w-13 h-13"
                 onMouseOver={() => setProDrop(true)}
                 onMouseOut={() => setProDrop(false)}
               >
@@ -176,7 +176,7 @@ const NAV = () => {
                   <img
                     src={currUser.profile.pic}
                     alt="Profile"
-                    className="profile-image"
+                    className="w-full h-full object-cover rounded-full "
                   />
                 ) : (
                   <img src={notP} alt="Profile" className="profile-image" />

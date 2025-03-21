@@ -2,17 +2,20 @@ import React, { useEffect } from 'react'
 import '../coustomStyles/contacts.css'
 import { userPic } from '../components/profileCard'
 import { useHomeStore } from '../Store/homeStore'
+import { Link } from 'react-router-dom'
 export const ContactCard =({keys,contact})=>{
   if(!contact)return;
   return(
-    <div className='cntCard flex   '>
+    <Link to={`/profile/${contact.username}`}>
+    <div className='cntCard flex text-black  '>
       <div className='w-1/6 '>
         <div className='object-cover fit rounded-full w-10 h-10 overflow-hidden'>
-          <img src={contact.profile.pic ||userPic} alt="" />
+          <img src={contact.profile.pic ||userPic} alt="" className='w-full h-full object-cover rounded-full border-2 border-gray-300' />
         </div>
       </div>
+      
       <div className='cntCardChild'>
-        <span></span>
+        <span className='center'>{contact.username}</span>
       </div>
       <div className='cntCardChild'>
         {contact.profile.role}
@@ -27,7 +30,9 @@ export const ContactCard =({keys,contact})=>{
         <button className='rounded-3xl deleteBtn'>remove</button>
       </div>
       
+      
     </div>
+    </Link>
   )
 }
 const Contacts = () => {

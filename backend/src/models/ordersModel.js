@@ -33,6 +33,8 @@ const orderSchema = new mongoose.Schema(
         "delivered",
         "paused",
         "rejected",
+        "waiting",
+        "todo",
       ],
       default: "newcreated",
     },
@@ -142,7 +144,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderHoldedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      ref: "User",
     },
   },
   { timestamps: true }

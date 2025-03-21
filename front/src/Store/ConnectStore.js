@@ -62,7 +62,7 @@ export const useConnectStore = create((set, get) => ({
     sendConnectionRequest: async (userId) => {
         try {
             set({ connectionRequestsLoading: true, connectionRequestsError: null });
-            await axiosApi.post(`/connections/sendConnectionRequest/${userId}`);
+            await axiosApi.post(`/connections/toggleConnectionRequest/${userId}`);
             set((state) => ({
                 connectionRequests: [...state.connectionRequests, { userId, status: "pending" }],
             }));
@@ -73,6 +73,7 @@ export const useConnectStore = create((set, get) => ({
             set({ connectionRequestsLoading: false });
         }
     },
+    
 
     acceptConnectionRequest: async (requestId) => {
         try {
@@ -84,6 +85,19 @@ export const useConnectStore = create((set, get) => ({
         } catch (error) {
             console.error("Error in acceptConnectionRequest store:", error);
             set({ acceptRequestError: "Failed to accept connection request." });
+        }
+    },
+    inConnection:false,
+    isInConnections:async(userId)=>{
+        try {
+            // set({ connectionsLoading: true, connectionsError: null });
+            const res = await axiosApi.get(`/connections/isInConnections/${userId}`);
+            set({ inConnection: res.data });
+        } catch (error) {
+            console.error("Error in isInConnections store:", error);
+            set({ connectionsError: "Failed to fetch connections." });
+        } finally {
+            set({ connectionsLoading: false });
         }
     },
 

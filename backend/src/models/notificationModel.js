@@ -6,6 +6,14 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    accepted: {
+			type: Boolean,
+			default: false,
+		},
+    rejected: {
+      type: Boolean,
+      default: false,
+    },
     type: {
       type: String,
       required: true,
@@ -22,6 +30,10 @@ const notificationSchema = new mongoose.Schema(
         "Jobs",
         "privateOd",
         "publicOd",
+        "connection_request",
+        "connection_accepted",
+        "connection_rejected",
+        "Disconnection",
 
       ],
     },
@@ -40,6 +52,10 @@ const notificationSchema = new mongoose.Schema(
     read: {
       type: Boolean,
       default: false,
+    },
+    description: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

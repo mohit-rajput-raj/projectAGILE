@@ -2,53 +2,63 @@ import React, { useEffect, useState } from "react";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
-import { Ordercard, TODOOrdercard } from "../components/orderCard";
+import { Ordercard, TODOOrdercard ,WaitingOrdercard} from "../components/orderCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
 import { useDashBoardStore } from "../Store/dashBoardStore.js";
 import { IoSearchSharp } from "react-icons/io5";
 import DeployeOrder from "./DeployeOrder";
+import { div } from "three/tsl";
 const orderStatusOptions = [
   "All",
-  "running",
-  "shipped",
-  "paused",
-  "pending",
-  "delivered",
-  "rejected",
+  "running",//
+  "shipped",//
+  "paused",//
+  "pending",//
+  "delivered",//
+  "rejected",//
 ];
 
 const Dashboard = () => {
   const [deployOrder, setDeployOrder] = useState(false);
+  const [deployOrderId, setDeployOrderId] = useState(null);
+  // const [barstatus , setBarStatus] = useState("running");
   const {
     orders,
     getDeployedOrders,
     ordersLoading,
     getUndeployedOrders,
     undorders,
+
+    waitingOrders,
+    getWaitingOrders,
   } = useDashBoardStore();
-  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("running");
   const [showOrder, setShowOrder] = useState(true);
 
   useEffect(() => {
     getDeployedOrders();
+  }, [getDeployedOrders]);
+  useEffect(()=>{
     getUndeployedOrders();
-  }, [getDeployedOrders, getUndeployedOrders]);
-
+  },[ getUndeployedOrders,deployOrder]);
+  useEffect(()=>{
+    getWaitingOrders();
+  },[ getWaitingOrders,deployOrder]);
   const navigate = useNavigate();
 
-  // Filter orders based on the selected status
+  
   const filteredOrders =
     selectedStatus === "All"
       ? orders
-      : orders.filter((order) => order.orderStatus === selectedStatus);
+      : orders?.filter((order) => order.orderStatus === selectedStatus);
 
   return (
     <div className="dashCon">
       <div className="dashCon">
         <div className="item1">
           <main className="dMain">
-          {deployOrder && <DeployeOrder deployOrder={deployOrder} setDeployOrder={setDeployOrder}  />}
+          {deployOrder && <DeployeOrder deployOrderId={deployOrderId} setDeployOrder={setDeployOrder} deployOrder={deployOrder} setDeployOrderId={setDeployOrderId} />}
 
             <div className="dMid gap-4">
               <div className="dMidTop w-full border-1 bg-zinc-100 rounded h-10">
@@ -70,7 +80,7 @@ const Dashboard = () => {
                   {orderStatusOptions.map((status, i) => (
                     <div key={i} className="w-full">
                       <button
-                        className="dNavBtn center"
+                        className={`dNavBtn center ${selectedStatus===status && 'text-blue-400'}`}
                         onClick={() => setSelectedStatus(status)}
                       >
                         {status}
@@ -86,6 +96,7 @@ const Dashboard = () => {
                     <PlacedOrderCard
                       key={i}
                       order={order}
+                      
                       rating={selectedStatus === "delivered"}
                     />
                   ))}
@@ -109,7 +120,8 @@ const Dashboard = () => {
                   </button>
                 </div>
                 {showOrder && (
-                  <div className="relative orderBlock mb-2">
+                  <div>
+                    <div className="relative orderBlock mb-2  h-[50vh] overflow-y-scroll">
                     <div>
                       <div className="flex">
                         <button
@@ -125,11 +137,25 @@ const Dashboard = () => {
                       <h2 className="text-2xl">undeployed Orders</h2>
                       <div className="w-full max-h-screen overflow-y-scroll">
                         {undorders?.map((item) => (
-                            <Ordercard key={item._id} order={item} deployOrder={deployOrder} setDeployOrder={setDeployOrder} />
+                            <Ordercard key={item._id} order={item} deployOrder={deployOrder} setDeployOrder={setDeployOrder} setDeployOrderId={setDeployOrderId}/>
                           ))}
                       </div>
                     </div>
                   </div>
+                  <div className="relative orderBlock mb-2  h-full overflow-y-scroll bg-blue-100 rounded-e-2xl backdrop:blur ">
+                    
+                    <div className="flex flex-col items-center">
+                      <h2 className="text-2xl">{waitingOrders?.length===0 ? "No waiting orders" : "Waiting Orders"}</h2>
+                      <div className="w-full max-h-screen overflow-y-scroll">
+                        {waitingOrders?.map((item) => (
+                            <WaitingOrdercard key={item._id} order={item} deployOrder={deployOrder} setDeployOrder={setDeployOrder} setDeployOrderId={setDeployOrderId}/>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  
+                  
                 )}
                 {!showOrder && (
                   <div className="relative orderBlock mb-2">

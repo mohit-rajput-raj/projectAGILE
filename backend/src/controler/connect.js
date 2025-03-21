@@ -66,41 +66,73 @@ export const toggleFollow = async (req, res) => {
 
 
 
-export const sendConnectionRequest = async (req, res) => {
+
+export const toggleConnectionRequest = async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const senderId = req.user._id;
 
 		if (senderId.toString() === userId) {
-			return res.status(400).json({ message: "You can't send a request to yourself" });
+			return res.status(400).json({ message: "You can't connect with yourself" });
 		}
 
-		if (req.user.profile.connections.includes(userId)) {
-			return res.status(400).json({ message: "You are already connected" });
+		// Find users
+		const sender = await User.findById(senderId);
+		const recipient = await User.findById(userId);
+
+		if (!sender || !recipient) {
+			return res.status(404).json({ message: "User not found" });
 		}
 
-		const existingRequest = await ConnectionRequest.findOne({
+		const isConnected = sender.profile.connections.includes(userId);
+
+		// If connected, disconnect & remove notifications
+		if (isConnected) {
+			await User.updateOne(
+				{ _id: senderId },
+				{ $pull: { "profile.connections": userId } }
+			);
+			await User.updateOne(
+				{ _id: userId },
+				{ $pull: { "profile.connections": senderId } }
+			);
+			await sender.save();
+			await recipient.save();
+
+			const disconnectNotification = new Notification({
+				sender: senderId,
+				recipient: userId,
+				type: "Connection",
+				description: `${sender.username} has disconnected from you.`,
+			  });
+			  await disconnectNotification.save();
+
+			return res.status(200).json({ message: "Disconnected successfully" });
+		}
+
+		
+
+		
+
+		const newNotification = new Notification({
 			sender: senderId,
 			recipient: userId,
-			status: "pending",
+			type: "Connection",
+			description: `${sender.username} has connected with you.`,
 		});
+		sender.profile.connections.push(userId);
+		await sender.save();
+		recipient.profile.connections.push(senderId);
+		await recipient.save();
+		await newNotification.save();
 
-		if (existingRequest) {
-			return res.status(400).json({ message: "A connection request already exists" });
-		}
-
-		const newRequest = new ConnectionRequest({
-			sender: senderId,
-			recipient: userId,
-		});
-
-		await newRequest.save();
-
-		res.status(201).json({ message: "Connection request sent successfully" });
+		return res.status(201).json({ message: "Connection request sent successfully" });
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Server error" });
 	}
 };
+
 
 export const acceptConnectionRequest = async (req, res) => {
 	try {
@@ -156,26 +188,7 @@ export const acceptConnectionRequest = async (req, res) => {
 		res.status(500).json({ message: "Server error" });
 	}
 };
-export const amIFollowing = async (req, res) => {
-	try {
-		console.log("mohit");
-		
-		const { userId } = req.params;
-		const myId = req.user._id;
 
-		const user = await User.findById(userId);
-
-		if (!user) {
-			return res.status(404).json({ message: "User not found" });
-		}
-
-		const isFollowing = user.profile.followers.includes(myId);
-		return res.json(isFollowing);
-	} catch (error) {
-		console.error("Error in amIFollowing controller:", error);
-		res.status(500).json({ message: "Server error" });
-	}
-};
 export const rejectConnectionRequest = async (req, res) => {
 	try {
 		const { requestId } = req.params;
@@ -211,6 +224,20 @@ export const getConnectionRequests = async (req, res) => {
 		);
 
 		res.json(requests);
+	} catch (error) {
+		console.error("Error in getConnectionRequests controller:", error);
+		res.status(500).json({ message: "Server error" });
+	}
+};
+export const isRequestPending = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		console.log("Extracted userId:", req.params.userId);
+
+		// const requests = await ConnectionRequest.findById({ sender: userId,recipient:req.params.userId, status: "pending" });
+		// console.log(requests);
+		
+		return res.json();
 	} catch (error) {
 		console.error("Error in getConnectionRequests controller:", error);
 		res.status(500).json({ message: "Server error" });
@@ -279,4 +306,59 @@ export const getConnectionStatus = async (req, res) => {
 		console.error("Error in getConnectionStatus controller:", error);
 		res.status(500).json({ message: "Server error" });
 	}
+
+
 };
+export const checkIfFollowing = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const currentUserId = req.user._id;
+
+        const user = await User.findById(currentUserId).select("profile.following");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isFollowing = user.profile?.following?.includes(userId) || false;
+
+        res.status(200).json({ isFollowing });
+    } catch (error) {
+        console.error("Error in checkIfFollowing:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const isInConnections = async (req, res) => {
+	try {	
+		const userId = req.params.userId;
+		const currentUserId = req.user._id;
+		const user = await User.findById(currentUserId).select("profile.connections");
+		const isInConnections = user.profile.connections.includes(userId);
+		return res.json(isInConnections );
+	} catch (error) {
+		console.error("Error in isInConnections controller:", error);
+		res.status(500).json({ message: "Server error" });
+	}
+};
+export const getconnections = async (req, res) => {
+	const userId = req.user._id;
+  
+	try {
+	  const user = await User.findById(userId)
+		.select('profile.connections')
+		.populate({
+		  path: 'profile.connections',
+		  select: 'username email'
+		});
+  
+	  if (!user || !user.profile.connections) {
+		return res.status(404).json({ msg: "No connections found for this user." });
+	  }
+  
+	  return res.status(200).json(user.profile);
+	} catch (error) {
+	  console.error("Error in getconnections:", error);
+	  res.status(500).json({ msg: "Internal Server Error" });
+	}
+  };

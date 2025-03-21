@@ -2,61 +2,55 @@ import {Messages} from "../models/messagesModel.js";
 // import cloudinary from "../library/cloud.js";
 import {User} from "../models/userModel.js";
 // import { io } from "socket.io-client";
+import { getReceiverSocketId, io } from "../library/socket.js";
 export const createMessage = async (req, res) => {
-    const myId = req.user._id;
-    const hisId = req.params.id;
-    const { text, image, video, file } = req.body;
-
     try {
-        if (!text && !image && !video && !file) {
-            return res.status(400).json({ msg: 'Fill at least one field' });
+        const myId = req.user?._id?.toString();
+        const hisId = req.params?.id;
+        const { text } = req.body;
+
+        if (!myId || !hisId) {
+            return res.status(400).json({ msg: "Invalid sender or receiver ID." });
         }
 
-        const myData = await User.findById(myId);
-        if (!myData) {
-            return res.status(404).json({ msg: 'User not found' });
+        if (!text || text.trim() === "") {
+            return res.status(400).json({ msg: "Message text cannot be empty." });
         }
 
-        const hisIdData = await User.findById(hisId);
-        if (!hisIdData) {
-            return res.status(404).json({ msg: 'User not found' });
+        const [myData, hisData] = await Promise.all([
+            User.findById(myId),
+            User.findById(hisId)
+        ]);
+
+        if (!myData || !hisData) {
+            return res.status(404).json({ msg: "One or both users not found." });
         }
-
-        await User.updateOne(
-            { _id: myId },
-            { $pull: { messagesBar: hisId } },{new:true}
-        );
-        await User.updateOne(
-            { _id: myId },
-            { $push: { messagesBar: hisId } },{new:true}
-        );
-
-        await User.updateOne(
-            { _id: hisId },
-            { $pull: { messagesBar: myId } },{new:true}
-        );
-        await User.updateOne(
-            { _id: hisId },
-            { $push: { messagesBar: myId }},{new:true} 
-        );
+        await Promise.all([
+            User.updateOne({ _id: myId }, { $addToSet: { messagesBar: hisId } }),
+            User.updateOne({ _id: hisId }, { $addToSet: { messagesBar: myId } })
+        ]);
 
         const newMessage = new Messages({
             senderId: myId,
             receiverId: hisId,
             text,
-            image,
-            video,
-            file
         });
 
         await newMessage.save();
+
+        const receiverSocketId = getReceiverSocketId(hisId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+        }
+
         return res.status(201).json(newMessage);
 
     } catch (error) {
         console.error("Error in createMessage:", error);
-        return res.status(500).json({ msg: 'Internal Server Error' });
+        return res.status(500).json({ msg: "Internal Server Error" });
     }
 };
+
 
 
 
@@ -124,7 +118,7 @@ export const getSideBarUsers = async (req, res) => {
                 { _id: { $in: myData.messagesBar } },
                 { _id: { $ne: myId } } 
             ]
-        }).select('username profile.Pic profile.role');
+        }).select('username profile.pic profile.role').exec();
         
         return res.status(200).json(users);
         

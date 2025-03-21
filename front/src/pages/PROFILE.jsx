@@ -31,10 +31,12 @@ const Profile = () => {
     isFollowingLoading,
     getIsFollowing,
     ToggleFollowingLoading,
-    
+    sendConnectionRequest,
+    isInConnections,
+    inConnection,
   } = useConnectStore();
   const {
-    sendConnectRequest,
+    
     addContact,
     isInContacts,
     contactsSaved,
@@ -42,15 +44,35 @@ const Profile = () => {
     removeContact,
     removingFromContacts,
     addingContacts,
+
   } = useHomeStore();
   
   useEffect(()=>{
-    getIsFollowing(userProfile?._id);
+    if(userProfile){
+      getIsFollowing(userProfile?._id);
+    }
+    
   },[getIsFollowing, ToggleFollowingLoading]);
 
  
   
-  
+  useEffect(() => {
+    isInConnections(userProfile?._id);
+  }, [inConnection,sendConnectionRequest]);
+  const handelRemoveconnect = async () => {
+    try {
+      await sendConnectionRequest(userProfile?._id);
+    } catch (error) {
+      console.error("Error adding contact:", error);
+    }
+  };
+  const handeladdConnection = async () => {
+    try {
+      await sendConnectionRequest(userProfile?._id);
+    } catch (error) {
+      console.error("Error adding contact:", error);
+    }
+  };
   const username = useParams().username;
 
   const { userProfile, getUserProfile, isUserProfileLoading } = useUsersData();
@@ -146,15 +168,15 @@ const Profile = () => {
 
               <div className="pInfo">
                 <div className="pPicHolder">
-                  <div className="pPic center">
+                  <div className="pPic center ">
                     {userData?.profile?.pic ? (
                       <img
                         src={userData.profile.pic}
-                        className="fit"
+                        className="w-full h-full object-cover rounded-full border-2 border-gray-300"
                         alt="userPic"
                       />
                     ) : (
-                      <div className="text-2xl center bg-">
+                      <div className="text-2xl center ">
                         <h1>{userData.username.charAt(0).toUpperCase()}</h1>
                       </div>
                     )}
@@ -197,7 +219,7 @@ const Profile = () => {
                     <span>
                       {userData.address ? user.current.address : "new user"}
                     </span>
-                    <div className="stat-item">
+                    <div className="stat-item cursor-pointer" onClick={()=>navigate("/connections")}>
                       <span>CONTACTS INFO</span>
                     </div>
                     <div className="w-8"></div>
@@ -235,9 +257,6 @@ const Profile = () => {
                       {userData.profile.connections.length} connections
                     </span>
                   </div>
-                  {/* <div className='stat-item'>
-                    <span>Alumni Student Club SGSITS Indore</span>
-                  </div> */}
                   <div className="stat-item">
                     <span>{userData.profile.followers.length} Folowers</span>
                   </div>
@@ -263,12 +282,17 @@ const Profile = () => {
 
                 {!isOwnProfile && (
                   <div className="profile-buttons">
-                    <button
-                      className="profile-btn btn-primary"
-                      onClick={() => sendConnectRequest(userData._id)}
-                    >
-                      Connect
-                    </button>
+                    {inConnection ? (
+                      <button className="profile-btn btn-primary" onClick={handelRemoveconnect}>
+                        Disconnect
+                      </button>
+                    ) : (
+                      <button className="profile-btn btn-primary" onClick={handeladdConnection}>
+                        Connect
+                      </button>
+                    )}
+
+
                     {isFollowing ? (
                             <button
                               className="profile-btn btn-secondary stat-item"
@@ -287,7 +311,7 @@ const Profile = () => {
                     {
                       <button
                         className="profile-btn btn-secondary"
-                        onClick={() => navigate("/messages")}
+                        onClick={() => navigate("/messages", { state: { newUser: userData } })}
                       >
                         Message
                       </button>

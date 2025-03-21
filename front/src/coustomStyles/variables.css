@@ -8,6 +8,20 @@
     --border-grey:1px solid rgb(191, 191, 191);
     --button-backGround:linear-gradient(135deg, #6366f1 10%, #ec4899 100%) !important;
   }
+  .backblur{
+    backdrop-filter: blur(8px);
+  }
+  .pad2{
+    padding: 8px;
+  }
+  .buttonsend{
+    background-color: rgb(203, 249, 255,0.5);
+    border: 0px;
+    width: 100px;
+    height: 90%;
+    /* all: unset; */
+
+  }
   .item1{
     background-image: url('images/walls.png');
     background-size: contain;

@@ -26,7 +26,24 @@
     width: 50px;
     margin-right: 30px;
     background-color: transparent;
+   
 }
+.bg-blue-500 {
+    background-color: #3b82f6; /* Blue color */
+  }
+  
+  .bg-gray-200 {
+    background-color: #e5e7eb; /* Light gray */
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  
+  .transition-all {
+    transition: background-color 0.3s ease-in-out;
+  }
+  
 .nEBox{
     background-color: #eaeaea;
     width: 100px;
