@@ -34,7 +34,6 @@ export const deleteAsk = async (req, res) => {
 };
 export const makeReject = async (req, res) => {
   const noti = req.body.data;
-  // console.log(noti);
   let updatedOrder;
   try {
     const newN = await Notification.findByIdAndUpdate(noti._id, { rejected: true });
@@ -63,7 +62,6 @@ export const makeReject = async (req, res) => {
 export const makeAccept = async (req, res) => {
   const noti = req.body.data;
   let updatedOrder;
-  // console.log(noti);
   try {
     const newN = await Notification.findByIdAndUpdate(noti._id, { accepted: true });
     if(noti.type==="Orders"){
@@ -182,7 +180,6 @@ export const getconnectionsFordeployOrders  = async (req, res) => {
       return res.status(401).json({ msg: "Unauthorized access" });
     }
 
-    // Fetch user and populate connections
     const user = await User.findById(userId)
       .select("profile.connections")
       .populate({
@@ -194,7 +191,6 @@ export const getconnectionsFordeployOrders  = async (req, res) => {
       return res.status(404).json({ msg: "No connections found for this user." });
     }
 
-    // Filter connections to only include those with role "homemaker"
     const homemakerConnections = user.profile.connections.filter(
       (connection) => connection.profile.role === "homemaker"
     );

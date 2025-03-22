@@ -34,7 +34,6 @@ const Ordercard = ({rating,order}) => {
                 </div>
             </div>
             <div className='w-1/10 rounded bg-gray-200 pb-3 flex flex-col items-center justify-evenly gap-4'>
-                {/* <TbListDetails /> */}
                 <IoCheckmarkDone />
                 <button className='center bookBtn'  onClick={() => setIsBookmarked(!isBookmarked)}>{isBookmarked ? <FaBookmark className='h-6 w-6' /> : <FaRegBookmark className='h-6 w-6' />}</button>
             </div>

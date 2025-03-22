@@ -66,9 +66,7 @@ import { CgDetailsMore } from "react-icons/cg";
 const TODOOrdercard = ({order}) => {
   if(order.orderStatus !=='pending')return;
   const {AddToDo,AddToDoLoading,AddToDoError,AddToDoData,getDeployedOrdersForMaker} = useDashBoardStore();
-  // useEffect(() => {
-  //   getDeployedOrdersForMaker();
-  // }, []);
+ 
   if(!order)return;
   const navigate = useNavigate();
 const handelAdd = async() => {
@@ -90,7 +88,6 @@ return (
       </div>
       <div className='flex justify-between'>
           <button className='deplayBtn center' onClick={handelAdd}><ImBoxAdd className='h-3 w-3' />Add todo</button>
-          {/* <button className='deleteBtn center'>< VscSyncIgnored className='h-6 w-6' /> reject</button> */}
       </div>
   </div>
 )

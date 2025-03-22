@@ -17,7 +17,6 @@ export const updatePfp = async (req, res) => {
     const profilePic = req.files?.pic;
     const bannerImg = req.files?.bannerImg;
     try {
-        // Clean up empty strings or undefined values
         const updateData = {};
         
         if (name?.trim()) updateData.name = name.trim();
@@ -58,12 +57,10 @@ export const updatePfp = async (req, res) => {
             }
         }
 
-        // Ensure there's actually something to update
         if (Object.keys(updateData).length === 0) {
             return res.status(400).json({ msg: "No data provided for update" });
         }
 
-        // Update user profile
         const updatedUser = await User.findByIdAndUpdate(
             userId, 
             { $set: updateData }, 

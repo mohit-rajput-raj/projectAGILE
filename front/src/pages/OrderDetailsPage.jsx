@@ -136,7 +136,6 @@ const OrderDetailsPage = () => {
                       </p>
                     </div>
                     
-                    {/* <button className="coBtn"  type="submit">Create</button> */}
 
                   </form>
                 </div>

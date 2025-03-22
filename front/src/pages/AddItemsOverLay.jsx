@@ -36,11 +36,11 @@ const AddItemsOverLay = ({
       return;
     }
 
-    setImg1(file); // Store the raw file for form submission and preview
+    setImg1(file); 
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImg(reader.result); // Display preview
+      setImg(reader.result);
     };
     reader.readAsDataURL(file);
   };

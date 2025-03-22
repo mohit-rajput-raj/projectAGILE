@@ -29,11 +29,11 @@ const EditProfile = () => {
         return;
     }
 
-    setImg1(file); // Store the raw file for form submission
+    setImg1(file); 
 
     const reader = new FileReader();
     reader.onloadend = () => {
-        setImg(reader.result); // Display preview
+        setImg(reader.result);
     };
     reader.readAsDataURL(file);
 };
@@ -47,11 +47,11 @@ const handleBannerImageChange = (e) => {
         return;
     }
 
-    setBannerImg1(file); // Store the raw file for form submission
+    setBannerImg1(file); 
 
     const reader = new FileReader();
     reader.onloadend = () => {
-        setBannerImg(reader.result); // Display preview
+        setBannerImg(reader.result); 
     };
     reader.readAsDataURL(file);
 };
@@ -72,7 +72,7 @@ const handleBannerImageChange = (e) => {
       const formData = new FormData();
   
       if (img1) {
-        formData.append("pic", img1); // Append image only if a new one is selected
+        formData.append("pic", img1);
       }
       if (bannerImg1) {
         formData.append("bannerImg", bannerImg1);
@@ -83,7 +83,6 @@ const handleBannerImageChange = (e) => {
       if (profile.lastName.trim()) formData.append("lastName", profile.lastName);
       if (profile.shopname.trim()) formData.append("shopname", profile.shopname);
   
-      // Ensure FormData isn't empty
       if (!img1 && !profile.name.trim() && !profile.lastName.trim() && !profile.shopname.trim()) {
         setError("No data provided for update.");
         setLoading(false);
