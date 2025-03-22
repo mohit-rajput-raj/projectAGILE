@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "../coustomStyles/addItemsOverLay.css";
 import cake from "../components/cake.png";
+import { BannerImageUploader } from "../components/ImgUploader";
 import { useItemStore } from "../Store/itemStore";
-
+import { nanoid } from "nanoid";
 const AddItemsOverLay = ({
   orderId,
   addItemsCards,
@@ -12,10 +13,12 @@ const AddItemsOverLay = ({
   setImg,
   img,
 }) => {
-  const [image,setImage] = useState(cake);
-  const { createItem, createItemError } = useItemStore();
+  const generateOrderKey = () => {
+    return `${nanoid(8)}`;
+  };
+  const { createItem, addItemsLoading, createItemError } = useItemStore();
   const [error, setError] = useState("");
-
+  const [img1, setImg1] = useState(null);
   const handelOnChange = (e) => {
     const { name, value } = e.target;
     setItemData((data) => ({
@@ -23,48 +26,49 @@ const AddItemsOverLay = ({
       [name]: value,
     }));
   };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); 
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      return;
     }
+
+    setImg1(file); // Store the raw file for form submission and preview
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImg(reader.result); // Display preview
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handelSaveItem = async (e) => {
-    // if (!img || !img.type.startsWith('image/')) {
-    //   setError('Please select a valid image file');
-    //   return;
-    // }
-    // console.log("image hai");
-    
+  const itemId = generateOrderKey();
+  const handelSaveItem = async () => {
     try {
-      // const formData = new FormData();
-      // formData.append('image', img);
-      // formData.append('name', itemData.name);
-      // formData.append('type', itemData.type);
-      // formData.append('price', itemData.price);
-      // formData.append('description', itemData.description);
-      // formData.append('quantity', itemData.quantity);
-      // const formObj = {};
-      // formData.forEach((value, key) => {
-      //   formObj[key] = value;
-      // });
-      // console.log(formData.entries());
+      const formData = new FormData();
+      formData.append('name', itemData.name);
+      formData.append('type', itemData.type);
+      formData.append('price', itemData.price);
+      formData.append('quantity', itemData.quantity);
+      formData.append('description', itemData.description);
+      formData.append('id', itemId);
+      if (img1) {
+        formData.append("image", img1);
+      }
+      formData.append('parentId', orderId);
 
-      console.log(itemData);
-      
-      await createItem(itemData);
+
+      await createItem(formData);
       if (createItemError) {
         alert(createItemError);
       } else {
         handelClear();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setError("An error occurred while saving the item.");
     }
   };
@@ -73,7 +77,7 @@ const AddItemsOverLay = ({
     addItemsCards();
     setItemData({
       parentId: orderId,
-      id:() => Date.now().toString(),
+      id: Date.now().toString(),
       name: "",
       type: "",
       price: "",
@@ -94,6 +98,7 @@ const AddItemsOverLay = ({
       >
         X
       </button>
+      {error && <div className="error-message">{error}</div>}
       <div className="uploadItemBox flex items-center justify-center gap-6">
         <div className="w-full max-h-screen">
           <div className="flex gap-12 w-full justify-evenly items-center">
@@ -106,7 +111,9 @@ const AddItemsOverLay = ({
             <button className="btn3" aria-label="Upload image">
               Upload image
             </button>
-            <button className="btn3" onClick={handelSaveItem}>Save</button>
+            <button className="btn3" onClick={handelSaveItem}>
+              {addItemsLoading ? 'Saving...' : 'save'}
+            </button>
             <button onClick={handelClear} className="btn3">
               Clear
             </button>
@@ -134,15 +141,6 @@ const AddItemsOverLay = ({
                 onChange={handelOnChange}
                 name="type"
                 id="category"
-              />
-            </div>
-            <div className="flex flex-col gap-1 w-1/2">
-              <label htmlFor="image">Image:</label>
-              <input
-                type="file"
-                id="avatar-upload"
-                accept="image/*"
-                onChange={(e) => {setImg(e.target.files[0]); handleImageChange(e);}}
               />
             </div>
             <div className="flex flex-col gap-1 w-1/2">
@@ -184,12 +182,8 @@ const AddItemsOverLay = ({
         </div>
         <div className="center w-full max-h-screen">
           <div className="mainItemCard rounded-3xl border-2 border-gray-400">
-            <div className="h-1/2">
-              <img
-                className="w-full h-full rounded-3xl object-cover"
-                src={image ?image: cake}
-                alt="Item"
-              />
+            <div className="w-64 h-60 fit overflow-hidden center">
+              <BannerImageUploader handleImageChange={handleImageChange} bannerImg={img} />
             </div>
             <div className="p-4">
               <h2 className="text-black">
@@ -199,9 +193,7 @@ const AddItemsOverLay = ({
               <div className="mt-2">
                 <span className="text-black">
                   Category:{" "}
-                  <span className="text-2xl text-white">
-                    {itemData.type}
-                  </span>
+                  <span className="text-2xl text-white">{itemData.type}</span>
                 </span>
               </div>
               <div className="mt-2">
@@ -213,9 +205,7 @@ const AddItemsOverLay = ({
               <div className="mt-2">
                 <span className="text-black">
                   Quantity:{" "}
-                  <span className="text-2xl text-white">
-                    {itemData.quantity}
-                  </span>
+                  <span className="text-2xl text-white">{itemData.quantity}</span>
                 </span>
               </div>
             </div>

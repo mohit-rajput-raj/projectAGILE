@@ -1,14 +1,35 @@
 import { Item } from "../models/itemsModel.js";
 import { User } from "../models/userModel.js";
-// import cloudinary from "../library/cloud.js";
+import cloudinary from "../library/cloud.js";
 
 export const createItem = async (req, res) => {
   try {
+    // const updateData = {};
     const { type, price, quantity, parentId, name, description, id } = req.body;
-  
-    if (!parentId || !name || !description || !type || !price || !quantity || !id) {
+    // console.log(req.body);
+    
+    const image = req.files?.image;
+    if (!parentId || !name || !description || !type || !price || !quantity || !id ) {
       console.log("missing data");
       return res.status(400).json({ msg: "Fill all data" });
+    }
+    let uploadResponse;
+    console.log(image);
+    if (image) {
+      console.log("Uploading image to Cloudinary...");
+      try {
+           uploadResponse = await cloudinary.uploader.upload(image.tempFilePath, {
+              folder: 'items_images',
+              // transformation: [
+              //     { width: 500, height: 500, crop: 'fill' },
+              //     { quality: 'auto:good' }
+              // ]
+          });
+          // imageUrl = uploadResponse.secure_url;
+      } catch (error) {
+          console.error('Cloudinary upload error:', error);
+          return res.status(500).json({ msg: "Failed to upload profile picture. Please try again." });
+      }
     }
 
     const newItem = new Item({
@@ -20,6 +41,7 @@ export const createItem = async (req, res) => {
       quantity,
       description,
       id,
+      image: uploadResponse?.secure_url,
     });
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -29,6 +51,8 @@ export const createItem = async (req, res) => {
     user.items.push(newItem._id);
     await user.save();
     await newItem.save();
+    console.log("created Item Successfully");
+    
     return res.status(201).json(newItem);
   } catch (error) {
     console.log("error in addItem", { error });

@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {axiosApi} from '../library/axios.js'
-import { createItem, deleteItem, getItem } from '../../../backend/src/controler/itemsControler';
+// import { createItem, deleteItem, getItem } from '../../../backend/src/controler/itemsControler';
 export const useItemStore = create((set,get)=>({
     items:null,
     item:null,
@@ -20,9 +20,9 @@ export const useItemStore = create((set,get)=>({
             set({addItemsLoading:true,createItemError:null});
 
             const res = await axiosApi.post('/dashboard/createItem',formData,{
-                // headers:{
-                //     'Content-Type': 'multipart/form-data'
-                // }
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             
         } catch (error) {

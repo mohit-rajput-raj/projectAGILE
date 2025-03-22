@@ -62,23 +62,35 @@ const WaitingOrdercard = ({order,deployOrder,setDeployOrder,setDeployOrderId}) =
  )
 }
 import { CgDetailsMore } from "react-icons/cg";
+
 const TODOOrdercard = ({order}) => {
+  if(order.orderStatus !=='pending')return;
+  const {AddToDo,AddToDoLoading,AddToDoError,AddToDoData,getDeployedOrdersForMaker} = useDashBoardStore();
+  // useEffect(() => {
+  //   getDeployedOrdersForMaker();
+  // }, []);
   if(!order)return;
   const navigate = useNavigate();
+const handelAdd = async() => {
+  AddToDo(order._id);
+  if(!AddToDoLoading){
+    getDeployedOrdersForMaker();
+  }
+}
 return (
   <div className='oCard'>
       <div className='oCardHead' onClick={() => navigate('/orderDetails')}>
           <h2 className=' oCH flex items-center gap-2 justify-between'>{order.caption} <CgDetailsMore className='h-6 w-6' /></h2>
           <div className='text-gret-500 flex justify-between'>{order.orderId} </div>
-          <h3 className='text-grey-300'>hiroshi saitama </h3>
+          <h3 className='text-grey-300'>{order.orderBuilder.username} </h3>
           <div className='flex gap-10'>
           <h3 className='text-sm flex text-grey-300'> < HiCalendarDateRange />{order.deadLine}</h3>
           <h3 className='text-sm flex text-grey-300'> < HiCalendarDateRange />{order.expiryDate}</h3>
           </div>
       </div>
       <div className='flex justify-between'>
-          <button className='deplayBtn center'><ImBoxAdd className='h-3 w-3' />Add todo</button>
-          <button className='deleteBtn center'>< VscSyncIgnored className='h-6 w-6' /> reject</button>
+          <button className='deplayBtn center' onClick={handelAdd}><ImBoxAdd className='h-3 w-3' />Add todo</button>
+          {/* <button className='deleteBtn center'>< VscSyncIgnored className='h-6 w-6' /> reject</button> */}
       </div>
   </div>
 )

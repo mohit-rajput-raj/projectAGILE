@@ -7,23 +7,30 @@ import {Ordercard,TODOOrdercard } from "../components/orderCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
-const orderStatus2=["All", "running", "shipped","paused","Todo", "delivered", "rejected"];
+const orderStatus2=["All", "running", "shipped","paused", "delivered", "rejected"];
 const statusPanel = [16,2,4,1,6,4,8];
 import { useDashBoardStore } from "../Store/dashBoardStore";
 const Dashboard = () => {
-  // const {getDeployedOrdersForMaker,makerorders,makerordersLoading}  = useDashBoardStore();
+  const {getDeployedOrdersForMaker,DeployedOrdersForMaker,getDeployedOrdersForMakerLoading}  = useDashBoardStore();
   const navigate = useNavigate();
   const [showOrder, setShowOrder] = useState(true);
   const [idd,setIdd] =useState(0);
   const [selectedStatus,setSelectedStatus] = useState("running");
-  // useEffect(()=>{
-  //   getDeployedOrdersForMaker();
-  // },[getDeployedOrdersForMaker])
-  // if(makerorders){
-  //   console.log(makerorders);
-    
-  // }
   
+  if(DeployedOrdersForMaker){
+    console.log(DeployedOrdersForMaker);
+  }
+  useEffect(()=>{
+    getDeployedOrdersForMaker();
+  },[]);
+  
+  let filteredOrders;
+  if(DeployedOrdersForMaker && selectedStatus && !getDeployedOrdersForMakerLoading){
+     filteredOrders =
+    selectedStatus === "All"
+      ? DeployedOrdersForMaker?.filter((order) => {return order.orderStatus !== 'pending'})
+      : DeployedOrdersForMaker?.filter((order) => order.orderStatus === selectedStatus);
+  }
   return (
     <div className="dashCon">
       <div className="dashCon">
@@ -46,9 +53,9 @@ const Dashboard = () => {
                   ))]}
                 </div>
                 <div style={{maxHeight:"200vh"}} className="overflow-y-scroll w-full  flex flex-col gap-2 ">
-                  {[...Array(statusPanel[idd])].map((item,i) => (
-                    <PlacedOrderCard key={i} rating={orderStatus2[idd]==="delivered"?true:false} />
-                  ))}
+                  {getDeployedOrdersForMakerLoading ? <div>Loading...</div> : (filteredOrders?.map((order,i) => (
+                    <PlacedOrderCard key={i} order={order} rating={orderStatus2[idd]==="delivered"?true:false} />
+                  )))}
                 </div>
               </div>
             </div>
@@ -72,11 +79,11 @@ const Dashboard = () => {
                   <div className=" relative orderBlock mb-2">
                    
                     <div className="flex flex-col items-center">
-                      <h2 className="text-2xl">undeployed Orders</h2>
+                      <h2 className="text-2xl">TODO Orders</h2>
                       <div className="w-full max-h-screen overflow-y-scroll">
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                          <TODOOrdercard />
-                        ))}
+                      {getDeployedOrdersForMakerLoading ? <div>Loading...</div> : (!getDeployedOrdersForMakerLoading && DeployedOrdersForMaker?.map((order,i) => (
+                    <TODOOrdercard key={i} order={order}  />
+                  )))}
                       </div>
                     </div>
                   </div>
@@ -85,7 +92,7 @@ const Dashboard = () => {
                   <div className=" relative orderBlock mb-2">
                    
                     <div className="flex flex-col items-center">
-                      <h2 className="text-2xl">undeployed challenges</h2>
+                      <h2 className="text-2xl">TODO challenges</h2>
                       <div className="w-full">
                         {[1, 2, 3, 4, 5].map((item) => (
                           <TODOOrdercard />

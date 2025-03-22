@@ -181,7 +181,7 @@ const Dashboard = () => {
                   </div>
                 )}
               </div>
-              <div className="dRightBottom min-h-12 bg-zinc-100 w-full overflow-y-scroll"></div>
+              {/* <div className="dRightBottom min-h-12 bg-zinc-100 w-full overflow-y-scroll"></div> */}
             </div>
           </main>
         </div>

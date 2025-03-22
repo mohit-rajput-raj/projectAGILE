@@ -21,12 +21,12 @@ const Ordercard = ({rating,order}) => {
     <div className='oCard'>
         <hr />
         <div className='flex'>
-            <div className='oCardHead'  onClick={() => navigate('/orderDetails')}>
+            <div className='oCardHead'  onClick={() => navigate('/orderDetails/' + order.orderId)}>
                 <h2 className='text-2X oCH flex items-center gap-2'><div className='center rounded bg-gray-300 w-10 h-10'><HiOutlineCake className='h-6 w-6' /></div>{order.caption}</h2>
                 <div className='text-gret-800 flex justify-between'>{order.orderId} <CgDetailsMore /> </div>
                 <h3 className='text-grey-500 flex gap-10'>Hold By : {order.orderHoldedBy.username} <p className='text-sm center'><MdEmail />{order.orderHoldedBy.email} {rating &&(<Rating name="size-small" defaultValue={0} size="small" readOnly />)}</p></h3>
                 <h3 className='text-grey-500 flex gap-10'>Deployed By : {order.orderBuilder.username} <p className='text-sm center'><MdEmail /> {order.orderBuilder.email}</p></h3>
-                
+                <h3 className='text-grey-500 flex gap-10'>Status : {order.orderStatus}</h3>
                 <div className='flex justify-between'>
                     <h3 className='text-sm flex'> < HiCalendarDateRange />{new Date(order.orderBuildDate).toLocaleString()} </h3>
                     <h3 className='text-sm flex'> < HiCalendarDateRange />{new Date(order.deadLine).toLocaleString()} </h3>

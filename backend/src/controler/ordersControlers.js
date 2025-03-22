@@ -73,7 +73,7 @@ export const makeAccept = async (req, res) => {
         { 
           orderHoldedBy: req.user._id,
           unDeployed: false,
-          orderStatus: "accepted"
+          orderStatus: "pending"///////////////////////done
         },
         { new: true }
       );
@@ -141,7 +141,6 @@ export const getWaitingOrdersforMaker = async (req, res) => {
   try {
     const orders = await Orders.find({
       orderHoldedBy: userId,
-      unDeployed: false,
       orderStatus: "waiting"
     }).populate({
       path: 'orderBuilder',
@@ -218,7 +217,6 @@ export const getDeployedOrders = async (req, res) => {//////////////////////////
     const orders = await Orders.find({
       orderBuilder: userId,
       unDeployed: false,
-      orderStatus: "accepted"
     }).populate({
       path: 'orderBuilder',
       select: 'username email'
@@ -234,15 +232,33 @@ export const getDeployedOrders = async (req, res) => {//////////////////////////
     res.status(500).json({ msg: error.message });
   }
 };
+export const AddToDo = async (req, res) => {//////////////////////////
+  
+  console.log("enter totdo");
+  
+  try {
+    const order = await Orders.findByIdAndUpdate(req.params.id,{
+      orderStatus: "running"
+    });
+    
+    await order.save();
+    res.status(200).json(order);
+  } catch (error) {
+    console.log("error in AddToDo", { error });
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const getDeployedOrdersForMaker = async (req, res) => {//////////////////////////
   const userId = req.user._id;
-  console.log("enter");
+  console.log(userId);
+  
+  console.log(Date.now());
   
   try {
     const orders = await Orders.find({
-      orderHoldedBy: userId,
+      orderHoldedBy: userId.toString(),
       unDeployed: false,
-      orderStatus: "accepted"
     }).populate({
       path: 'orderBuilder',
       select: 'username email'
@@ -262,7 +278,15 @@ export const getDeployedOrdersForMaker = async (req, res) => {//////////////////
 export const getOrder = async (req, res) => {///////////
   try {
     const { id } = req.params;
-    const order = await Orders.findById(id);
+    console.log(id);
+    
+    const order = await Orders.findOne({orderId:id}).populate({
+      path: 'orderBuilder',
+      select: 'username email'
+    }).populate({
+      path: 'orderHoldedBy',
+      select: 'username email'
+    });
     res.status(200).json(order);
   } catch (error) {
     console.log("error in getOrder", { error });

@@ -201,7 +201,70 @@ export const useDashBoardStore = create((set,get)=>({
       } finally {
         set({deployOrder2Loading:false});
       }
-    }
+    },
+    WaitingOrdersforMaker:null,
+    getWaitingOrdersforMakerLoading:false,
+    getWaitingOrdersforMakerError:null,
+    getWaitingOrdersforMaker: async () => {
+      try {
+        set({ getWaitingOrdersforMakerLoading: true, getWaitingOrdersforMakerError: null });
+        const res = await axiosApi.get(`/dashboard/getWaitingOrdersforMaker`);
+        set({ WaitingOrdersforMaker: res.data });
+      } catch (error) {
+        console.log("Error in getWaitingOrdersforMaker store:", error);
+        set({ getWaitingOrdersforMakerError: "Failed to load waiting orders." });
+      } finally {
+        set({ getWaitingOrdersforMakerLoading: false });
+      }
+    },
+    DeployedOrdersForMaker:null,
+    getDeployedOrdersForMakerLoading:false,
+    getDeployedOrdersForMakerError:null,
+    getDeployedOrdersForMaker: async () => {
+      try {
+        set({ getDeployedOrdersForMakerLoading: true, getDeployedOrdersForMakerError: null,DeployedOrdersForMaker:null });
+        const res = await axiosApi.get(`/dashboard/getDeployedOrdersForMaker`);
+        set({ DeployedOrdersForMaker: res.data });
+      } catch (error) {
+        console.log("Error in getDeployedOrdersForMaker store:", error);
+        set({ getDeployedOrdersForMakerError: "Failed to load deployed orders." });
+      } finally {
+        set({ getDeployedOrdersForMakerLoading: false });
+      }
+    },
+    AddToDoLoading:false,
+    AddToDoError:null,
+    AddToDoData:null,
+    AddToDo: async (id) => {
+      try {
+        set({ AddToDoLoading: true, AddToDoError: null });
+        const res = await axiosApi.put(`/dashboard/AddToDo/${id}`);
+        set({ AddToDoData: res.data });
+      } catch (error) {
+        console.log("Error in AddToDo store:", error);
+        set({ AddToDoError: "Failed to add to-do." });
+      } finally {
+        set({ AddToDoLoading: false });
+      }
+    },
+    getOrderLoading:false,
+    getOrderError:null,
+    order:null,
+    getOrder: async (id) => {
+      try {
+        set({ getOrderLoading: true, getOrderError: null, order: null });
+        const res = await axiosApi.get(`/dashboard/getOrder/${id}`);
+        set({ order: res.data });
+      } catch (error) {
+        console.log("Error in getOrder store:", error);
+        set({ getOrderError: "Failed to load order." });
+      } finally {
+        set({ getOrderLoading: false });
+      }
+    },
+
+    
+    
     
     
 }))

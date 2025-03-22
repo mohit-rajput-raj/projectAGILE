@@ -1,7 +1,7 @@
 import express from 'express';
 import { protectRoute } from "../middleware/auth.js";
 import { getAllItems, getItem, deleteItem, updateItem, createItem, setRating } from '../controler/itemsControler.js';
-import {getUnDeployedOrders,getDeployedOrdersForMaker,getDeployedOrders,makeAccept,makeReject,deleteFromCreation,createOrder,deleteAsk,getconnectionsFordeployOrders,deployOrder ,getWaitingOrders} from '../controler/ordersControlers.js';
+import {getUnDeployedOrders,getOrder,AddToDo,getWaitingOrdersforMaker,getDeployedOrdersForMaker,getDeployedOrders,makeAccept,makeReject,deleteFromCreation,createOrder,deleteAsk,getconnectionsFordeployOrders,deployOrder ,getWaitingOrders} from '../controler/ordersControlers.js';
 const router = express.Router();
 router.get('/getAllItems',protectRoute,getAllItems);
 router.get('/getItem/:id',protectRoute,getItem);
@@ -25,6 +25,9 @@ router.post('/makeAccept',protectRoute,makeAccept);
 router.post('/makeReject',protectRoute,makeReject);
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.post('/getDeployedOrdersForMaker',protectRoute,getDeployedOrdersForMaker);
-getDeployedOrdersForMaker
+router.get('/getDeployedOrdersForMaker',protectRoute,getDeployedOrdersForMaker);
+router.get('/getWaitingOrdersforMaker',protectRoute,getWaitingOrdersforMaker);
+
+router.put('/AddToDo/:id',protectRoute,AddToDo);
+router.get('/getOrder/:id',protectRoute,getOrder);
 export default router;
