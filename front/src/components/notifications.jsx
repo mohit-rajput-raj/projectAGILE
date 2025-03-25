@@ -29,8 +29,8 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
   };
   const handleClick = () => {
     switch (notification.type) {
-      case "Order":
-        navigate(`/order/${notification.relatedPost}`);
+      case "Orders":
+        navigate(`/orderDetails/${notification.relatedPost.orderId}`);
         break;
       case "Like":
         navigate(`/post/${notification.relatedPost}`);
@@ -56,7 +56,7 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
   return (
     <div
       className="nItem flex gap-4 bg-white p-4 rounded-lg shadow-md relative w-full hover:shadow-lg transition-all cursor-pointer"
-      onClick={handleClick}
+      
     >
       <div className="flex gap-4 items-start w-full justify-between">
         <div className="flex gap-4">
@@ -71,7 +71,7 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
           {notification.sender.username}
         </div>
 
-        <div className="nItemRight flex flex-col flex-1">
+        <div className="nItemRight flex flex-col flex-1" onClick={handleClick}>
           {/* <h3 className="text-lg font-semibold">{title}</h3> */}
           <p className="text-lg text-gray-600 font-semibold">{notification.description}</p>
          

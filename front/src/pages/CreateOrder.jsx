@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 import { useDashBoardStore } from '../Store/dashBoardStore';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
+import {useItemStore} from '../Store/itemStore';
 const CreateOrder = () => {
   const navigate = useNavigate();
   const generateOrderId = (name) => {
@@ -18,6 +19,7 @@ const CreateOrder = () => {
   const generateOrderKey = () => {
     return `${nanoid(8)}`;
   };
+  const {addItemsLoading,Item} = useItemStore();
   const { createOrder, creatingOrder, NewcreatedOrder, creatingOrderError } = useDashBoardStore();
   const { currUser } = useAuthStore();
   const [items, setItems] = useState([]);
@@ -42,10 +44,10 @@ const CreateOrder = () => {
     parentId: orderId,
     name: '',
     type: '',
-    price: '',
+    
     quantity: '',
     description: '',
-    id: '',
+    id: Date.now().toString(),
   });
 
   const [img, setImg] = useState(cake);
@@ -88,13 +90,15 @@ const CreateOrder = () => {
   };
 
   const addItemsCards = () => {
+    setItems(prevItems => [...prevItems, itemData]);
+
     setOverLayAddItems(false);
     setItemData({
       parentId: orderId,
-      id: "",
+      id: Date.now().toString(),
       name: '',
       type: '',
-      price: '',
+      
       quantity: '',
       description: '',
     });
@@ -262,10 +266,10 @@ const CreateOrder = () => {
                 </div>
               </div>
             </aside>
-            <aside className="coRight">
+            {/* <aside className="coRight">
               <div className="coRightTop"></div>
               <div className="coRightBottom"></div>
-            </aside>
+            </aside> */}
           </main>
           <footer className="w-full bg-zinc-200">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. At a aspernatur laboriosam iste quasi atque. Consectetur omnis autem aliquam hic et voluptatem aut modi, nostrum impedit deserunt, doloremque, commodi est!

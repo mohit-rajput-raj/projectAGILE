@@ -14,21 +14,20 @@ export const useItemStore = create((set,get)=>({
     
     createItem:async(formData)=>{
         try {
-            // console.log(data);
-            console.log("hello");
+            console.log("mohit");
             
             set({addItemsLoading:true,createItemError:null});
-
             const res = await axiosApi.post('/dashboard/createItem',formData,{
                 headers:{
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            
+            set({item:res.data});
+            return res.data;
         } catch (error) {
             console.log('error in createItem store:', error);
             set({ createItemError: 'Failed to create item.' });
-            
+            return null;
         }finally{
             set({addItemsLoading:false});
         }

@@ -35,6 +35,8 @@ export const toggleFollow = async (req, res) => {
                 { _id: userId },
                 { $pull: { "profile.followers": myId } }
             );
+			
+			await notif.save();
 
             return res.status(200).json({ message: "Unfollowed successfully",isFollowing: false });
         } else {
@@ -50,7 +52,8 @@ export const toggleFollow = async (req, res) => {
 			const notif = new Notification({
 				recipient: userId,
 				type: "Follow",
-				sender: myId
+				sender: myId,
+				description: "starts following you",
 			});
 			await notif.save();
 
@@ -322,7 +325,7 @@ export const checkIfFollowing = async (req, res) => {
 
         const isFollowing = user.profile?.following?.includes(userId) || false;
 
-        res.status(200).json({ isFollowing });
+        res.status(200).json( isFollowing );
     } catch (error) {
         console.error("Error in checkIfFollowing:", error);
         res.status(500).json({ message: "Server error" });

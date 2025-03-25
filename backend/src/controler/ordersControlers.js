@@ -97,6 +97,11 @@ export const createOrder = async (req, res) => {
     if (!orderId || !orderKey || !caption || !description || !address || !budget || !deadLine || !date) {
       return res.status(400).json({ msg: "Fill all data" });
     }
+
+    const items = await Item.find({ parentId: orderId });
+    if (!items || items.length === 0) {
+      return res.status(400).json({ msg: "No items found for this order" });
+    }
     const newOrder = new Orders({
       orderId,
       orderKey,
@@ -107,6 +112,7 @@ export const createOrder = async (req, res) => {
       deadLine,
       orderBuildDate: date,
       orderBuilder: req.user._id,
+      orderItems: items.map(item => item._id),
     });
     await newOrder.save();
     res.status(201).json(newOrder);
@@ -289,6 +295,16 @@ export const getOrder = async (req, res) => {///////////
     res.status(500).json({ msg: error.message });
   }
 };
+export const geFavroutes =async(req,res)=>{
+  try {
+    const userId  = req.user._id;
+    const favroutes = await User.find(userId).select()
+    
+  } catch (error) {
+    console.log("error in getFavroutes", { error });
+    res.status(500).json({ msg: error.message });
+  }
+}
 export const deleteFromCreation = async (req,res)=>{
   try {
     const { id } = req.params;
@@ -372,15 +388,13 @@ export const deployOrder = async (req, res) => {
     await User.findByIdAndUpdate(personId, {
       $push: { undOrders: orderId },
     });
-    const notification = new Notification({
+    const notification = await Notification.create({
       sender: userId,
       recipient: personId,
-      description: `You have been assigned to a new order.`,
+      description: `${userId.username} has been assigned you to a new order.`,
       type: "Orders",
       relatedPost: orderId,
     });
-
-    await notification.save();
 
     await User.findByIdAndUpdate(personId, {
       $push: { "profile.notifications": notification._id },

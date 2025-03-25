@@ -3,7 +3,7 @@ const orderSchema = new mongoose.Schema(
   {
     orderId: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
     },
     budget: {
@@ -145,6 +145,9 @@ const orderSchema = new mongoose.Schema(
     orderHoldedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    rating: {
+      type: Number,
     },
   },
   { timestamps: true }

@@ -6,6 +6,8 @@ import { ProfileComponent } from "../components/profileCard";
 import { useNavigate,Link } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 import { axiosApi } from "../library/axios.js";
+import SnapchatThread  from "../skeletons/ProfileCardSkeleton";
+import { AvatarWithText } from "../skeletons/chatList";
 const Home = () => {
   const navigate = useNavigate();
   // const [isLoading,setIsLoading] =useState(false);
@@ -82,8 +84,8 @@ const Home = () => {
               </div>
 
               <div className="w-1/2 CosCard">
-                {isLoading ? (
-                  <p>Loading...</p>
+                { isLoading  ? (
+                  <SnapchatThread />
                 ) : searchedUsers?.length === 0 ? (
                   <p>No users found</p>
                 ) : (

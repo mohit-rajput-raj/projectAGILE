@@ -73,7 +73,13 @@ const userModel = new mongoose.Schema({
         ref: "Item"
     }],
     
-    
+    shopName:{
+      type:String,
+    },
+    reports:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Report",
+    }],
 
     profile:{
         notifications:[{
@@ -181,7 +187,7 @@ const userModel = new mongoose.Schema({
     
         saved: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Post",
+            ref: "Orders",
         }],
         posts:[{
             type: mongoose.Schema.Types.ObjectId,

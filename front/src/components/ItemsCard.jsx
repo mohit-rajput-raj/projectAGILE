@@ -8,7 +8,8 @@ import cake from '../components/cake.png';
 const ItemsCard = ({ CardData, deleteItem }) => {
   const [price, setPrice] = useState(CardData.price);
   const [piece, setPiece] = useState(CardData.quantity);
-
+  console.log(CardData);
+  
   return (
     <div className="ItemCard">
       <div className="ItemCardPic fit">
@@ -17,23 +18,24 @@ const ItemsCard = ({ CardData, deleteItem }) => {
       <div className="flex flex-col justify-end pdng">
         <div className="flex justify-between">
           <span>ID: {CardData.id}</span>
-          <span className="bg-red-200 center rounded" onClick={() => deleteItem(CardData.idp)}>
+          {/* <span className="bg-red-200 center rounded" onClick={() => deleteItem(CardData.idp)}>
             <AiOutlineDelete className="h-5 w-5" />
-          </span>
+          </span> */}
         </div>
         <h5 className="username">{CardData.name}</h5>
         <Rating name="size-small" defaultValue={2} size="small" />
         <h3 className="profession">{CardData.category}</h3>
         <div className="w-full flex flex-col gap-px">
           <div className="w-full flex h-8 justify-between">
-            <label htmlFor="price">Price/Unit</label>
-            <input className="w-1/2 h-6" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
+            {/* <label htmlFor="price">Price/Unit</label> */}
+            {/* <input className="w-1/2 h-6" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} /> */}
           </div>
           <div className="w-full h-8 flex justify-between">
             <label htmlFor="quantity">Quantity</label>
             <input className="w-1/2 h-6" type="number" placeholder="Quantity" value={piece} onChange={(e) => setPiece(e.target.value)} />
           </div>
-          <label htmlFor="quantity">{`Total Price: ${piece * price}`}</label>
+          <div>{CardData.description || 'No description'}</div>
+          {/* <label htmlFor="quantity">{`Total Price: ${piece * price}`}</label> */}
         </div>
       </div>
     </div>

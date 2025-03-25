@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAuthStore } from '../Store/AuthStore'
 import { useDashBoardStore } from '../Store/dashBoardStore'
+import { BlankItemsCard, ItemsCard } from "../components/ItemsCard";
 const OrderDetailsPage = () => {
   const orderId = useParams().orderId;
   console.log(orderId);
@@ -93,13 +94,13 @@ const OrderDetailsPage = () => {
                       style={{ padding: "10px" }}
                     >
                       
-                      {/* <div className="flex overflow-x-scroll h-90 gap-4 bg-transparent">
-                        {items.map((item) => (
+                      <div className="flex overflow-x-scroll h-90 gap-4 bg-transparent">
+                        {order?.orderItems?.map((item) => (
                           <div key={item.id} className="rounded-2xl h-full">
-                            <ItemsCard CardData={item} deleteItem={deleteItem} />
+                            <ItemsCard CardData={item}  />
                           </div>
                         ))}
-                      </div> */}
+                      </div>
                     </div>
                     <div className="additions">
                       <h2 className="text-2xl bold"></h2>

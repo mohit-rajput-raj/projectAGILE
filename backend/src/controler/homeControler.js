@@ -1,5 +1,6 @@
 import { User } from "../models/userModel.js";
 
+
 export const searchPerson = async (req, res) => {
   const { query } = req.query; 
   // console.log(query);

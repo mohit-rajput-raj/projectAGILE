@@ -107,6 +107,32 @@ export const addContact = async (req, res) => {
     res.status(500).json({ message: "Server error addContacts" });
   }
 };
+export const doReport = async (req, res) => {
+	try {
+	  const { userId } = req.params;
+  
+	  const user = await User.findById(userId);
+	  if (!user) {
+		return res.status(404).json({ msg: "User not found" });
+	  }
+  
+	  const alreadyReported = user.reports.includes(req.user._id);
+	  if (alreadyReported) {
+		return res.status(400).json({ msg: "User already reported" });
+	  }
+  
+	 
+	  user.reports.push(req.user._id);
+	  await user.save(); 
+	  console.log("Report added successfully");
+	  
+	  return res.status(201).json({ msg: "Report added successfully" });
+  
+	} catch (error) {
+	  console.error("Error in doReport:", error);
+	  return res.status(500).json({ msg: "Internal server error" });
+	}
+  };
 export const isInContacts = async (req, res) => {
   try {
     const { userId } = req.params;

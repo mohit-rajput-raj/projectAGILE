@@ -4,6 +4,9 @@ import "../coustomStyles/container.css";
 import banner from "../coustomStyles/images/banner.jpg";
 import banner2 from "../coustomStyles/images/banner2.jpg";
 import banner3 from "../coustomStyles/images/banner3.jpg";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import dummyBanner from "../coustomStyles/images/image.png";
 // import banner4 from '../coustomStyles/banner4.jpg'
 import black from "./black.tree.jpg";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -12,16 +15,16 @@ import "../coustomStyles/person.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MdOutlineVerified } from "react-icons/md";
 import userPic from "./user.jpg";
-
+import '../coustomStyles/NAV.css'
 import { useDashBoardStore } from "../Store/dashBoardStore";
 import { useAuthStore } from "../Store/AuthStore";
 import { useHomeStore } from "../Store/homeStore";
 import { useConnectStore } from "../Store/ConnectStore.js";
 const banners = [banner, banner2, banner3, banner2];
 const images = banners;
-
+import {LinkedinFeed} from '../skeletons/profileSkeleton.jsx'
 import { useUsersData } from "../Store/dataStore";
-
+import { MdOutlineReportProblem } from "react-icons/md";
 const Profile = () => {
   const { getConnections, connections } = useDashBoardStore();
   const {
@@ -34,6 +37,9 @@ const Profile = () => {
     sendConnectionRequest,
     isInConnections,
     inConnection,
+    connectionRequestsLoading
+    
+    
   } = useConnectStore();
   const {
     
@@ -44,6 +50,7 @@ const Profile = () => {
     removeContact,
     removingFromContacts,
     addingContacts,
+    doReport
 
   } = useHomeStore();
   
@@ -52,8 +59,11 @@ const Profile = () => {
       getIsFollowing(userProfile?._id);
     }
     
-  },[getIsFollowing, ToggleFollowingLoading]);
+  },[getIsFollowing]);
 
+ const [incon , setIncon] = useState(inConnection);
+ const [inFol , setInFol] = useState(isFollowing);
+ console.log(inFol);
  
   
   useEffect(() => {
@@ -62,6 +72,9 @@ const Profile = () => {
   const handelRemoveconnect = async () => {
     try {
       await sendConnectionRequest(userProfile?._id);
+      // inConnection = false;
+      setIncon(false);
+      setTotalConnections(prev => prev - 1);
     } catch (error) {
       console.error("Error adding contact:", error);
     }
@@ -69,6 +82,9 @@ const Profile = () => {
   const handeladdConnection = async () => {
     try {
       await sendConnectionRequest(userProfile?._id);
+      // inConnection = true;
+      setIncon(true);
+      setTotalConnections(prev => prev + 1);
     } catch (error) {
       console.error("Error adding contact:", error);
     }
@@ -76,13 +92,16 @@ const Profile = () => {
   const username = useParams().username;
 
   const { userProfile, getUserProfile, isUserProfileLoading } = useUsersData();
-  
+  const [reportOverlay , setReportOverlay] = useState(false);
   
   useEffect(() => {
     getUserProfile(username);
     console.log(userProfile);
   }, [getUserProfile]);
-
+  const handelsendReport =()=>{
+    setReportOverlay(false);
+    toast.warning("Report sent");
+  }
   
   useEffect(() => {
     isInContacts(userProfile?._id);
@@ -104,66 +123,62 @@ const Profile = () => {
   const { currUser } = useAuthStore();
 
   const navigate = useNavigate();
-  // console.log(userProfile);
 
   const isOwnProfile = currUser?._id === userProfile?._id;
-  // const isOwnProfile = false;
   const userData = isOwnProfile ? currUser : userProfile;
-  // console.log(userData);
-  // const userData = currUser;
-  // const isOwnProfile =false;
-
-  // const [currentSlide, setCurrentSlide] = useState(0);
-
-  // const nextSlide = useCallback(() => {
-  //   setCurrentSlide((prev) => (prev + 1) % images.length);
-  // }, [images.length]);
-
-  // const prevSlide = () => {
-  //   setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-  // };
-
-  // const goToSlide = (index) => {
-  //   setCurrentSlide(index);
-  // };
-
-  if (isUserProfileLoading || !userProfile) return <div>Loading...</div>;
-
+  console.log(userProfile);
+  
+  const [totalConnections, setTotalConnections] = useState(userData?.profile.connections.length);
+  const [totalFollowers, setTotalFollowers] = useState(userData?.profile.followers.length);
+  if (isUserProfileLoading || !userProfile) return <LinkedinFeed/>;
+  
   return (
     <div className="dashCon">
       <div className="dashConItem">
         <div className="item1">
           <main className="pMain">
+          <Toaster position="top-center" />
+            {reportOverlay&&<div className="fixed inset-0 z-50 flex items-center justify-center backest w-screen h-screen">
+              <div className="w-screen h-screen testBack">
+                <div className="testCard">
+                  <div className="flex h-1/5 w-1/1 justify-end">
+                    <button className="logout text-6xl " onClick={()=>setReportOverlay(false)}>
+                      X
+                    </button>
+                  </div>
+                  <div className="flex justify-center items-center w-1/1 h-1/5">
+                    <p className="text-2xl">report the profile</p>
+                  </div>
+                  {/* <div className="w-full center"><input type="text" className="bg-red-200" /></div> */}
+                  <div className="flex justify-center items-center h-3/5 w-1/1">
+                  
+                  <button 
+                      className="logout center" 
+                      onClick={() => {setReportOverlay(false);
+                        toast.success("Report sent");
+                        doReport(userData?._id);
+                      }}
+                    >
+                      Report
+                    </button>
+                      
+                    <button className="nott" onClick={()=>setReportOverlay(false)}>
+                      no
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>}
             <div className="pLeft">
               <div className="banner">
-                <div className="banner-slide">
+                <div className="banner-slide" >
                   <img
-                    src={userData?.profile?.bannerImg || banner}
+                    src={userData?.profile?.bannerImg.length>0?userData?.profile?.bannerImg:dummyBanner}
                     className="object-cover"
                     style={{ width: "100%", height: "100%" }}
                   />
                 </div>
-                {/* <button className='banner-arrow left' onClick={prevSlide}>{`<`}</button>
-                <div 
-                  className='banner-container' 
-                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                >
-                  {images.map((img, i) => (
-                    <div key={i} className='banner-slide'>
-                      <img src={img} alt={`Slide ${i + 1}`} className='object-cover' style={{ width: '100%', height: '100%' }} />
-                    </div>
-                  ))}
-                </div>
-                <button className='banner-arrow right' onClick={nextSlide}>{`>`}</button>
-                <div className='banner-dots'>
-                  {images.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`banner-dot ${i === currentSlide ? 'active' : ''}`}
-                      onClick={() => goToSlide(i)}
-                    />
-                  ))}
-                </div> */}
+                
               </div>
 
               <div className="pInfo">
@@ -226,7 +241,7 @@ const Profile = () => {
                     {!isOwnProfile &&
                       !isInContactsLoading &&
                       !removingFromContacts && (
-                        <span className=" text-blue-500">
+                        <span className=" text-blue-500 flex">
                           {contactsSaved ? (
                             <button
                               className="profile-btn btn-secondary stat-item"
@@ -242,7 +257,9 @@ const Profile = () => {
                               Add to connect
                             </button>
                           )}
+                          
                         </span>
+                        
                       )}
                   </div>
 
@@ -254,11 +271,11 @@ const Profile = () => {
                 <div className="profile-stats">
                   <div className="stat-item">
                     <span>
-                      {userData.profile.connections.length} connections
+                      {totalConnections} connections
                     </span>
                   </div>
                   <div className="stat-item">
-                    <span>{userData.profile.followers.length} Folowers</span>
+                    <span>{totalFollowers} Folowers</span>
                   </div>
                   <div className="stat-item">
                     <span>{userData.profile.following.length} Followring</span>
@@ -269,6 +286,7 @@ const Profile = () => {
                   <div className="stat-item">
                     <span>accounts</span>
                   </div>
+                  <div className="w-4 h-4 center" onClick={()=>setReportOverlay(true)}><span><MdOutlineReportProblem/></span></div>
                   {userData.profile.role === "homemaker" && (
                     <div className="stat-item">
                       <span
@@ -282,30 +300,30 @@ const Profile = () => {
 
                 {!isOwnProfile && (
                   <div className="profile-buttons">
-                    {inConnection ? (
+                    {incon ? (
                       <button className="profile-btn btn-primary" onClick={handelRemoveconnect}>
-                        Disconnect
+                        {connectionRequestsLoading?'disconnecting...':'disconnect'}
                       </button>
                     ) : (
                       <button className="profile-btn btn-primary" onClick={handeladdConnection}>
-                        Connect
+                        {connectionRequestsLoading?"connecting...":"Connect"}
                       </button>
                     )}
 
 
-                    {isFollowing ? (
+                    {inFol ? (
                             <button
                               className="profile-btn btn-secondary stat-item"
-                              onClick={()=>sendUnfollowRequest(userData._id)}
+                              onClick={()=>{sendUnfollowRequest(userData._id);setInFol(false);setTotalFollowers(prev => prev - 1)}}
                             >
-                              unfollow
+                              {ToggleFollowingLoading ? 'Unfollowing...' : 'Unfollow'}
                             </button>
                           ) : (
                             <button
                               className="profile-btn btn-secondary stat-item"
-                              onClick={()=>sendFollowRequest(userData._id)}
+                              onClick={()=>{sendFollowRequest(userData._id);setInFol(true);setTotalFollowers(prev => prev + 1)}}
                             >
-                              Follow
+                              {ToggleFollowingLoading ? 'Following...' : 'Follow'}
                             </button>
                           )}
                     {

@@ -3,14 +3,12 @@ import bcrypt from "bcryptjs";
 import genToken from "../library/genToken.js";
 import { sendOTPEmail } from "../library/sendEmail.js";
 import cloudinary from "../library/cloud.js";
-
+import { Admins } from "../models/adminModel.js";
 export const about = async (req, res) => {
     res.json({ msg: "hell yeah" });
 };
 
 export const updatePfp = async (req, res) => {
-    // console.log('Files received:', req.files); // Debugging log
-    // console.log('Body received:', req.body);   // Debugging log
     
     const userId = req.user._id;
     let { name, lastName, shopname } = req.body;
@@ -18,7 +16,7 @@ export const updatePfp = async (req, res) => {
     const bannerImg = req.files?.bannerImg;
     try {
         const updateData = {};
-        
+        const user = await User.findById(userId);
         if (name?.trim()) updateData.name = name.trim();
         if (lastName?.trim()) updateData.lastName = lastName.trim();
         if (shopname?.trim()) updateData.shopname = shopname.trim();
@@ -26,12 +24,12 @@ export const updatePfp = async (req, res) => {
         if (profilePic) {
             console.log("Uploading image to Cloudinary...");
             try {
+                if(user.profile.pic){
+                    const response = await cloudinary.uploader.destroy(user.profile.pic);
+                }
                 const uploadResponse = await cloudinary.uploader.upload(profilePic.tempFilePath, {
                     folder: 'user_profiles',
-                    // transformation: [
-                    //     { width: 500, height: 500, crop: 'fill' },
-                    //     { quality: 'auto:good' }
-                    // ]
+                    
                 });
                 updateData['profile.pic'] = uploadResponse.secure_url;
             } catch (error) {
@@ -43,6 +41,9 @@ export const updatePfp = async (req, res) => {
         if (bannerImg) {
             console.log("Uploading banner image to Cloudinary...");
             try {
+                if(user.profile.bannerImg){
+                    const response = await cloudinary.uploader.destroy(user.profile.bannerImg);
+                }
                 const uploadResponse = await cloudinary.uploader.upload(bannerImg.tempFilePath, {
                     folder: 'user_banners',
                     // transformation: [
@@ -87,7 +88,9 @@ export const login = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ msg: "User does not exist" });
-
+        if(user.profile.isBanned){
+            return res.status(400).json({ msg: "your profile is banned" });
+        }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 

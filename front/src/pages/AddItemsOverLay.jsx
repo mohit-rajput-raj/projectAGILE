@@ -4,6 +4,7 @@ import cake from "../components/cake.png";
 import { BannerImageUploader } from "../components/ImgUploader";
 import { useItemStore } from "../Store/itemStore";
 import { nanoid } from "nanoid";
+
 const AddItemsOverLay = ({
   orderId,
   addItemsCards,
@@ -13,12 +14,12 @@ const AddItemsOverLay = ({
   setImg,
   img,
 }) => {
-  const generateOrderKey = () => {
-    return `${nanoid(8)}`;
-  };
   const { createItem, addItemsLoading, createItemError } = useItemStore();
   const [error, setError] = useState("");
   const [img1, setImg1] = useState(null);
+
+  const generateOrderKey = () => nanoid(8);
+
   const handelOnChange = (e) => {
     const { name, value } = e.target;
     setItemData((data) => ({
@@ -36,7 +37,7 @@ const AddItemsOverLay = ({
       return;
     }
 
-    setImg1(file); 
+    setImg1(file);
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -45,21 +46,21 @@ const AddItemsOverLay = ({
     reader.readAsDataURL(file);
   };
 
-  const itemId = generateOrderKey();
   const handelSaveItem = async () => {
+    // if (!validateForm()) return;
+
     try {
       const formData = new FormData();
       formData.append('name', itemData.name);
       formData.append('type', itemData.type);
-      formData.append('price', itemData.price);
+      // formData.append('price', itemData.price);
       formData.append('quantity', itemData.quantity);
       formData.append('description', itemData.description);
-      formData.append('id', itemId);
+      formData.append('id', generateOrderKey());
       if (img1) {
         formData.append("image", img1);
       }
       formData.append('parentId', orderId);
-
 
       await createItem(formData);
       if (createItemError) {
@@ -73,14 +74,56 @@ const AddItemsOverLay = ({
     }
   };
 
+  const handelAddItem = async () => {
+    console.log(itemData);
+    
+    // if (!validateForm()) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("name", itemData.name);
+      formData.append("type", itemData.type);
+      // formData.append("price", itemData.price);
+      formData.append("quantity", itemData.quantity);
+      formData.append("description", itemData.description);
+      formData.append("parentId", orderId);
+      formData.append("id", generateOrderKey());
+
+      if (img1) {
+        formData.append("image", img1);
+      }
+
+      await createItem(formData);
+      if (createItemError) {
+        alert(createItemError);
+        return;
+      }
+      console.log(itemData);
+      
+      addItemsCards(); 
+        handelClear(); 
+        setOverLayAddItems(false); 
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while saving the item.");
+    }
+  };
+
+  // const validateForm = () => {
+  //   if (!itemData.name || !itemData.type || !itemData.price || !itemData.quantity) {
+  //     setError("All fields are required.");
+  //     return false;
+  //   }
+  //   setError("");
+  //   return true;
+  // };
+
   const handelClear = () => {
-    addItemsCards();
     setItemData({
       parentId: orderId,
       id: Date.now().toString(),
       name: "",
       type: "",
-      price: "",
       quantity: "",
       description: "",
     });
@@ -102,7 +145,7 @@ const AddItemsOverLay = ({
       <div className="uploadItemBox flex items-center justify-center gap-6">
         <div className="w-full max-h-screen">
           <div className="flex gap-12 w-full justify-evenly items-center">
-            <button className="btn3" onClick={handelClear}>
+            <button className="btn3" onClick={handelAddItem}>
               Add
             </button>
             <button className="btn3" aria-label="Select from bucket">
@@ -112,7 +155,7 @@ const AddItemsOverLay = ({
               Upload image
             </button>
             <button className="btn3" onClick={handelSaveItem}>
-              {addItemsLoading ? 'Saving...' : 'save'}
+              {addItemsLoading ? 'Saving...' : 'Save'}
             </button>
             <button onClick={handelClear} className="btn3">
               Clear
@@ -143,8 +186,8 @@ const AddItemsOverLay = ({
                 id="category"
               />
             </div>
-            <div className="flex flex-col gap-1 w-1/2">
-              <label htmlFor="price">Item Price:</label>
+            {/* <div className="flex flex-col gap-1 w-1/2">
+              <label htmlFor="price">Price:</label>
               <input
                 className="CreateitemsInputes"
                 type="number"
@@ -154,7 +197,7 @@ const AddItemsOverLay = ({
                 name="price"
                 id="price"
               />
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1 w-1/2">
               <label htmlFor="quantity">Item Quantity:</label>
               <input

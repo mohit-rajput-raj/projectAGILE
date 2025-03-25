@@ -3,14 +3,17 @@ import Login from './pages/Login'
 // import Login1 from './pages/Login1'
 import Dashboard from './pages/dashboard'
 // import Login from './pages/login'
+// import Report from './pages/Report'
+import AdminBoard from './pages/AdminBoard'
 import { Route,Routes } from 'react-router-dom'
 import { useAuthStore } from './Store/AuthStore'
 import Sign from './pages/Sigin'
 import { Navigate } from 'react-router-dom'
 import Home from './pages/Home'
-import NAV from './pages/NAV'
+import {NAV,NAVadmin} from './pages/NAV'
 import Recover from './pages/Recover'
 import Logout from './pages/Logout'
+import AdminHome from './pages/AdminHome'
 // import PhoneNumberInput from './pages/num'
 import PageNotFound from './pages/PageN'
 // import Tpp from './pages/num'
@@ -25,11 +28,11 @@ import Notification from './pages/Notification'
 import CreateOrder from './pages/CreateOrder'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import EditOrder from './pages/EditOrder'
-import HeaderLoader from './skeletons/profileSkeleton';
+import {HeaderLoader,LinkedinFeed} from './skeletons/profileSkeleton';
 
 
 import Items from './pages/Items'
-import Deleted from './pages/Deleted'
+import Favourites from './pages/Fav'
 import History from './pages/History'
 import Report from './pages/Report'
 import Colabration from './pages/Colabration'
@@ -44,7 +47,7 @@ import { nanoid } from "nanoid";
 const App = () => {
   const {currUser,getUser,isLogin} = useAuthStore();
   
-
+ 
 
 
   
@@ -53,54 +56,55 @@ const App = () => {
   },[getUser]);
 
   if(isLogin && !currUser){
-    return <HeaderLoader/>
+    return <LinkedinFeed/>
   }
   
   
 
   return (
-     
     <Routes>
-      <Route path='/' element={currUser?<NAV/>:<Navigate to={'/login'}/>}>
-        <Route path='/' element={<Home />} />
-        <Route path='/dashboard/items' element={<Items />} />
-        <Route path='/dashboard/colabration' element={<Colabration />} />
-        <Route path='/dashboard/contacts' element={<Contacts />} />
-        <Route path='/contacts' element={<Contacts />} />
-        <Route path='/dashboard/issues' element={<Issues />} />
-        <Route path='/dashboard/report' element={<Report />} />
-        <Route path='/dashboard/history' element={<History />} />
-        <Route path='/dashboard/deleted' element={<Deleted />} />
-        <Route path='/dashboard/Cancled' element={<Cancled/>} />
-        <Route path='/dashboard/menu' element={<Menu/>} />
-        
-
-        <Route path='/profile/:username' element={<Profile/>} />
-        <Route path='/profile/:username/menu' element={<Menu2/>} />
-        {/* <Route path='/profile/:id' element={<Profile/>} /> */}
-        <Route path='/editProfile' element={<EditProfile/>} />
-        <Route path='/dashboard' element={currUser?.profile?.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
-        <Route path='/createOrder' element={<CreateOrder/>} />
-        <Route path='/messages' element={<Messages />} />
-        <Route path='/notification' element={<Notification />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/completep' element={<EditProfile/>} />
-        <Route path='/connections' element={<Connections />} />
-        <Route path='/orderDetails/:orderId' element={<OrderDetailsPage />} />
-        <Route path='/editOrder' element={<EditOrder />} />
-        <Route path='/create' element={<CreateOrder />} />
-      </Route>
-        
-      <Route path='/login' element={!currUser?<Login/>:<Navigate to={'/'}/>}/>
+      <Route path='/login' element={!currUser ? <Login/> : <Navigate to='/'/>}/>
+      <Route path='/register' element={!currUser ? <Sign/> : <Navigate to='/'/>}/>
       <Route path='/recover' element={<Recover/>}/>
-      <Route path='/dash' element={<Dashboard/>}/>
-      <Route path='/register' element={!currUser?<Sign/>:<Navigate to={'/'}/>}/>
       <Route path='/logout' element={<Logout/>}/>
+
+      {currUser?.profile?.role === 'admin' ? (
+        <Route path='/' element={<NAVadmin/>}>
+          <Route index element={<AdminHome />} />
+          <Route path='/adminBoard' element={<AdminBoard />} />
+          <Route path='/reports' element={<Report />} />
+        </Route>
+      ) : (
+        <Route path='/' element={<NAV/>}>
+          <Route index element={<Home />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/dashboard/items' element={<Items />} />
+          <Route path='/dashboard/colabration' element={<Colabration />} />
+          <Route path='/contacts' element={<Contacts />} />
+          <Route path='/dashboard/issues' element={<Issues />} />
+          <Route path='/dashboard/report' element={<Report />} />
+          <Route path='/dashboard/history' element={<History />} />
+          <Route path='/dashboard/favourites' element={<Favourites />} />
+          <Route path='/dashboard/Cancled' element={<Cancled/>} />
+          <Route path='/dashboard/menu' element={<Menu/>} />
+          <Route path='/profile/:username' element={<Profile/>} />
+          <Route path='/profile/:username/menu' element={<Menu2/>} />
+          <Route path='/editProfile' element={<EditProfile/>} />
+          <Route path='/dashboard' element={currUser?.profile?.role==="homemaker"?<DashboardHomeMaker/>:<Dashboard />} />
+          <Route path='/createOrder' element={<CreateOrder/>} />
+          <Route path='/messages' element={<Messages />} />
+          <Route path='/notification' element={<Notification />} />
+          <Route path='/completep' element={<EditProfile/>} />
+          <Route path='/connections' element={<Connections />} />
+          <Route path='/orderDetails/:orderId' element={<OrderDetailsPage />} />
+          <Route path='/editOrder' element={<EditOrder />} />
+          <Route path='/create' element={<CreateOrder />} />
+        </Route>
+      )}
+
       <Route path='/*' element={<PageNotFound/>}/>
-      {/* <Route path='/test' element={<Num/>}/> */}
     </Routes>
-    
-  )
+  );
 }
 
 export default App

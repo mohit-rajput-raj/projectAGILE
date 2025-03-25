@@ -4,61 +4,52 @@ import cloudinary from "../library/cloud.js";
 
 export const createItem = async (req, res) => {
   try {
-    // const updateData = {};
-    const { type, price, quantity, parentId, name, description, id } = req.body;
-    // console.log(req.body);
-    
+    const { type, quantity, parentId, name, description, id } = req.body;
     const image = req.files?.image;
-    if (!parentId || !name || !description || !type || !price || !quantity || !id ) {
-      console.log("missing data");
+
+    if (!parentId || !name || !description || !type || !quantity || !id) {
       return res.status(400).json({ msg: "Fill all data" });
     }
-    let uploadResponse;
-    console.log(image);
+
+    let imageUrl = null;
     if (image) {
-      console.log("Uploading image to Cloudinary...");
       try {
-           uploadResponse = await cloudinary.uploader.upload(image.tempFilePath, {
-              folder: 'items_images',
-              // transformation: [
-              //     { width: 500, height: 500, crop: 'fill' },
-              //     { quality: 'auto:good' }
-              // ]
-          });
-          // imageUrl = uploadResponse.secure_url;
-      } catch (error) {
-          console.error('Cloudinary upload error:', error);
-          return res.status(500).json({ msg: "Failed to upload profile picture. Please try again." });
+        const uploadResponse = await cloudinary.uploader.upload(image.tempFilePath, {
+          folder: 'items_images',
+        });
+        imageUrl = uploadResponse.secure_url;
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({ msg: "Failed to upload image. Please try again." });
       }
     }
 
     const newItem = new Item({
-      
-      parentId, 
+      parentId,
       name,
       type,
-      price,
       quantity,
       description,
       id,
-      image: uploadResponse?.secure_url,
+      image: imageUrl,
     });
+
     const user = await User.findById(req.user._id);
     if (!user) {
-      console.log("user not found");
       return res.status(404).json({ msg: "User not found" });
     }
+
     user.items.push(newItem._id);
     await user.save();
     await newItem.save();
-    console.log("created Item Successfully");
-    
+
     return res.status(201).json(newItem);
   } catch (error) {
-    console.log("error in addItem", { error });
+    console.error("Error in createItem:", error);
     return res.status(500).json({ msg: error.message });
   }
 };
+
 
 export const getAllItems = async (req, res) => {
   try {

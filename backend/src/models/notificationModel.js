@@ -6,6 +6,15 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
     accepted: {
 			type: Boolean,
 			default: false,
@@ -37,25 +46,17 @@ const notificationSchema = new mongoose.Schema(
 
       ],
     },
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
     relatedUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     relatedPost: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
+      ref: "Orders",
     },
     read: {
       type: Boolean,
       default: false,
-    },
-    description: {
-      type: String,
-      required: true,
     },
   },
   { timestamps: true }

@@ -20,7 +20,7 @@ const Login = () => {
   };
   useEffect(()=>{
     if(loginError){
-      alert("Invalid Credentials");
+      alert(loginError);
     }
   },[loginError])
 
@@ -57,7 +57,7 @@ const Login = () => {
           >
             <h2>Login</h2>
 
-            <label htmlFor="loginEmail">Email</label>
+            <label htmlFor="loginEmail">Email</label> 
             <input
               type="email"
               id="loginEmail"
@@ -67,7 +67,7 @@ const Login = () => {
               onChange={handleChange}
               required
             />
-
+              
             <label htmlFor="loginPassword">Password</label>
             <input
               type="password"

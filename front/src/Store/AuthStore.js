@@ -12,7 +12,7 @@ export const useAuthStore = create((set, get) => ({
   socket: null,
   onlineUsers: [],
   registerError: false,
-  loginError: false,
+  loginError: null,
   updating: false,
   updatingError: null,
 
@@ -30,18 +30,19 @@ export const useAuthStore = create((set, get) => ({
   },
 
   login: async (data) => {
-    set({ loginError: false, isLogin: true });
+    set({ loginError: null, isLogin: true });
     try {
-      const res = await axiosApi.post("/auth/login", data);
-      set({ currUser: res.data });
-      get().connectSocket();
+        const res = await axiosApi.post("/auth/login", data);
+        set({ currUser: res.data });
+        get().connectSocket();
     } catch (error) {
-      console.error("Error in login store:", error);
-      set({ loginError: true });
+        console.error("Error in login store:", error.response?.data?.msg || "Unknown error");
+        set({ loginError: error.response?.data?.msg || "Login failed" });
     } finally {
-      set({ isLogin: false });
+        set({ isLogin: false });
     }
-  },
+},
+
 
   sendOtp: async (data) => {
     try {

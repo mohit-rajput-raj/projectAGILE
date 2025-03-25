@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { getuserProfile,hi,deleteContact,sendConnectionRequest ,acceptConnectionRequest,isInContacts,addContact,getContacts} from '../controler/usersControlers.js';
+import { getuserProfile,doReport,hi,deleteContact,sendConnectionRequest ,acceptConnectionRequest,isInContacts,addContact,getContacts} from '../controler/usersControlers.js';
 import { protectRoute } from '../middleware/auth.js';
 
 router.get('/getUserProfile/:username',protectRoute,getuserProfile);
@@ -11,4 +11,5 @@ router.get('/getContacts',protectRoute,getContacts);
 router.get('/isInContacts/:userId',protectRoute,isInContacts);
 router.put('/removeContact/:userId',protectRoute,deleteContact);
 router.get('/hi',protectRoute,hi);
+router.post('/doReport/:userId', protectRoute,doReport);
 export default router;

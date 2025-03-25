@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 import authRoute from "./routes/auth.rout.js";
 import dashRoute from "./routes/dashBoard.route.js";
 import messageRoute from "./routes/message.route.js";
+import adminRoute from "./routes/admin.route.js";
 import homeRoute from "./routes/home.rout.js";
 import userRoute from "./routes/user.route.js";
 import connectionsRoute from "./routes/connections.route.js";
@@ -46,6 +47,7 @@ app.use("/api/home", homeRoute);
 app.use("/api/user",userRoute );
 app.use("/api/connections", connectionsRoute);
 app.use("/api/notifications", notificationRoute);
+app.use("/api/admin", adminRoute);
 // app.use("/api/profile/:id", profile);
 
 server.listen(Port, () => {

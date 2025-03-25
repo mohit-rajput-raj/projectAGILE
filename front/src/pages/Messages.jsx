@@ -52,10 +52,12 @@ const Messages = () => {
     setSideBarUsers4(sideBarUsers);
   }, [sideBarUsers]);
   
+  
   useEffect(() => {
     if (location.state?.newUser) {
+      
       const newUser = location.state.newUser;
-  
+      console.log(newUser);
       setSideBarUsers4(prevUsers => {
         if (!Array.isArray(prevUsers)) return [newUser]; 
         
@@ -67,9 +69,7 @@ const Messages = () => {
     }
   }, [location.state]);
   
-  // console.log(messages);
   
-  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (messageEndRef.current && messages?.length > 0) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -79,7 +79,8 @@ const Messages = () => {
   if (error) {
     return <div>Error loading sidebar users.</div>;
   }
-
+  console.log(sideBarUsers4);
+  // if(!sideBarUsersLoading && !sideBarUsers?.length)
   return (
     <div className="dashCon">
       <div className="dashConItem">
@@ -100,7 +101,7 @@ const Messages = () => {
                       </div>
                     ))
                   ) : sideBarUsers4?.length > 0 ? (
-                    sideBarUsers4.map((sideUser, i) => (
+                    sideBarUsers4?.map((sideUser, i) => (
                       <div className="p-0" key={i}>
                         <button
                           className="proBtn focus:ring-0"

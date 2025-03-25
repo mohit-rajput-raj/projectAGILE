@@ -128,6 +128,7 @@ const Sign = () => {
                 <option value="">Choose Role</option>
                 <option value="homemaker">Home-Maker</option>
                 <option value="shopowner">Shop Owner</option>
+                <option value="admin">Admin</option>
               </select>
 
               <div className="links">
