@@ -2,6 +2,98 @@ import { Orders } from "../models/ordersModel.js";
 import { User } from "../models/userModel.js";
 import { Item } from "../models/itemsModel.js";
 import { Notification } from "../models/notificationModel.js";
+import { populate } from "dotenv";
+
+export const setDelivered= async (req, res) => {
+  try {
+    console.log("setDelivered");
+    
+    const id = req.params.id;
+    const order = await Orders.findByIdAndUpdate(id, { orderStatus: "delivered" }, { new: true });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // await order.save();
+    return res.status(200).json({ message: "Order marked as delivered" });
+  } catch (error) {
+    console.error("Error in setDelivered:", error);
+    res.status(500).json({ message: "Server error, please try again later." });
+    
+  }
+  
+}
+
+export const getHistory = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .select("profile.history")
+      .populate({
+        path: 'profile.history',
+        model: 'Order' 
+      });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.profile || !user.profile.history) {
+      return res.status(200).json({ history: [] });
+    }
+
+    res.status(200).json(user.profile.history);
+  } catch (error) {
+    console.error("Error in getHistory:", error);
+    res.status(500).json({ message: "Server error, please try again later." });
+  }
+};
+
+
+
+
+export const addHistory = async (req, res) => {
+  try {
+    const order = await Orders.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { "profile.history": order._id } },
+      { new: true } 
+    ); 
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "History added successfully"});
+
+  } catch (error) {
+    console.error("Error in addHistory:", error);
+    res.status(500).json({ message: "Server error, please try again later." });
+  }
+};
+export const deleteHistory = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { "profile.history": req.params.id } }, 
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "History deleted successfully", history: user.profile?.history || [] });
+
+  } catch (error) {
+    console.error("Error in deleteHistory:", error);
+    res.status(500).json({ message: "Server error, please try again later." });
+  }
+};
 
 
 
@@ -33,32 +125,51 @@ export const deleteAsk = async (req, res) => {
   }
 };
 export const makeReject = async (req, res) => {
-  const noti = req.body.data;
+  const notiId = req.params.id;
   let updatedOrder;
+
   try {
-    const newN = await Notification.findByIdAndUpdate(noti._id, { rejected: true });
-    if(noti.type==="Orders"){
-      const order = await Orders.findById(noti.relatedPost);
-       updatedOrder = await Orders.findByIdAndUpdate(
-        order._id, 
-        { 
+    // Find and update the notification
+    const notification = await Notification.findById(notiId);
+    if (!notification) {
+      return res.status(404).json({ msg: "Notification not found" });
+    }
+
+    notification.rejected = true;
+    await notification.save();
+
+    if (notification.type === "Orders") {
+      const order = await Orders.findById(notification.relatedPost);
+      if (!order) {
+        return res.status(404).json({ msg: "Order not found" });
+      }
+
+      updatedOrder = await Orders.findByIdAndUpdate(
+        order._id,
+        {
           orderHoldedBy: null,
           unDeployed: true,
-          orderStatus: "rejected"
+          orderStatus: "newcreated"
         },
         { new: true }
       );
+      await User.findByIdAndUpdate(
+        order.orderBuilder,
+        { $push: { "profile.history": order._id } },
+        { new: true } 
+      ); 
+
+
       return res.status(200).json(updatedOrder);
     }
-    
 
-
-    return res.status(200).json(updatedOrder);
+    return res.status(200).json({ msg: "Notification rejected successfully" });
   } catch (error) {
-    console.log("error in makeReject", error);
-    res.status(500).json({ msg: error.message });
+    console.log("Error in makeReject", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
+
 export const makeAccept = async (req, res) => {
   const noti = req.body.data;
   let updatedOrder;
@@ -75,6 +186,11 @@ export const makeAccept = async (req, res) => {
         },
         { new: true }
       );
+      await User.findByIdAndUpdate(
+        order.orderBuilder,
+        { $push: { "profile.history": order._id } },
+        { new: true } 
+      ); 
       return res.status(200).json(updatedOrder);
     }
     
@@ -115,6 +231,11 @@ export const createOrder = async (req, res) => {
       orderItems: items.map(item => item._id),
     });
     await newOrder.save();
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { "profile.history": newOrder._id } },
+      { new: true } 
+    ); 
     res.status(201).json(newOrder);
   } catch (error) {
     console.error("Error in createOrder:", error.message);
@@ -244,6 +365,11 @@ export const AddToDo = async (req, res) => {//////////////////////////
     });
     
     await order.save();
+    await User.findByIdAndUpdate(
+      order.orderBuilder,
+      { $push: { "profile.history": order._id } },
+      { new: true } 
+    ); 
     res.status(200).json(order);
   } catch (error) {
     console.log("error in AddToDo", { error });
@@ -277,34 +403,37 @@ export const getDeployedOrdersForMaker = async (req, res) => {//////////////////
   }
 };
 
-export const getOrder = async (req, res) => {///////////
+export const getOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     
-    const order = await Orders.findOne({orderId:id}).populate({
-      path: 'orderBuilder',
-      select: 'username email'
-    }).populate({
-      path: 'orderHoldedBy',
-      select: 'username email'
-    });
+    if (!id) {
+      return res.status(400).json({ msg: "Order ID is required" });
+    }
+
+    console.log(`Fetching order with ID: ${id}`);
+
+    const order = await Orders.findOne({ orderId: id })
+      .populate('orderBuilder', 'username email')
+      .populate('orderHoldedBy', 'username email')
+      .populate({
+        path: 'orderItems',
+        model: 'Item',
+        select: 'name description price quantity type image id'
+      });
+
+    if (!order) {
+      return res.status(404).json({ msg: "Order not found" });
+    }
+
     res.status(200).json(order);
   } catch (error) {
-    console.log("error in getOrder", { error });
-    res.status(500).json({ msg: error.message });
+    console.error("Error in getOrder:", error);
+    res.status(500).json({ msg: "Internal Server Error", error: error.message });
   }
 };
-export const geFavroutes =async(req,res)=>{
-  try {
-    const userId  = req.user._id;
-    const favroutes = await User.find(userId).select()
-    
-  } catch (error) {
-    console.log("error in getFavroutes", { error });
-    res.status(500).json({ msg: error.message });
-  }
-}
+
+
 export const deleteFromCreation = async (req,res)=>{
   try {
     const { id } = req.params;
@@ -334,6 +463,11 @@ export const updateOrder = async (req, res) => {
     const order = await Orders.findByIdAndUpdate(id, data, { new: true });
 
     await order.save();
+    await User.findByIdAndUpdate(
+      order.orderBuilder,
+      { $push: { "profile.history": order._id } },
+      { new: true } 
+    ); 
     res.status(200).json(order);
   } catch (error) {
     console.log("error in updateOrder", { error });
@@ -361,7 +495,7 @@ export const deployOrder = async (req, res) => {
     }
     
     const userId = req.user._id;
-
+    const myId = await User.findById(userId);
     const person = await User.findById(personId);
     if (!person) {
       return res.status(404).json({ msg: "Person not found" });
@@ -388,10 +522,12 @@ export const deployOrder = async (req, res) => {
     await User.findByIdAndUpdate(personId, {
       $push: { undOrders: orderId },
     });
+    console.log(userId);
+    
     const notification = await Notification.create({
       sender: userId,
       recipient: personId,
-      description: `${userId.username} has been assigned you to a new order.`,
+      description: `${myId.username} has been assigned you to a new order.`,
       type: "Orders",
       relatedPost: orderId,
     });
@@ -400,6 +536,12 @@ export const deployOrder = async (req, res) => {
       $push: { "profile.notifications": notification._id },
     }, { new: true });
     console.log("all good");
+
+    await User.findByIdAndUpdate(
+      order.orderBuilder,
+      { $push: { "profile.history": order._id } },
+      { new: true } 
+    ); 
     
     res.status(200).json({ msg: "Order deployed successfully", order: updatedOrder });
   } catch (error) {

@@ -80,7 +80,10 @@ const userModel = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Report",
     }],
-
+    saved: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+    }],
     profile:{
         notifications:[{
             type: mongoose.Schema.Types.ObjectId,
@@ -185,10 +188,7 @@ const userModel = new mongoose.Schema({
             default: "",
         },
     
-        saved: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Orders",
-        }],
+       
         posts:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Post",
@@ -223,7 +223,7 @@ const userModel = new mongoose.Schema({
         }],
         history: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: "History",
+            ref: "Orders",
         }],
         blockedBy:[{
             type:mongoose.Schema.Types.ObjectId,

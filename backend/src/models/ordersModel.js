@@ -62,7 +62,7 @@ const orderSchema = new mongoose.Schema(
     orderItems: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        ref: "Item",
       },
     ],
     description: {

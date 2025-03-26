@@ -98,10 +98,10 @@ const Profile = () => {
     getUserProfile(username);
     console.log(userProfile);
   }, [getUserProfile]);
-  const handelsendReport =()=>{
-    setReportOverlay(false);
-    toast.warning("Report sent");
-  }
+  // const handelsendReport =()=>{
+  //   setReportOverlay(false);
+  //   toast.warning("Report sent");
+  // }
   
   useEffect(() => {
     isInContacts(userProfile?._id);
@@ -286,7 +286,6 @@ const Profile = () => {
                   <div className="stat-item">
                     <span>accounts</span>
                   </div>
-                  <div className="w-4 h-4 center" onClick={()=>setReportOverlay(true)}><span><MdOutlineReportProblem/></span></div>
                   {userData.profile.role === "homemaker" && (
                     <div className="stat-item">
                       <span
@@ -296,6 +295,8 @@ const Profile = () => {
                       </span>
                     </div>
                   )}
+                  <div className="w-4 h-4 center" onClick={()=>setReportOverlay(true)}><span><MdOutlineReportProblem/></span></div>
+
                 </div>
 
                 {!isOwnProfile && (

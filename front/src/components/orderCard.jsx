@@ -69,11 +69,13 @@ const TODOOrdercard = ({order}) => {
  
   if(!order)return;
   const navigate = useNavigate();
+  // useEffect(()=>{
+  //   getDeployedOrdersForMaker();
+  // },[AddToDoLoading]);
 const handelAdd = async() => {
-  AddToDo(order._id);
-  if(!AddToDoLoading){
-    getDeployedOrdersForMaker();
-  }
+  await AddToDo(order._id);
+  getDeployedOrdersForMaker();
+  
 }
 return (
   <div className='oCard'>

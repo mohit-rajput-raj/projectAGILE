@@ -55,11 +55,11 @@ const DeployOrder = ({ deployOrder, setDeployOrder, deployOrderId }) => {
                 <div
                   key={item._id}
                   onClick={() => setSelected(item._id)}
-                  className={`flex  center w-80  p-2 text-gray-900 hover:bg-blue-100 cursor-pointer ${
-                    selected === item._id ? "bg-blue-200" : ""
+                  className={`flex  center w-80  p-2 text-gray-900 hover:bg-blue-100 hover:scale-120 cursor-pointer ${
+                    selected === item._id ? "bg-blue-300 rounded-3xl:" : ""
                   }`}
                 >
-                  <div className="center w-50">
+                  <div className="center w-50 bg-blue-100 rounded-3xl">
                   <ProfileComponent user={item} />
                   </div>
                   <hr />

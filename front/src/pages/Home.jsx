@@ -8,8 +8,11 @@ import { IoSearchSharp } from "react-icons/io5";
 import { axiosApi } from "../library/axios.js";
 import SnapchatThread  from "../skeletons/ProfileCardSkeleton";
 import { AvatarWithText } from "../skeletons/chatList";
+import { useAuthStore } from "../Store/AuthStore.js";
 const Home = () => {
+  const {currUser} = useAuthStore();
   const navigate = useNavigate();
+  
   // const [isLoading,setIsLoading] =useState(false);
   const handelSuggestions = async()=>{
     try {

@@ -9,31 +9,32 @@ export const about = async (req, res) => {
 };
 
 export const updatePfp = async (req, res) => {
-    
     const userId = req.user._id;
     let { name, lastName, shopname } = req.body;
     const profilePic = req.files?.pic;
     const bannerImg = req.files?.bannerImg;
+
     try {
         const updateData = {};
         const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ msg: "User not found" });
+
         if (name?.trim()) updateData.name = name.trim();
         if (lastName?.trim()) updateData.lastName = lastName.trim();
         if (shopname?.trim()) updateData.shopname = shopname.trim();
 
         if (profilePic) {
-            console.log("Uploading image to Cloudinary...");
+            console.log("Uploading profile picture to Cloudinary...");
             try {
-                if(user.profile.pic){
-                    const response = await cloudinary.uploader.destroy(user.profile.pic);
+                if (user.profile?.pic) {
+                    await cloudinary.uploader.destroy(user.profile.pic);
                 }
                 const uploadResponse = await cloudinary.uploader.upload(profilePic.tempFilePath, {
-                    folder: 'user_profiles',
-                    
+                    folder: "user_profiles",
                 });
-                updateData['profile.pic'] = uploadResponse.secure_url;
+                updateData["profile.pic"] = uploadResponse.secure_url;
             } catch (error) {
-                console.error('Cloudinary upload error:', error);
+                console.error("Cloudinary profile picture upload error:", error);
                 return res.status(500).json({ msg: "Failed to upload profile picture. Please try again." });
             }
         }
@@ -41,44 +42,39 @@ export const updatePfp = async (req, res) => {
         if (bannerImg) {
             console.log("Uploading banner image to Cloudinary...");
             try {
-                if(user.profile.bannerImg){
-                    const response = await cloudinary.uploader.destroy(user.profile.bannerImg);
+                if (user.profile?.bannerImg) {
+                    await cloudinary.uploader.destroy(user.profile.bannerImg);
                 }
                 const uploadResponse = await cloudinary.uploader.upload(bannerImg.tempFilePath, {
-                    folder: 'user_banners',
-                    // transformation: [
-                    //     { width: 1920, height: 1080, crop: 'fill' },
-                    //     { quality: 'auto:good' }
-                    // ]
+                    folder: "user_banners",
                 });
-                updateData['profile.bannerImg'] = uploadResponse.secure_url;
+                updateData["profile.bannerImg"] = uploadResponse.secure_url;
             } catch (error) {
-                console.error('Cloudinary upload error:', error);
+                console.error("Cloudinary banner image upload error:", error);
                 return res.status(500).json({ msg: "Failed to upload banner image. Please try again." });
             }
         }
+
+        if (updateData.shopname) updateData.isVerified = true;
 
         if (Object.keys(updateData).length === 0) {
             return res.status(400).json({ msg: "No data provided for update" });
         }
 
         const updatedUser = await User.findByIdAndUpdate(
-            userId, 
-            { $set: updateData }, 
+            userId,
+            { $set: updateData },
             { new: true }
         );
-
-        if (!updatedUser) {
-            return res.status(404).json({ msg: "User not found" });
-        }
 
         return res.status(200).json({ msg: "Profile updated successfully", user: updatedUser });
 
     } catch (error) {
-        console.error("Error in updatePFP:", error);
+        console.error("Error in updatePfp:", error);
         return res.status(500).json({ msg: "Server error during profile update" });
     }
 };
+
 
 
 export const login = async (req, res) => {

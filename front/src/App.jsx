@@ -1,36 +1,25 @@
 import React, { useEffect } from 'react'
 import Login from './pages/Login'
-// import Login1 from './pages/Login1'
 import Dashboard from './pages/dashboard'
-// import Login from './pages/login'
-// import Report from './pages/Report'
 import AdminBoard from './pages/AdminBoard'
-import { Route,Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { useAuthStore } from './Store/AuthStore'
 import Sign from './pages/Sigin'
-import { Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import {NAV,NAVadmin} from './pages/NAV'
 import Recover from './pages/Recover'
 import Logout from './pages/Logout'
 import AdminHome from './pages/AdminHome'
-// import PhoneNumberInput from './pages/num'
 import PageNotFound from './pages/PageN'
-// import Tpp from './pages/num'
 import {Profile} from './pages/Profile'
-// import PeoplesProfile from './pages/Profile'
-// import Num from './pages/num'
 import Connections from './pages/Connections'
 import EditProfile from './pages/EditProfile'
 import Messages from './pages/Messages'
 import Notification from './pages/Notification'
-// import CompleteProfile from './pages/CompleteProfile'
 import CreateOrder from './pages/CreateOrder'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import EditOrder from './pages/EditOrder'
-import {HeaderLoader,LinkedinFeed} from './skeletons/profileSkeleton';
-
-
+import {HeaderLoader,LinkedinFeed} from './skeletons/profileSkeleton'
 import Items from './pages/Items'
 import Favourites from './pages/Fav'
 import History from './pages/History'
@@ -42,24 +31,26 @@ import Cancled from './pages/Cancled'
 import Menu from './pages/Menu'
 import DashboardHomeMaker from './pages/DashboardHomeMaker'
 import Menu2 from './pages/Menu2'
-import { nanoid } from "nanoid";
-// import CreateOrder from './pages/CreateOrder'
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { currUser } = useAuthStore();
+  if (!currUser) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
 const App = () => {
-  const {currUser,getUser,isLogin} = useAuthStore();
+  const {currUser, getUser, isLogin} = useAuthStore();
   
- 
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
-
-  
-  useEffect(()=>{
-    getUser()
-  },[getUser]);
-
-  if(isLogin && !currUser){
+  if(isLogin && !currUser) {
     return <LinkedinFeed/>
   }
-  
-  
 
   return (
     <Routes>
@@ -69,13 +60,21 @@ const App = () => {
       <Route path='/logout' element={<Logout/>}/>
 
       {currUser?.profile?.role === 'admin' ? (
-        <Route path='/' element={<NAVadmin/>}>
+        <Route path='/' element={
+          <ProtectedRoute>
+            <NAVadmin/>
+          </ProtectedRoute>
+        }>
           <Route index element={<AdminHome />} />
           <Route path='/adminBoard' element={<AdminBoard />} />
           <Route path='/reports' element={<Report />} />
         </Route>
       ) : (
-        <Route path='/' element={<NAV/>}>
+        <Route path='/' element={
+          <ProtectedRoute>
+            <NAV/>
+          </ProtectedRoute>
+        }>
           <Route index element={<Home />} />
           <Route path='/home' element={<Home />} />
           <Route path='/dashboard/items' element={<Items />} />

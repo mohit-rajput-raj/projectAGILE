@@ -3,15 +3,24 @@ import { useParams } from 'react-router-dom'
 import { useAuthStore } from '../Store/AuthStore'
 import { useDashBoardStore } from '../Store/dashBoardStore'
 import { BlankItemsCard, ItemsCard } from "../components/ItemsCard";
+// import { useDashBoardStore } from '../Store/dashBoardStore';
+import { useNavigate } from 'react-router-dom';
 const OrderDetailsPage = () => {
+  const navigate = useNavigate();
   const orderId = useParams().orderId;
   console.log(orderId);
-  const {getOrder,getOrderLoading,order} = useDashBoardStore();
+  const {getOrder,getOrderLoading,order,setDelivered,getDeployedOrdersForMaker} = useDashBoardStore();
+  const {currUser} = useAuthStore();
   useEffect(() => {
     getOrder(orderId);
   }, [getOrder]);
   console.log(order);
-  
+  const handleSetFinished = async() => {
+    await setDelivered(order._id);
+    
+    navigate('/dashboard');
+    await getDeployedOrdersForMaker();
+  }
   
   if(getOrderLoading )return <div> loading</div>
   return (
@@ -43,6 +52,7 @@ const OrderDetailsPage = () => {
                         className="coInput"
                       />
                     </div>
+
                     <div className="description max-h-40 coIPar overflow-y-scroll">
                       <label htmlFor="description">Description</label>
                       <textarea
@@ -136,6 +146,11 @@ const OrderDetailsPage = () => {
                         provident suscipit laborum.
                       </p>
                     </div>
+                    {currUser.profile.role ==="homemaker" && (
+                      <button className="proBtn" onClick={handleSetFinished}>
+                        Set Finished
+                      </button>
+                    )}
                     
 
                   </form>

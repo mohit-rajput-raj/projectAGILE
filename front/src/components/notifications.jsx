@@ -3,7 +3,7 @@ import { MdOutlineArchive } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useNotificationStore } from "../Store/notificationStore.js";
 import { useDashBoardStore } from "../Store/dashBoardStore.js";
 
@@ -23,7 +23,7 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
     fetchNotifications();
   };
   const handelReject = () => {
-    makeReject({data: notification});
+    makeReject(notification._id);
     setIsRejected(!isRejected);
     fetchNotifications();
   };
@@ -59,6 +59,7 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
       
     >
       <div className="flex gap-4 items-start w-full justify-between">
+        <Link className="flex items-center gap-2" to={`/profile/${notification.sender.username}`}>
         <div className="flex gap-4">
           <img
             src={notification.sender?.profile?.pic || userPic}
@@ -70,6 +71,7 @@ const NotificationItem = ({fetchNotifications, notification, title }) => {
         <div className="text-lg text-blue-900 font-semibold">
           {notification.sender.username}
         </div>
+        </Link>
 
         <div className="nItemRight flex flex-col flex-1" onClick={handleClick}>
           {/* <h3 className="text-lg font-semibold">{title}</h3> */}

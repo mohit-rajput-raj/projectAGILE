@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from "react";
-import "../coustomStyles/container.css";
-import "../coustomStyles/dashboard.css";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { IoSearchSharp } from "react-icons/io5";
 import { IoAddOutline } from "react-icons/io5";
 import {Ordercard,TODOOrdercard } from "../components/orderCard";
 // import DemoCard from "../components/DemoCard";
 import PlacedOrderCard from "../components/PlacedOrderCard";
-import { useNavigate } from "react-router-dom";
-import { IoSearchSharp } from "react-icons/io5";
+import "../coustomStyles/container.css";
+import "../coustomStyles/dashboard.css";
 const orderStatus2=["All", "running", "shipped","paused", "delivered", "rejected"];
 const statusPanel = [16,2,4,1,6,4,8];
 import { useDashBoardStore } from "../Store/dashBoardStore";
-const Dashboard = () => {
+
+const DashboardHomeMaker = () => {
   const {getDeployedOrdersForMaker,DeployedOrdersForMaker,getDeployedOrdersForMakerLoading}  = useDashBoardStore();
-  const navigate = useNavigate();
   const [showOrder, setShowOrder] = useState(true);
   const [idd,setIdd] =useState(0);
   const [selectedStatus,setSelectedStatus] = useState("running");
   
-  if(DeployedOrdersForMaker){
-    console.log(DeployedOrdersForMaker);
-  }
-  useEffect(()=>{
+  useEffect(() => {
     getDeployedOrdersForMaker();
-  },[]);
+  }, []); 
+  
   
   let filteredOrders;
   if(DeployedOrdersForMaker && selectedStatus && !getDeployedOrdersForMakerLoading){
@@ -111,4 +109,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardHomeMaker;

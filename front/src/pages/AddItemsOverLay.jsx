@@ -148,15 +148,15 @@ const AddItemsOverLay = ({
             <button className="btn3" onClick={handelAddItem}>
               Add
             </button>
-            <button className="btn3" aria-label="Select from bucket">
+            {/* <button className="btn3" aria-label="Select from bucket">
               Select from bucket
-            </button>
-            <button className="btn3" aria-label="Upload image">
+            </button> */}
+            {/* <button className="btn3" aria-label="Upload image">
               Upload image
-            </button>
-            <button className="btn3" onClick={handelSaveItem}>
+            </button> */}
+            {/* <button className="btn3" onClick={handelSaveItem}>
               {addItemsLoading ? 'Saving...' : 'Save'}
-            </button>
+            </button> */}
             <button onClick={handelClear} className="btn3">
               Clear
             </button>

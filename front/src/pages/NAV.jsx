@@ -3,6 +3,7 @@ import { useAuthStore } from "../Store/AuthStore";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Logout from "./Logout";
 import "../coustomStyles/Nav.css";
+// import 
 export const menu1 = [
   { name: "DashBoard", rout: "/dashboard" },
   { name: "Items", rout: "/dashboard/items" },
@@ -11,10 +12,11 @@ export const menu1 = [
   { name: "FeedBack", rout: "/dashboard/issues" },
   { name: "Report", rout: "/dashboard/report" },
   { name: "HIstory", rout: "/dashboard/history" },
-  { name: "Cancled", rout: "/dashboard/cancled" },
+  // { name: "Cancled", rout: "/dashboard/cancled" },
   { name: "Favourites", rout: "/dashboard/favourites" },
 ];
 import notP from "./user.jpg";
+import { useDashBoardStore } from "../Store/dashBoardStore";
 import {
   FaHome,
   FaBell,
@@ -33,23 +35,26 @@ export const menu2 = [
   { name: "FeedBack", rout: "/dashboard/issues" },
   { name: "Menu", rout: "/dashboard/menu" },
   { name: "HIstory", rout: "/dashboard/history" },
-  { name: "Cancled", rout: "/dashboard/cancled" },
+  // { name: "Cancled", rout: "/dashboard/cancled" },
   { name: "Favourites", rout: "/dashboard/favourites" },
 ];
 const NAV = () => {
   const { getUnreadNotifications,unreadNotifications,unreadNotificationsLoading } = useNotificationStore();
+  const {getDeployedOrdersForMaker,DeployedOrdersForMaker,getDeployedOrdersForMakerLoading}  = useDashBoardStore();
   const [re, setRe ] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const location = useLocation();
   const handelOver = () => {
     setOverlay(!overlay);
   };
+  
   const { logout, getUser, currUser } = useAuthStore();
+ 
   const navigate = useNavigate();
   const [menu , setMenu] = useState(null);
   useEffect(() => {
     getUnreadNotifications();
-  }, [getUnreadNotifications]);
+  }, [getUnreadNotifications,re]);
   
   const handelMenu = ()=>{
     if(currUser?.profile?.role==="homemaker"){
@@ -112,7 +117,7 @@ const NAV = () => {
                 <span className="hidden md:inline">Home</span>
               </button>
               <button
-                onClick={() => {navigate("/notification");setRe(!re)}}
+                onClick={() => {navigate("/notification");setRe(!re);}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaBell className="w-5 h-5 mr-2" />
@@ -133,7 +138,7 @@ const NAV = () => {
               </button>
 
               <button
-                onClick={() =>{ navigate("/dashboard");setRe(!re)}}
+                onClick={() =>{ navigate("/dashboard");setRe(!re);}}
                 className="flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors"
               >
                 <FaUser className="w-5 h-5 mr-2" />

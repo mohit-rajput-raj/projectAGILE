@@ -18,7 +18,7 @@ const Logout = () => {
     } else {
       
       logout();
-      // navigate('/login');
+      navigate('/login');
       setrel(true);
     }
     // logout();

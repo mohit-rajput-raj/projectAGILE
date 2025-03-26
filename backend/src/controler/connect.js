@@ -124,6 +124,8 @@ export const toggleConnectionRequest = async (req, res) => {
 			description: `${sender.username} has connected with you.`,
 		});
 		sender.profile.connections.push(userId);
+		recipient.messagesBar.push(senderId);
+		sender.messagesBar.push(userId);
 		await sender.save();
 		recipient.profile.connections.push(senderId);
 		await recipient.save();

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../coustomStyles/ordercard.css'
 import { HiCalendarDateRange } from "react-icons/hi2";
 import { TbListDetails } from "react-icons/tb";
@@ -12,11 +12,31 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import { IoCheckmarkDone } from "react-icons/io5";
 import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
-const Ordercard = ({rating,order}) => {
+// import Stack from '@mui/material/Stack';
+import { useDashBoardStore } from '../Store/dashBoardStore';
+import { useAuthStore } from '../Store/AuthStore';
+const PlacedOrderCard = ({rating,order}) => {
+    
     if(!order) return;
+    // console.log(order);
+    
+    const {currUser} = useAuthStore();
     const navigate = useNavigate();
-    const [isBookmarked, setIsBookmarked] = React.useState(false);
+    const {deleteAsk,getWaitingOrders,getDeployedOrdersForMaker,deleteAskLoading,toggleFavroute,toggleFavrouteLoading} = useDashBoardStore();
+    const [isBookmarked, setIsBookmarked] = React.useState(currUser.saved.includes(order._id));
+    const handelSave = async()=>{
+        await toggleFavroute(order._id);
+    }
+    // useEffect(() => {
+        
+        
+    //   }, [deleteAskLoading]);
+    const handelDelete = async() => {
+        console.log("fgfg");
+        
+        await deleteAsk(order._id);
+        getDeployedOrdersForMaker();
+      }
   return (
     <div className='oCard'>
         <hr />
@@ -35,16 +55,16 @@ const Ordercard = ({rating,order}) => {
             </div>
             <div className='w-1/10 rounded bg-gray-200 pb-3 flex flex-col items-center justify-evenly gap-4'>
                 <IoCheckmarkDone />
-                <button className='center bookBtn'  onClick={() => setIsBookmarked(!isBookmarked)}>{isBookmarked ? <FaBookmark className='h-6 w-6' /> : <FaRegBookmark className='h-6 w-6' />}</button>
+                <button className='center bookBtn'  onClick={() => {setIsBookmarked(!isBookmarked);handelSave}}>{isBookmarked ? <FaBookmark className='h-6 w-6' /> : <FaRegBookmark className='h-6 w-6' />}</button>
             </div>
         </div>
         {order.orderStatus !== "delivered" && <div className='flex justify-between'>
             <button className='deplayBtn center'> <RiMessageFill />Messages</button>
-            <button className='deleteBtn'>cancel</button>
+            <button className='deleteBtn' onClick={handelDelete}>cancel</button>
         </div>}
         <hr />
     </div>
   )
 }
 
-export default Ordercard
+export default PlacedOrderCard

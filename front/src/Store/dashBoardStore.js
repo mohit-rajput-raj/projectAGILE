@@ -1,5 +1,6 @@
 import {create} from 'zustand'
 import { axiosApi } from '../library/axios.js';
+import { toggleFavroute } from '../../../backend/src/controler/favroutes.js';
 
 export const useDashBoardStore = create((set,get)=>({
     dashBoardData:null,
@@ -56,10 +57,11 @@ export const useDashBoardStore = create((set,get)=>({
     makeAcceptLoading:false,
     makeAcceptError:null,
     makeAccepted:null,
-    makeReject: async(data)=>{
+
+    makeReject: async(id)=>{
       try {
         set({ makeRejectLoading: true, makeRejectError: null });
-        const res = await axiosApi.put(`/dashboard/makeReject`,data);
+        const res = await axiosApi.put(`/dashboard/makeReject/${id}`,);
         set({ makeRejected: res.data });
       } catch (error) {
         console.log("Error in makeReject store:", error);
@@ -129,19 +131,19 @@ export const useDashBoardStore = create((set,get)=>({
     },
     makerorders:null,
     makerordersLoading: false,
-    
-    getDeployedOrdersForMaker:async()=>{
+    DeployedOrdersForMaker:null,
+    getDeployedOrdersForMakerLoading:false,
+    getDeployedOrdersForMakerError:null,
+    getDeployedOrdersForMaker: async () => {
       try {
-        console.log("helll");
-        
-        set({ makerordersLoading: true, ordersError: null });
+        set({ getDeployedOrdersForMakerLoading: true, getDeployedOrdersForMakerError: null });
         const res = await axiosApi.get(`/dashboard/getDeployedOrdersForMaker`);
-        set({ makerorders: res.data });
+        set({ DeployedOrdersForMaker: res.data });
       } catch (error) {
-        console.log("Error in getDashBoardData store:", error);
-        set({ ordersError: "Failed to load dashboard data." });
+        console.log("Error in getDeployedOrdersForMaker store:", error);
+        set({ getDeployedOrdersForMakerError: "Failed to load deployed orders for maker." });
       } finally {
-        set({makerordersLoading: false });
+        set({ getDeployedOrdersForMakerLoading: false });
       }
     },
     getConnections:async()=>{
@@ -179,6 +181,7 @@ export const useDashBoardStore = create((set,get)=>({
         set({ creatingOrder: true, creatingOrderError: null });
         const res = await axiosApi.post(`/dashboard/createOrder`,data);
         set({NewcreatedOrder:res.data});
+        get().addHistory(res.data._id);
       } catch (error) {
         console.log("Error in createOrde getDashBoardData store:", error);
         set({ creatingOrderError: "Failed to load dashboard data." });
@@ -194,6 +197,7 @@ export const useDashBoardStore = create((set,get)=>({
       try {
         set({deployOrder2Loading:true,deployOrder2Error:null});
         const res = await axiosApi.post(`/dashboard/deployOrder2`,data);
+        
         set({deployOrder2data:res.data});
       } catch (error) {
         console.log("Error in deployOrder2 store:", error);
@@ -262,6 +266,107 @@ export const useDashBoardStore = create((set,get)=>({
         set({ getOrderLoading: false });
       }
     },
+    toggleFavrouteLoading:false,
+    toggleFavrouteError:null,
+    toggleFavroute:async(routeId )=>{
+      try {
+        
+        set({toggleFavrouteLoading:true,toggleFavrouteError:null});
+        const res = await axiosApi.get(`/dashboard/toggleFavroute`,{routeId });
+        set({ getSavedData: res.data });
+        
+      } catch (error) {
+        console.log("Error in getSaved store:", error);
+        set({ toggleFavrouteError: "Failed to load saved routes." });
+      }finally{
+        set({toggleFavrouteLoading:false});
+      }
+    }
+     ,
+    getSaved:async()=>{
+      try {
+        set({ getSavedLoading: true, getSavedError: null });
+        const res = await axiosApi.get(`/dashboard/getSaved`);
+        set({ getSavedData: res.data });
+      } catch (error) {
+        console.log("Error in getSaved store:", error);
+        set({ getSavedError: "Failed to load saved routes." });
+      } finally {
+        set({ getSavedLoading: false });
+      }
+    },
+    getSavedData:null,
+    getSavedLoading:false,
+    getSavedError:null,
+
+    getHistory: async () => {
+      try {
+        set({ getHistoryLoading: true, getHistoryError: null });
+        const res = await axiosApi.get(`/dashboard/getHistory`);
+        set({ getHistoryData: res.data });
+      } catch (error) {
+        console.log("Error in getHistory store:", error);
+        set({ getHistoryError: "Failed to load history." });
+      } finally {
+        set({ getHistoryLoading: false });
+      }
+    },
+    getHistoryData: null,
+    getHistoryLoading: false,
+    getHistoryError: null,
+
+    deleteHistory: async (id) => {
+      try {
+        set({ deleteHistoryLoading: true, deleteHistoryError: null });
+        const res = await axiosApi.delete(`/dashboard/deleteHistory/${id}`);
+        set({ getHistoryData: res.data });
+      } catch (error) {
+        console.log("Error in deleteHistory store:", error);
+        set({ deleteHistoryError: "Failed to delete history." });
+      } finally {
+        set({ deleteHistoryLoading: false });
+      }
+    },
+    deleteHistoryLoading: false,
+    deleteHistoryError: null,
+
+    addHistory: async (id) => {
+      try {
+        set({ addHistoryLoading: true, addHistoryError: null });
+        const res = await axiosApi.put(`/dashboard/addHistory/${id}`);
+        set({ getHistoryData: res.data });
+      } catch (error) {
+        console.log("Error in addHistory store:", error);
+        set({ addHistoryError: "Failed to add history." });
+      } finally {
+        set({ addHistoryLoading: false });
+      }
+    },
+    addHistoryLoading: false,
+    addHistoryError: null,
+
+    setDelivered: async (id) => {
+      try {
+        set({ setDeliveredLoading: true, setDeliveredError: null });
+        const res = await axiosApi.post(`/dashboard/setDelivered/${id}`);
+        set({ getHistoryData: res.data });
+      } catch (error) {
+        console.log("Error in setDelivered store:", error);
+        set({ setDeliveredError: "Failed to mark order as delivered." });
+      } finally {
+        set({ setDeliveredLoading: false });
+      }
+    },
+    setDeliveredLoading: false,
+    setDeliveredError: null,
+    setDeliveredData: null,
+    
+    
+    
+
+    
+  
+
 
     
     

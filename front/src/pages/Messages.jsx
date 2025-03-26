@@ -11,11 +11,35 @@ import {
 import "../coustomStyles/container.css";
 import "../coustomStyles/messages.css";
 import MessageInput from "../components/MessageInput";
+
+const SideBarUsersPFP = ({ sideBarUsers, setSelectedUser, onlineUsers }) => {
+  if (!sideBarUsers || sideBarUsers.length === 0) return <p>No users available</p>;
+
+  return (
+    <>
+      {sideBarUsers.map((user, i) => (
+        <div className="p-0" key={user._id || i}>
+          <button
+            className="proBtn focus:ring-0"
+            onClick={() => {
+              console.log("User Selected:", user);
+              setSelectedUser(user);
+            }}
+          >
+            <ProfileComponentMessage sideUser={user} onlineUsers={onlineUsers} />
+          </button>
+        </div>
+      ))}
+    </>
+  );
+};
+
 const Messages = () => {
-  
   const location = useLocation();
-  const { currUser,onlineUsers } = useAuthStore();
+  const { currUser, onlineUsers } = useAuthStore();
   const [sideBarUsers4, setSideBarUsers4] = useState([]);
+  const messageEndRef = useRef(null);
+
   const {
     selectedUser,
     setSelectedUser,
@@ -32,55 +56,63 @@ const Messages = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useMessagesStore();
-  
-  const messageEndRef = useRef(null);
+
+  // Fetch sidebar users on mount
   useEffect(() => {
     getSideBarUsers();
-  }, [getSideBarUsers]);
+  }, []);
+
+  // Fetch messages when a user is selected
   useEffect(() => {
     if (!selectedUser?._id) return;
 
+    console.log("Fetching messages for:", selectedUser);
     getMessages(selectedUser._id);
     subscribeToMessages();
 
     return () => {
       unsubscribeFromMessages();
     };
-  }, [selectedUser?._id]);
+  }, [selectedUser]);
 
+  // Update local sidebar users when store updates
   useEffect(() => {
-    setSideBarUsers4(sideBarUsers);
+    if (sideBarUsers) {
+      setSideBarUsers4(sideBarUsers);
+    }
   }, [sideBarUsers]);
-  
-  
+
+  // Handle new user selection from location state
   useEffect(() => {
     if (location.state?.newUser) {
-      
       const newUser = location.state.newUser;
-      console.log(newUser);
-      setSideBarUsers4(prevUsers => {
-        if (!Array.isArray(prevUsers)) return [newUser]; 
-        
-        if (!prevUsers.some(user => user._id === newUser._id)) {
+      console.log("New user added:", newUser);
+
+      setSideBarUsers4((prevUsers) => {
+        if (!Array.isArray(prevUsers)) return [newUser];
+
+        if (!prevUsers.some((user) => user._id === newUser._id)) {
           return [...prevUsers, newUser];
         }
         return prevUsers;
       });
     }
   }, [location.state]);
-  
-  
+
+  // Auto-scroll when new messages arrive
   useEffect(() => {
     if (messageEndRef.current && messages?.length > 0) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  
+
+  console.log("SideBarUsers4:", sideBarUsers4);
+  console.log("Selected User:", selectedUser);
+
   if (error) {
     return <div>Error loading sidebar users.</div>;
   }
-  console.log(sideBarUsers4);
-  // if(!sideBarUsersLoading && !sideBarUsers?.length)
+
   return (
     <div className="dashCon">
       <div className="dashConItem">
@@ -100,27 +132,24 @@ const Messages = () => {
                         </button>
                       </div>
                     ))
-                  ) : sideBarUsers4?.length > 0 ? (
-                    sideBarUsers4?.map((sideUser, i) => (
-                      <div className="p-0" key={i}>
-                        <button
-                          className="proBtn focus:ring-0"
-                          onClick={() => setSelectedUser(sideUser)}
-                        >
-                          <ProfileComponentMessage sideUser={sideUser} onlineUsers={onlineUsers} />
-                        </button>
-                      </div>
-                    ))
+                  ) : sideBarUsers4.length > 0 ? (
+                    <SideBarUsersPFP
+                      sideBarUsers={sideBarUsers4}
+                      setSelectedUser={setSelectedUser}
+                      onlineUsers={onlineUsers}
+                    />
                   ) : (
                     <div className="w-full h-2/3 center"> No chats yet</div>
                   )}
                 </div>
               </div>
+
               <div className="mlr flex flex-col gap-2">
                 <div className="mlrHead flex justify-between items-center">
                   <ProfileComponentMessageHeader selectedUser={selectedUser} onlineUsers={onlineUsers} />
                   <FaPhone className="h-6 w-6" />
                 </div>
+
                 <div className="mlrBase">
                   {messagesLoading ? (
                     [...Array(5)].map((_, i) => (
@@ -159,7 +188,6 @@ const Messages = () => {
                   )}
                 </div>
                 {selectedUser && <MessageInput />}
-
               </div>
             </div>
             <div className="mRight"></div>

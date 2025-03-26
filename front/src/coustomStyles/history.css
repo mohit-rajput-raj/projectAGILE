@@ -8,3 +8,13 @@
     padding-top: 10px;
     gap: 10px;
 }
+.histOrders{
+    height: 100vh;
+    overflow-y: scroll;
+    width: 100%;
+    background-color: var(--backgroundColor);
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 10px;
+    gap: 10px;
+}
