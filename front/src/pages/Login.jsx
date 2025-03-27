@@ -46,7 +46,7 @@ const Login = () => {
     <div className="w-screen flex justify-center">
       <div className="container ">
         <header className="header">
-          <h1>MyCollab</h1>
+          <h1>Bake2Biz</h1>
         </header>
         <div className="flex">
         <main className="form-container flex justify-center w-screen">

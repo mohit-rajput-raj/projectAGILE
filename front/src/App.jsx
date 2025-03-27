@@ -31,7 +31,7 @@ import Cancled from './pages/Cancled'
 import Menu from './pages/Menu'
 import DashboardHomeMaker from './pages/DashboardHomeMaker'
 import Menu2 from './pages/Menu2'
-
+export const companyName="Bake2Biz";
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { currUser } = useAuthStore();
@@ -79,7 +79,7 @@ const App = () => {
           <Route path='/home' element={<Home />} />
           <Route path='/dashboard/items' element={<Items />} />
           <Route path='/dashboard/colabration' element={<Colabration />} />
-          <Route path='/contacts' element={<Contacts />} />
+          <Route path='/dashboard/contacts' element={<Contacts />} />
           <Route path='/dashboard/issues' element={<Issues />} />
           <Route path='/dashboard/report' element={<Report />} />
           <Route path='/dashboard/history' element={<History />} />

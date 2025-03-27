@@ -2,8 +2,9 @@ import { User } from "../models/userModel.js";
 import { Notification } from "../models/notificationModel.js";
 export const getAllUses = async(req,res)=>{
     try {
-        const users = await User.find();
-        return res.json(users);
+        // const id = 2;
+        const Users = await User.find();
+        return res.json(Users);
         
     } catch (error) {
         console.error("Error in getAllUsers controller:", error);

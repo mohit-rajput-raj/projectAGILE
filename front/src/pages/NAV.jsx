@@ -6,7 +6,7 @@ import "../coustomStyles/Nav.css";
 // import 
 export const menu1 = [
   { name: "DashBoard", rout: "/dashboard" },
-  { name: "Items", rout: "/dashboard/items" },
+  // { name: "Items", rout: "/dashboard/items" },
   
   { name: "Contacts", rout: "/dashboard/contacts" },
   { name: "FeedBack", rout: "/dashboard/issues" },
@@ -29,11 +29,11 @@ import "../components/ove.css";
 import { useNotificationStore } from "../Store/notificationStore";
 export const menu2 = [
   { name: "DashBoard", rout: "/dashboard" },
-  { name: "Items", rout: "/dashboard/items" },
-  { name: "Colabration", rout: "/dashboard/colabration" },
+  // { name: "Items", rout: "/dashboard/items" },
+  // { name: "Collaboration", rout: "/dashboard/colabration" },
   { name: "Contacts", rout: "/dashboard/contacts" },
   { name: "FeedBack", rout: "/dashboard/issues" },
-  { name: "Menu", rout: "/dashboard/menu" },
+  // { name: "Menu", rout: "/dashboard/menu" },
   { name: "HIstory", rout: "/dashboard/history" },
   // { name: "Cancled", rout: "/dashboard/cancled" },
   { name: "Favourites", rout: "/dashboard/favourites" },

@@ -268,16 +268,19 @@ export const useDashBoardStore = create((set,get)=>({
     },
     toggleFavrouteLoading:false,
     toggleFavrouteError:null,
-    toggleFavroute:async(routeId )=>{
+    toggleFavroute:async(routeId)=>{
       try {
+        console.log("routeId",routeId);
         
         set({toggleFavrouteLoading:true,toggleFavrouteError:null});
-        const res = await axiosApi.get(`/dashboard/toggleFavroute`,{routeId });
-        set({ getSavedData: res.data });
+        await axiosApi.post(`/dashboard/toggleFavroute`, { routeId });
+        // After toggling favorite, refresh the saved list
+        const savedRes = await axiosApi.get('/dashboard/getSaved');
+        set({ getSavedData: savedRes.data });
         
       } catch (error) {
-        console.log("Error in getSaved store:", error);
-        set({ toggleFavrouteError: "Failed to load saved routes." });
+        console.log("Error in toggleFavroute store:", error);
+        set({ toggleFavrouteError: "Failed to toggle favorite." });
       }finally{
         set({toggleFavrouteLoading:false});
       }
@@ -295,7 +298,7 @@ export const useDashBoardStore = create((set,get)=>({
         set({ getSavedLoading: false });
       }
     },
-    getSavedData:null,
+    getSavedData:[],
     getSavedLoading:false,
     getSavedError:null,
 
