@@ -26,9 +26,9 @@ export const updatePfp = async (req, res) => {
         if (profilePic) {
             console.log("Uploading profile picture to Cloudinary...");
             try {
-                if (user.profile?.pic) {
-                    await cloudinary.uploader.destroy(user.profile.pic);
-                }
+                // if (user.profile?.pic) {
+                //     await cloudinary.uploader.destroy(user.profile.pic);
+                // }
                 const uploadResponse = await cloudinary.uploader.upload(profilePic.tempFilePath, {
                     folder: "user_profiles",
                 });
@@ -42,9 +42,9 @@ export const updatePfp = async (req, res) => {
         if (bannerImg) {
             console.log("Uploading banner image to Cloudinary...");
             try {
-                if (user.profile?.bannerImg) {
-                    await cloudinary.uploader.destroy(user.profile.bannerImg);
-                }
+                // if (user.profile?.bannerImg) {
+                //     await cloudinary.uploader.destroy(user.profile.bannerImg);
+                // }
                 const uploadResponse = await cloudinary.uploader.upload(bannerImg.tempFilePath, {
                     folder: "user_banners",
                 });

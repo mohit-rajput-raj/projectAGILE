@@ -32,9 +32,9 @@ export const menu2 = [
   // { name: "Items", rout: "/dashboard/items" },
   // { name: "Collaboration", rout: "/dashboard/colabration" },
   { name: "Contacts", rout: "/dashboard/contacts" },
-  { name: "FeedBack", rout: "/dashboard/issues" },
+  // { name: "FeedBack", rout: "/dashboard/issues" },
   // { name: "Menu", rout: "/dashboard/menu" },
-  { name: "HIstory", rout: "/dashboard/history" },
+  // { name: "HIstory", rout: "/dashboard/history" },
   // { name: "Cancled", rout: "/dashboard/cancled" },
   { name: "Favourites", rout: "/dashboard/favourites" },
 ];

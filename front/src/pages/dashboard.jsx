@@ -3,7 +3,7 @@ import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 import { IoAddOutline } from "react-icons/io5";
 import { Ordercard, TODOOrdercard ,WaitingOrdercard} from "../components/orderCard";
-import PlacedOrderCard from "../components/PlacedOrderCard";
+import { PlacedOrderCard } from "../components/PlacedOrderCard";
 import { useNavigate } from "react-router-dom";
 import { useDashBoardStore } from "../Store/dashBoardStore.js";
 import { IoSearchSharp } from "react-icons/io5";

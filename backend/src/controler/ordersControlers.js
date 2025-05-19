@@ -3,6 +3,7 @@ import { User } from "../models/userModel.js";
 import { Item } from "../models/itemsModel.js";
 import { Notification } from "../models/notificationModel.js";
 import { populate } from "dotenv";
+import {Hist} from '../models/historycardModel.js'
 
 export const setDelivered= async (req, res) => {
   try {
@@ -13,6 +14,19 @@ export const setDelivered= async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+    const history = new Hist({
+      caption: order.caption,
+      description: "order delivered on its destination",
+      orderId: order.orderId,
+      orderStatus: order.orderStatus,
+      orderPaid: order.orderPaid
+    });
+    await history.save();
+    const user= await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { "profile.history": history._id } },
+      { new: true } 
+    ); 
 
     // await order.save();
     return res.status(200).json({ message: "Order marked as delivered" });
@@ -77,11 +91,13 @@ export const addHistory = async (req, res) => {
 };
 export const deleteHistory = async (req, res) => {
   try {
+    
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { $pull: { "profile.history": req.params.id } }, 
       { new: true }
     );
+    const hist= await Hist.findByIdAndDelete(req.params.id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -117,6 +133,7 @@ export const deleteAsk = async (req, res) => {
       },
       { new: true }
     );
+    // const history = await Hist
 
     return res.status(200).json(updatedOrder);
   } catch (error) {
@@ -153,9 +170,17 @@ export const makeReject = async (req, res) => {
         },
         { new: true }
       );
-      await User.findByIdAndUpdate(
-        order.orderBuilder,
-        { $push: { "profile.history": order._id } },
+      const history = new Hist({
+        caption: order.caption,
+        description: "order rejected by builder",
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        orderPaid: order.orderPaid
+      });
+      await history.save();
+      const user= await User.findByIdAndUpdate(
+        req.user._id,
+        { $push: { "profile.history": history._id } },
         { new: true } 
       ); 
 
@@ -186,9 +211,17 @@ export const makeAccept = async (req, res) => {
         },
         { new: true }
       );
-      await User.findByIdAndUpdate(
-        order.orderBuilder,
-        { $push: { "profile.history": order._id } },
+      const history = await Hist.create({
+        caption: order.caption,
+        description: "order accepted by builder",
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        orderPaid: order.orderPaid
+      });
+      await history.save();
+      const user= await User.findByIdAndUpdate(
+        req.user._id,
+        { $push: { "profile.history": history._id } },
         { new: true } 
       ); 
       return res.status(200).json(updatedOrder);
@@ -231,9 +264,17 @@ export const createOrder = async (req, res) => {
       orderItems: items.map(item => item._id),
     });
     await newOrder.save();
-    await User.findByIdAndUpdate(
+    const history  = await Hist.create({
+      caption: newOrder.caption,
+      description: "new order created",
+      orderId: newOrder.orderId,
+      orderStatus: newOrder.orderStatus,
+      orderPaid: newOrder.orderPaid
+    });
+    await history.save();
+    const user= await User.findByIdAndUpdate(
       req.user._id,
-      { $push: { "profile.history": newOrder._id } },
+      { $push: { "profile.history": history._id } },
       { new: true } 
     ); 
     res.status(201).json(newOrder);
@@ -254,6 +295,7 @@ export const getWaitingOrders = async (req, res) => {/////////////////////////
       select: 'username email' 
     })
     .exec();
+    
   
     return res.status(200).json(orders);
   } catch (error) {
@@ -261,8 +303,13 @@ export const getWaitingOrders = async (req, res) => {/////////////////////////
     res.status(500).json({ msg: error.message });
   }
 };
+function sdf(){
+  console.log("antimatter");
+  
+}
 export const getWaitingOrdersforMaker = async (req, res) => {
   const userId = req.user._id;
+  sdf();
   try {
     const orders = await Orders.find({
       orderHoldedBy: userId,
@@ -336,6 +383,7 @@ export const getconnectionsFordeployOrders  = async (req, res) => {
 
 export const getDeployedOrders = async (req, res) => {//////////////////////////
   const userId = req.user._id;
+  sdf();
   try {
     const orders = await Orders.find({
       orderBuilder: userId,
@@ -449,6 +497,19 @@ export const deleteOrder = async (req, res) => {////////////////////
   try {
     const { id } = req.params;
     const order = await Orders.findByIdAndDelete(id);
+    const history = await Hist.create({
+      caption: order.caption,
+      description: "order deleted",
+      orderId: order.orderId,
+      orderStatus: order.orderStatus,
+      orderPaid: order.orderPaid
+    });
+    await history.save();
+    const user= await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { "profile.history": history._id } },
+      { new: true } 
+    ); 
     res.status(200).json(order);
   } catch (error) {
     console.log("error in deleteOrder", { error });
@@ -536,7 +597,9 @@ export const deployOrder = async (req, res) => {
       $push: { "profile.notifications": notification._id },
     }, { new: true });
     console.log("all good");
+    const history = new HistoryCard({
 
+    })
     await User.findByIdAndUpdate(
       order.orderBuilder,
       { $push: { "profile.history": order._id } },

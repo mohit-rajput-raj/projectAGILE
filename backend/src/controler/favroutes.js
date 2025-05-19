@@ -1,7 +1,7 @@
 import {User} from "../models/userModel.js";
 import {Orders} from "../models/ordersModel.js";
 import {Item} from "../models/itemsModel.js";
-import { select } from "three/tsl";
+// import { select } from "three/tsl";
 // import {}
 export const getSaved = async (req, res) => {
     try {
@@ -12,15 +12,20 @@ export const getSaved = async (req, res) => {
             .select("saved")
             .populate({
                 path: "saved",
-                select: "orderId orderItems orderBuilder description caption",
+                select: "orderId orderItems orderBuilder description caption orderStatus orderBuildDate deadLine",
                 populate: {
                     path: "orderItems",
                     select: "name quantity",
                 },
                 populate:{
                     path:"orderBuilder",
-                    select:"username",
+                    select:"username email",
                 },
+                populate:{
+                    path:"orderHoldedBy",
+                    select:"username email",
+                },
+                
                 
 
             });

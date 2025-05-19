@@ -108,7 +108,6 @@ export const useMessagesStore = create((set, get) => ({
       return;
     }
 
-    // Remove any existing listeners to prevent duplicates
     socket.off("newMessage");
 
     // Subscribe to new messages
@@ -116,7 +115,6 @@ export const useMessagesStore = create((set, get) => ({
       const { selectedUser } = get(); // Get fresh selected user
       if (!selectedUser) return;
 
-      // Check if message belongs to current chat
       const isRelevantMessage =
         (newMessage.senderId === selectedUser._id && newMessage.receiverId === useAuthStore.getState().currUser._id) ||
         (newMessage.receiverId === selectedUser._id && newMessage.senderId === useAuthStore.getState().currUser._id);
@@ -128,7 +126,6 @@ export const useMessagesStore = create((set, get) => ({
       }));
     });
 
-    // Reconnect handler
     socket.io.on("reconnect", () => {
       const { selectedUser } = get();
       if (selectedUser?._id) {

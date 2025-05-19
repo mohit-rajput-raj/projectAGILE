@@ -23,7 +23,7 @@ const ItemsCard = ({ CardData, deleteItem }) => {
           </span> */}
         </div>
         <h5 className="username">{CardData.name}</h5>
-        <Rating name="size-small" defaultValue={2} size="small" />
+        {/* <Rating name="size-small" defaultValue={2} size="small" /> */}
         <h3 className="profession">{CardData.category}</h3>
         <div className="w-full flex flex-col gap-px">
           <div className="w-full flex h-8 justify-between">

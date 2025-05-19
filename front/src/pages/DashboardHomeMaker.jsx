@@ -4,7 +4,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { IoAddOutline } from "react-icons/io5";
 import {Ordercard,TODOOrdercard } from "../components/orderCard";
 // import DemoCard from "../components/DemoCard";
-import PlacedOrderCard from "../components/PlacedOrderCard";
+import { PlacedOrderCard} from "../components/PlacedOrderCard";
 import "../coustomStyles/container.css";
 import "../coustomStyles/dashboard.css";
 const orderStatus2=["All", "running", "shipped","paused", "delivered", "rejected"];

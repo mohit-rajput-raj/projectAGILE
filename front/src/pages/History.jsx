@@ -1,37 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import gian from './gian.jpg'
 import '../coustomStyles/history.css'
 import { useDashBoardStore } from "../Store/dashBoardStore";
-const HistOrder =({items})=>{
+// import React, { useState } from 'react';
+
+const HistOrder = ({ items }) => {
+  const [openfull, setOpenfull] = useState(false);
+
   return (
-    <div className="orderListCard rounded-2xl w-full  h-30 backdrop-blur bg-white/40">
-      
-      <div className="flex w-full h-1/2">
-      <div className="center w-full ">
-        <h2>captiom :{items?.caption}</h2>
-
-      </div>
-      <div className="center w-full ">orderKey :{items?.orderKey}</div>
-      <div className="center w-full ">orderBuildDate :{items?.orderBuildDate}</div>
-      <div className="center w-full ">
-        orederStatus: {items?.orderStatus}
-      </div>
-      <div className="center w-full ">{items?.orderStatus}</div>
-      </div>
-      <div className="flex w-full h-1/2">
-      <div className="center w-full ">
-        <h2>orderId :{items?.orderId}</h2>
-
-      </div>
-      <div className="center w-full ">orderBudget :{items?.budget}</div>
-      <div className="center w-full ">orderDeadLine :{items?.deadLine}</div>
-      <div className="center w-full ">orderPaid :{items?.orderPaid}</div>
-      
+    <div className="orderListCard rounded-2xl w-full p-4 bg-white/40 backdrop-blur shadow-md">
+      <div className="flex flex-col w-full space-y-4">
+        <div className="flex  gap-10 w-full space-y-2">
+          <h2 className="text-lg font-semibold">Caption: {items?.caption}</h2>
+          <div className="text-gray-700">Order Status: {items?.orderStatus}</div>
+        </div>
+        {openfull && (
+          <div className="flex flex-col w-full space-y-2">
+            <div className="text-gray-700">Order ID: {items?.orderId}</div>
+            <div className="text-gray-700">Order Budget: {items?.budget}</div>
+            <div className="text-gray-700">Order Deadline: {items?.deadLine}</div>
+            <div className="text-gray-700">Order Paid: {items?.orderPaid}</div>
+          </div>
+        )}
+        <button
+          onClick={() => setOpenfull(!openfull)}
+          className="btn3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          {openfull ? 'Hide Details' : 'Show Details'}
+        </button>
       </div>
     </div>
+  );
+};
 
-  )
-}
+
+
 const History = () => {
   const {getHistory, getHistoryData, getHistoryLoading, getHistoryError,deleteHistory,deleteHistoryLoading,deleteHistoryError} = useDashBoardStore();
   useEffect(()=>{

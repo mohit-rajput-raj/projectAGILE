@@ -176,15 +176,18 @@ const AddItemsOverLay = ({
             </div>
             <div className="flex flex-col gap-1 w-1/2">
               <label htmlFor="category">Category:</label>
-              <input
-                className="CreateitemsInputes"
-                type="text"
-                placeholder="Enter category"
+              <select
+                id="regRole"
+                required
+                name="type"
                 value={itemData.type}
                 onChange={handelOnChange}
-                name="type"
-                id="category"
-              />
+                className="bg-gray-200 rounded-lg p-2 w-full"
+              >
+                <option value="">Category</option>
+                <option value="homemaker">non-veg</option>
+                <option value="shopowner">veg</option>
+              </select>
             </div>
             {/* <div className="flex flex-col gap-1 w-1/2">
               <label htmlFor="price">Price:</label>
@@ -239,12 +242,12 @@ const AddItemsOverLay = ({
                   <span className="text-2xl text-white">{itemData.type}</span>
                 </span>
               </div>
-              <div className="mt-2">
+              {/* <div className="mt-2">
                 <span className="text-black">
                   Price:{" "}
                   <span className="text-2xl text-white">{itemData.price}</span>
                 </span>
-              </div>
+              </div> */}
               <div className="mt-2">
                 <span className="text-black">
                   Quantity:{" "}

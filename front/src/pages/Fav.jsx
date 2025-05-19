@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import '../coustomStyles/fav.css'
 import { useDashBoardStore } from "../Store/dashBoardStore";
-import PlacedOrderCard from '../components/PlacedOrderCard';
+import {PlacedOrderCard,FAVPlacedOrderCard} from '../components/PlacedOrderCard';
 const Favourites = () => {
 
   const {getSavedData,getSavedLoading,getSavedError,getSaved} = useDashBoardStore();
@@ -19,7 +19,7 @@ const Favourites = () => {
               <div className="rounded-2xl w-full overflow-y-scroll h-full flex flex-col items-center">
                 {getSavedData && getSavedData.map((item) => (
                   <div key={item._id} className="favItem w-full">
-                    <PlacedOrderCard order={item}/>
+                    <FAVPlacedOrderCard order={item}/>
                   </div>
                 ))}
               </div>
