@@ -63,7 +63,6 @@ const Profile = () => {
 
  const [incon , setIncon] = useState(inConnection);
  const [inFol , setInFol] = useState(isFollowing);
- console.log(inFol);
  
   
   useEffect(() => {
@@ -72,7 +71,6 @@ const Profile = () => {
   const handelRemoveconnect = async () => {
     try {
       await sendConnectionRequest(userProfile?._id);
-      // inConnection = false;
       setIncon(false);
       setTotalConnections(prev => prev - 1);
     } catch (error) {
@@ -82,7 +80,6 @@ const Profile = () => {
   const handeladdConnection = async () => {
     try {
       await sendConnectionRequest(userProfile?._id);
-      // inConnection = true;
       setIncon(true);
       setTotalConnections(prev => prev + 1);
     } catch (error) {
@@ -96,12 +93,8 @@ const Profile = () => {
   
   useEffect(() => {
     getUserProfile(username);
-    console.log(userProfile);
   }, [getUserProfile]);
-  // const handelsendReport =()=>{
-  //   setReportOverlay(false);
-  //   toast.warning("Report sent");
-  // }
+
   
   useEffect(() => {
     isInContacts(userProfile?._id);
@@ -126,7 +119,6 @@ const Profile = () => {
 
   const isOwnProfile = currUser?._id === userProfile?._id;
   const userData = isOwnProfile ? currUser : userProfile;
-  console.log(userProfile);
   
   const [totalConnections, setTotalConnections] = useState(userData?.profile.connections.length);
   const [totalFollowers, setTotalFollowers] = useState(userData?.profile.followers.length);

@@ -21,8 +21,7 @@ const Logout = () => {
       navigate('/login');
       setrel(true);
     }
-    // logout();
-    // navigate("/login");
+
   }, [navigate,sec]);
 
   return (
@@ -31,9 +30,7 @@ const Logout = () => {
       {rel ? <h6> You are loged out</h6>:(<h6> Logging you out in {sec}...</h6>)}
       <p className="text-gray-600">Please wait while we securely log you out.</p>
       <Link to={"/login"} className="text-blue-500 mt-4">Return on page</Link>
-      {/* <p className="mt-2">
-        New to MyCollab? <Link to={"/register"} className="text-blue-500">Join now</Link>
-      </p> */}
+     
       <TableFooter className="footer">&copy; 2025 MyCollab. All rights reserved.</TableFooter>
     </Box>
   );

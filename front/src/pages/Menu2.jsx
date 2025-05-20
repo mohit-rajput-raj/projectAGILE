@@ -37,7 +37,6 @@ const itemsTypes = [
 ];
 const Menu2 = () => {
     const username = useParams().username
-    console.log(username, "username");
     
   const [expended, setExpended] = useState(false);
   const bitonItems = useRef();

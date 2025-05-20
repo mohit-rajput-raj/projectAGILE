@@ -8,7 +8,7 @@ import cake from '../components/cake.png';
 const ItemsCard = ({ CardData, deleteItem }) => {
   const [price, setPrice] = useState(CardData.price);
   const [piece, setPiece] = useState(CardData.quantity);
-  console.log(CardData);
+  // console.log(CardData);
   
   return (
     <div className="ItemCard">

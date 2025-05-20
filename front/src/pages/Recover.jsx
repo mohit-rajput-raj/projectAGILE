@@ -21,7 +21,6 @@ const Recover = () => {
   const handleSendOtp = (e) => {
     e.preventDefault();
     if (email) {
-      console.log(email);
       
       sendOtp({email});
       toast.success("Otp sent successfully");

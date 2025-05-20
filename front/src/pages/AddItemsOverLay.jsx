@@ -75,7 +75,7 @@ const AddItemsOverLay = ({
   };
 
   const handelAddItem = async () => {
-    console.log(itemData);
+    // console.log(itemData);
     
     // if (!validateForm()) return;
 

@@ -14,7 +14,7 @@ const ProfileComponent = ({ user }) => {
   const styleC = {
     marginLeft: "10px",
   };
-  console.log(user);
+  // console.log(user);
 
   return (
     <Link to={`/profile/${user.username}`} style={{ color: "black" }}>

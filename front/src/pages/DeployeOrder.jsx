@@ -10,7 +10,7 @@ const DeployOrder = ({ deployOrder, setDeployOrder, deployOrderId }) => {
   const handleGetConnections = async () => {
     try {
       await getConnections();
-      console.log("Fetched connections:", connections);
+      // console.log("Fetched connections:", connections);
     } catch (error) {
       console.error("Error fetching connections:", error);
     }
@@ -19,7 +19,7 @@ const DeployOrder = ({ deployOrder, setDeployOrder, deployOrderId }) => {
   const handleDeployOrder = async () => {
     try {
       await deployOrder2({  personId: selected,orderId:deployOrderId});
-      console.log("Order deployed successfully");
+      // console.log("Order deployed successfully");
       setDeployOrder(!deployOrder);
     } catch (error) {
       console.error("Error deploying order:", error);

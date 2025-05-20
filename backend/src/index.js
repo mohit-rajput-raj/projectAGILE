@@ -43,14 +43,14 @@ app.use("/api/user",userRoute );
 app.use("/api/connections", connectionsRoute);
 app.use("/api/notifications", notificationRoute);
 app.use("/api/admin", adminRoute);
-console.log(__dirname);
+// console.log(__dirname);
 
 if(process.env.NODE_ENV==='production'){
     app.use(express.static(path.join(__dirname,"../front/dist")));
     app.get("*", (req,res)=>{
         res.sendFile(path.resolve(__dirname,"../front","dist", "index.html"));
     })
-    console.log('done yo');
+    // console.log('done yo');
     
 }
 

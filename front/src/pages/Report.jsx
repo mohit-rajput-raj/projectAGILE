@@ -9,8 +9,6 @@ const Report = () => {
     getReports();
   },[getReports]);
   if(reportsLoading)return <div>loading</div>
-  console.log(reports);
-  // if(reports.length === 0) return <div>No reports found</div>;
   return (
     <div className="dashCon">
       <div className="dashConItem">

@@ -9,7 +9,7 @@ const AdminBoard = () => {
     getAllUses();
   },[getAllUses]);
   if(usersLoading)return <div>loading</div>
-  console.log(users);
+  // console.log(users);
   // if(reports.length === 0) return <div>No reports found</div>;
   return (
     <div className="dashCon">

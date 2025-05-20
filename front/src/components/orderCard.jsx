@@ -42,7 +42,7 @@ const WaitingOrdercard = ({order,deployOrder,setDeployOrder,setDeployOrderId}) =
     getUndeployedOrders();
   }, [deleteAsk,deleteAskLoading]);
   const handelDelete = () => {
-    console.log("fgfg");
+    // console.log("fgfg");
     
     deleteAsk(order._id);
   }

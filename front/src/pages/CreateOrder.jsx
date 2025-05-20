@@ -55,7 +55,7 @@ const CreateOrder = () => {
   const handelSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Submitting order:", order);
+      // console.log("Submitting order:", order);
       await createOrder(order);
       toast.success("New order created");
       setOrder({

@@ -8,13 +8,11 @@ import { useNavigate } from 'react-router-dom';
 const OrderDetailsPage = () => {
   const navigate = useNavigate();
   const orderId = useParams().orderId;
-  console.log(orderId);
   const {getOrder,getOrderLoading,order,setDelivered,getDeployedOrdersForMaker} = useDashBoardStore();
   const {currUser} = useAuthStore();
   useEffect(() => {
     getOrder(orderId);
   }, [getOrder]);
-  console.log(order);
   const handleSetFinished = async() => {
     await setDelivered(order._id);
     

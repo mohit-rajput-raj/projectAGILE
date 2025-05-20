@@ -22,7 +22,6 @@ const SideBarUsersPFP = ({ sideBarUsers, setSelectedUser, onlineUsers }) => {
           <button
             className="proBtn focus:ring-0"
             onClick={() => {
-              console.log("User Selected:", user);
               setSelectedUser(user);
             }}
           >
@@ -57,16 +56,13 @@ const Messages = () => {
     unsubscribeFromMessages,
   } = useMessagesStore();
 
-  // Fetch sidebar users on mount
   useEffect(() => {
     getSideBarUsers();
   }, []);
 
-  // Fetch messages when a user is selected
   useEffect(() => {
     if (!selectedUser?._id) return;
 
-    console.log("Fetching messages for:", selectedUser);
     getMessages(selectedUser._id);
     subscribeToMessages();
 
@@ -75,18 +71,15 @@ const Messages = () => {
     };
   }, [selectedUser]);
 
-  // Update local sidebar users when store updates
   useEffect(() => {
     if (sideBarUsers) {
       setSideBarUsers4(sideBarUsers);
     }
   }, [sideBarUsers]);
 
-  // Handle new user selection from location state
   useEffect(() => {
     if (location.state?.newUser) {
       const newUser = location.state.newUser;
-      console.log("New user added:", newUser);
 
       setSideBarUsers4((prevUsers) => {
         if (!Array.isArray(prevUsers)) return [newUser];
@@ -106,8 +99,7 @@ const Messages = () => {
     }
   }, [messages]);
 
-  console.log("SideBarUsers4:", sideBarUsers4);
-  console.log("Selected User:", selectedUser);
+  
 
   if (error) {
     return <div>Error loading sidebar users.</div>;

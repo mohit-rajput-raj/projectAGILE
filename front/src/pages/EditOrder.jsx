@@ -156,18 +156,7 @@ const EditOrder = () => {
                       <span className="cursor-pointer hover:bg-zinc-200 rounded-2xl w-20 center" onClick={() => setOrderKey(generateOrderKey())}>refresh</span>
                     </div>
                     
-              {/* <select
-                id="regRole"
-                required
-                className="min-w-1/2 coInput"
-                onChange={handelOnChange}
-                value={order.type}
-                name="role"
-              >
-                <option value="">type</option>
-                <option value="homemaker">private</option>
-                <option value="shopowner">pulblic</option>
-              </select> */}
+           
                     </div>
                     <div>
                       <select

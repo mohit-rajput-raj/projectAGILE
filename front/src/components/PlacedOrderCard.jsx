@@ -38,7 +38,7 @@ const PlacedOrderCard = ({rating,order}) => {
         
     //   }, [deleteAskLoading]);
     const handelDelete = async() => {
-        console.log("fgfg");
+        // console.log("fgfg");
         
         await deleteAsk(order._id);
         getDeployedOrdersForMaker();
@@ -75,7 +75,7 @@ const PlacedOrderCard = ({rating,order}) => {
 const FAVPlacedOrderCard = ({rating,order}) => {
     
     if(!order) return;
-    console.log(order);
+    // console.log(order);
     
     const {currUser} = useAuthStore();
     const navigate = useNavigate();
@@ -94,7 +94,7 @@ const FAVPlacedOrderCard = ({rating,order}) => {
         
     //   }, [deleteAskLoading]);
     const handelDelete = async() => {
-        console.log("fgfg");
+        // console.log("fgfg");
         
         await deleteAsk(order._id);
         getDeployedOrdersForMaker();
